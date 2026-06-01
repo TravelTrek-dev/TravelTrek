@@ -1,0 +1,86 @@
+import 'dart:developer';
+
+import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+import 'package:travel_trek/Features/auth/data/models/user_model.dart';
+import 'package:travel_trek/Features/auth/domain/entity/user_entity.dart';
+import 'package:travel_trek/Features/auth/domain/repos/auth_repo.dart';
+import 'package:travel_trek/core/errors/custom_exception.dart';
+import 'package:travel_trek/core/errors/failures.dart';
+import 'package:travel_trek/core/helper_function/api.dart';
+import 'package:travel_trek/core/services/backend_service.dart';
+import 'package:travel_trek/core/services/firebase_auth_service.dart';
+
+class AuthRepoImpleApi implements AuthRepo {
+  FirebaseAuthService firebaseAuthService;
+
+  final Api api;
+
+  AuthRepoImpleApi({required this.api, required this.firebaseAuthService});
+  @override
+  Future<Either<Failures, UserEntity>> createUserWithEmailAndPassword({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    var body = {'email': email, 'password': password, 'fullName': name};
+    try {
+      await api.post(url: BackendService.singupUrl, body: body);
+      return right(
+        UserEntity(name: name, email: email, uId: 'N/A', token: 'N/A'),
+      );
+    } on CustomException catch (e) {
+      return left(ServerFailure(errorMessage: e.message));
+    } on DioException catch (e) {
+      if (e.response != null && e.response!.data != null) {
+        final String errorMessage =
+            e.response!.data ['message'] ?? 'An unexpected error occurred';
+
+        return left(ServerFailure(errorMessage: errorMessage));
+      } else {
+        return left(
+          ServerFailure(errorMessage: e.message ?? 'Connection error'),
+        );
+      }
+    } catch (e) {
+      return left(ServerFailure(errorMessage: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failures, UserEntity>> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    var body = {'email': email, 'password': password};
+    try {
+      var data = await api.post(url: BackendService.signinUrl, body: body);
+      return right(UserModel.fromJson(data));
+    } on CustomException catch (e) {
+      log(
+        'Exception in AuthRepoImpleApi.signInWithEmailAndPassword: ${e.toString()}',
+      );
+      return left(ServerFailure(errorMessage: e.message));
+    } catch (e) {
+      log(
+        'Exception in AuthRepoImpleApi.signInWithEmailAndPassword: ${e.toString()}',
+      );
+      return left(ServerFailure(errorMessage: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failures, UserEntity>> signInWithGoogle() async {
+    try {
+      var user = await firebaseAuthService.signInWithGoogle();
+      return right(UserModel.formFireBaseUser( user: user));
+    } on CustomException catch (e) {
+      return left(ServerFailure(errorMessage: e.message));
+    } catch (e) {
+      log(
+        'Exception in AuthRepoImple.signInWithGoogle: ${e.toString()}',
+      );
+      return left(ServerFailure(errorMessage: e.toString()));
+    }
+  }
+}

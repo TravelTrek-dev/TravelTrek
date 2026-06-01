@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "325204551736",
+    "project_id": "travel-trek-25d21",
+    "storage_bucket": "travel-trek-25d21.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:325204551736:android:3458387c46df7bd0f29ecd",
+        "android_client_info": {
+          "package_name": "com.example.travel_trek"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "325204551736-to2f0aceh4vt3elhrvpgfi30igh4p333.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.travel_trek",
+            "certificate_hash": "7f35d21a3ca674a217bad94b0fe5d8fdf4036bbb"
+          }
+        },
+        {
+          "client_id": "325204551736-jjdprc41vji4t6os18bo0ck5fd8bqnd1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrXxQ4CusVEKFtDs46-G__ybAF57vKF1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "325204551736-jjdprc41vji4t6os18bo0ck5fd8bqnd1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "325204551736-ekgpvl55t5heueisq96hl30hmd4ueko1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.travelTrek"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
