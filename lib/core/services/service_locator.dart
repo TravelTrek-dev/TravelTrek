@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:travel_trek/Features/Budget/data/repos/expense_repo_imple.dart';
+import 'package:travel_trek/Features/Budget/domain/repos/expense_repo.dart';
 import 'package:travel_trek/Features/auth/data/repos/auth_repo_imple_api.dart';
 import 'package:travel_trek/Features/auth/domain/repos/auth_repo.dart';
 import 'package:travel_trek/core/helper_function/api.dart';
@@ -17,6 +19,11 @@ void setup() {
     AuthRepoImpleApi(
       api: getIt<Api>(),
       firebaseAuthService: getIt<FirebaseAuthService>(),
+    ),
+  );
+  getIt.registerSingleton<ExpenseRepo>(
+    ExpenseRepoImple(
+      apiService: getIt<Api>(),
     ),
   );
 }

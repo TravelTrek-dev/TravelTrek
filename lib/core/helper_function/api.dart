@@ -3,7 +3,7 @@ import 'package:travel_trek/core/errors/custom_exception.dart';
 
 class Api {
   final Dio dio;
-
+  
   Api({required this.dio});
 
   Future<dynamic> get({required String url , String? token}) async {

@@ -1,9 +1,7 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:travel_trek/Features/Budget/presentation/views/widgets/add_amount_field.dart';
 import 'package:travel_trek/Features/Budget/presentation/views/widgets/category_selector.dart';
-import 'package:travel_trek/Features/Budget/presentation/views/widgets/data_textfiled.dart';
 import 'package:travel_trek/Features/Budget/presentation/views/widgets/expense_form_fields.dart';
 import 'package:travel_trek/constants.dart';
 import 'package:travel_trek/core/services/prefs.dart';
@@ -36,28 +34,21 @@ class _AddExpenseViewBodyState extends State<AddExpenseViewBody> {
               },
             ),
             const SizedBox(height: 24),
+
+            CategorySelector(
+              onCategorySelected: (String value) {
+                category = value;
+                log('Selected Category: $userToken');
+              },
+            ),
+            const SizedBox(height: 24),
             DescriptionField(
               onChangedDescriptionField: (String value) {
                 description = value;
               },
             ),
-            const SizedBox(height: 24),
-            CategorySelector(
-              onCategorySelected: (String value) {
-                category = value;
-                log(
-                  'Selected Category: $userToken',
-                ); 
-              },
-            ),
-            const SizedBox(height: 24),
-            DateTextfiled(
-              onChangedDateField: (String value) {
-                date = value;
-                
-              },
-            ),
-            const SizedBox(height: 170),
+
+             SizedBox(height: 250),
             CustomButton(text: 'Add Expense', onPressed: () {}),
           ],
         ),
