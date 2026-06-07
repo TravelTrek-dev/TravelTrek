@@ -1,5 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_trek/Features/Budget/domain/entites/expense_entity.dart';
+import 'package:travel_trek/Features/Budget/presentation/manger/cubit/expense_cubit.dart';
 import 'package:travel_trek/Features/Budget/presentation/views/widgets/add_amount_field.dart';
 import 'package:travel_trek/Features/Budget/presentation/views/widgets/category_selector.dart';
 import 'package:travel_trek/Features/Budget/presentation/views/widgets/expense_form_fields.dart';
@@ -19,7 +22,8 @@ class _AddExpenseViewBodyState extends State<AddExpenseViewBody> {
   String description = '';
   String date = '';
   String category = '';
-  String userToken = Prefs.getString(kUserToken);
+  String userToken = Prefs.getString(kUserToken); 
+  String tripId = '17964615-9485-43b3-caf1-08dec47a5379';
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -48,8 +52,22 @@ class _AddExpenseViewBodyState extends State<AddExpenseViewBody> {
               },
             ),
 
-             SizedBox(height: 250),
-            CustomButton(text: 'Add Expense', onPressed: () {}),
+            SizedBox(height: 250),
+            CustomButton(
+              text: 'Add Expense',
+              onPressed: () {
+                BlocProvider.of<ExpenseCubit>(context).addExpense(
+                  expenseEntity: ExpenseEntity(
+                    description: description,
+                    price: price,
+                    category: category,
+                  ),
+                  userToken: userToken,
+                  tripId: tripId,
+                );
+                Navigator.pop(context);
+              },
+            ),
           ],
         ),
       ),

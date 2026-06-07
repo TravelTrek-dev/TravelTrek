@@ -10,17 +10,29 @@ class ExpenseCubit extends Cubit<ExpenseState> {
 
   final ExpenseRepo expenseRepo;
 
-  void addExpense({required ExpenseEntity expenseEntity}) async {
+  void addExpense({
+    required ExpenseEntity expenseEntity,
+    required String userToken,
+    required String tripId,
+  }) async {
     emit(AddExpenseLoading());
-   
+
     var result = await expenseRepo.addExpense(
-        expenseEntity: expenseEntity,
-        tripId: expenseEntity.id,
-      );
+      expenseEntity: expenseEntity,
+      tripId: tripId,
+      userToken: userToken,
+    );
     result.fold(
-      (failure) => emit(AddExpenseFailure(errorMessage: failure.errorMessage)),
-      (expense) => emit(AddExpenseSuccess()),
-    );  
-    
+      (failure) {
+        if (!isClosed) {
+          emit(AddExpenseFailure(errorMessage: failure.errorMessage));
+        }
+      },
+      (expenseData) {
+        if (!isClosed) {
+          emit(AddExpenseSuccess());
+        }
+      },
+    );
   }
 }

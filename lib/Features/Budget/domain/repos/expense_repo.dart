@@ -6,7 +6,11 @@ abstract class ExpenseRepo {
   Future<Either<Failures, ExpenseEntity>> addExpense({
     required ExpenseEntity expenseEntity,
     required String tripId,
+    required String userToken,
   });
 
-  Future<Either<Failures, List<ExpenseEntity>>> getExpenseHistory({required String tripId});
+  Future<Either<Failures, List<ExpenseEntity>>> getExpenseHistory({
+    required String tripId,
+    required String userToken,
+  });
 }

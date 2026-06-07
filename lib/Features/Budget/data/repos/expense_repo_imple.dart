@@ -15,39 +15,44 @@ class ExpenseRepoImple implements ExpenseRepo {
   Future<Either<Failures, ExpenseEntity>> addExpense({
     required ExpenseEntity expenseEntity,
     required String tripId,
+    required String userToken,
   }) async {
     try {
       var body = {
-        'name': expenseEntity.description,
+        'name': expenseEntity.category,
         'description': expenseEntity.description,
         'price': expenseEntity.price,
       };
+    
       await apiService.post(
         url: '${BackendService.addExpenseUrl}$tripId?',
         body: body,
+        token: userToken,
       );
       return right(expenseEntity);
     } on Exception catch (e) {
-      return left(ServerFailure(errorMessage: e.toString()));
+      return left(throw ServerFailure(errorMessage: e.toString()));
     }
   }
 
   @override
   Future<Either<Failures, List<ExpenseEntity>>> getExpenseHistory({
     required String tripId,
+    required String userToken,
   }) async {
-    List<ExpenseModel> expenseModels = [];
+    List<ExpenseModel> expenseModelsList = [];
     try {
       Response response = await apiService.get(
         url: '${BackendService.getExpenseHistoryUrl}$tripId?',
+        token: userToken,
       );
 
       for (var expense in response.data['value']['expenses']) {
-        expenseModels.add(ExpenseModel.fromJson(expense));
+        expenseModelsList.add(ExpenseModel.fromJson(expense));
       }
-      return right(expenseModels);
+      return right(expenseModelsList);
     } on Exception catch (e) {
-      return left(ServerFailure(errorMessage: e.toString()));
+      return left(throw ServerFailure(errorMessage: e.toString()));
     }
   }
 }
