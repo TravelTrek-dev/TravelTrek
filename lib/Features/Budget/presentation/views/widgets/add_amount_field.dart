@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AddAmountField extends StatefulWidget {
-  const AddAmountField({super.key});
-
+  const AddAmountField({super.key, required this.onChanged});
+  final Function(String)? onChanged;
   @override
   State<AddAmountField> createState() => _AddAmountFieldState();
 }
@@ -54,6 +54,7 @@ class _AddAmountFieldState extends State<AddAmountField> {
             const SizedBox(width: 8),
             IntrinsicWidth(
               child: TextField(
+                onChanged: widget.onChanged,
                 showCursor: true,
                 cursorHeight: 50,
                 controller: _controller,

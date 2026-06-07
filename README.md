@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # travel_trek
 
 A new Flutter project.
@@ -15,3 +16,8 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# TravelTrek
+TravelTrek AI is an intelligent, AI-powered travel planning mobile application. Built with Flutter and Clean Architecture, it helps users generate personalized itineraries, manage travel budgets, and explore destinations seamlessly.
+>>>>>>> d3f4995bd1a7ee3d92778d5fddb64ebe1339821f
+ي
