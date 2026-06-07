@@ -14,22 +14,26 @@ class CurrencyLocationService {
       permission = await Geolocator.requestPermission();
     }
 
-    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
-      print('[CurrencyLocationService] Location permission denied. Falling back to locale.');
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      print(
+        '[CurrencyLocationService] Location permission denied. Falling back to locale.',
+      );
       return _getCurrencyFromLocale();
     }
 
     try {
       Position? position;
       if (serviceEnabled) {
-        position = await Geolocator.getCurrentPosition(
-          locationSettings: const LocationSettings(
-            accuracy: LocationAccuracy.low,
-          ),
-        ).timeout(
-          const Duration(seconds: 10),
-          onTimeout: () => throw Exception('Location request timed out'),
-        );
+        position =
+            await Geolocator.getCurrentPosition(
+              locationSettings: const LocationSettings(
+                accuracy: LocationAccuracy.low,
+              ),
+            ).timeout(
+              const Duration(seconds: 10),
+              onTimeout: () => throw Exception('Location request timed out'),
+            );
       }
 
       if (position == null) {
@@ -37,28 +41,35 @@ class CurrencyLocationService {
       }
 
       if (position == null) {
-        print('[CurrencyLocationService] No location available from GPS. Falling back to locale.');
+        print(
+          '[CurrencyLocationService] No location available from GPS. Falling back to locale.',
+        );
         return _getCurrencyFromLocale();
       }
 
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude,
-        position.longitude,
-      ).timeout(
-        const Duration(seconds: 10),
-        onTimeout: () => throw Exception('Geocoding timed out'),
-      );
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(
+            position.latitude,
+            position.longitude,
+          ).timeout(
+            const Duration(seconds: 10),
+            onTimeout: () => throw Exception('Geocoding timed out'),
+          );
 
       if (placemarks.isNotEmpty) {
         String? countryCode = placemarks.first.isoCountryCode;
         if (countryCode != null && countryCode.isNotEmpty) {
           final currency = _getCurrencyFromCountryCode(countryCode);
-          print('[CurrencyLocationService] Country code found: $countryCode -> $currency');
+          print(
+            '[CurrencyLocationService] Country code found: $countryCode -> $currency',
+          );
           return currency;
         }
       }
 
-      print('[CurrencyLocationService] No placemark country code found. Falling back to locale.');
+      print(
+        '[CurrencyLocationService] No placemark country code found. Falling back to locale.',
+      );
       return _getCurrencyFromLocale();
     } catch (e) {
       print('[CurrencyLocationService] Error fetching location/currency: $e');
@@ -71,11 +82,15 @@ class CurrencyLocationService {
     final countryCode = locale.countryCode;
     if (countryCode != null && countryCode.isNotEmpty) {
       final currency = _getCurrencyFromCountryCode(countryCode);
-      print('[CurrencyLocationService] Locale country code: $countryCode -> $currency');
+      print(
+        '[CurrencyLocationService] Locale country code: $countryCode -> $currency',
+      );
       return currency;
     }
 
-    print('[CurrencyLocationService] Locale country code missing. Using default $_defaultCurrency.');
+    print(
+      '[CurrencyLocationService] Locale country code missing. Using default $_defaultCurrency.',
+    );
     return _defaultCurrency;
   }
 

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class CategorySelector extends StatefulWidget {
   final Function(String) onCategorySelected;
-  
+
   const CategorySelector({super.key, required this.onCategorySelected});
-  
+
   @override
   State<CategorySelector> createState() => _CategorySelectorState();
 }
@@ -21,7 +21,7 @@ class _CategorySelectorState extends State<CategorySelector> {
   @override
   Widget build(BuildContext context) {
     const Color labelColor = Color(0xFF5D5451);
-    const Color fieldFillColor = Color(0xFFEBEBE3); 
+    const Color fieldFillColor = Color(0xFFEBEBE3);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +46,9 @@ class _CategorySelectorState extends State<CategorySelector> {
             filled: true,
             fillColor: fieldFillColor,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20), // حواف دائرية مشابهة للتصميم السابق
+              borderRadius: BorderRadius.circular(
+                20,
+              ), // حواف دائرية مشابهة للتصميم السابق
               borderSide: BorderSide.none,
             ),
             contentPadding: const EdgeInsets.symmetric(

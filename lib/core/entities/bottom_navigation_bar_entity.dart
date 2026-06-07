@@ -1,4 +1,3 @@
-
 import 'package:travel_trek/core/utils/app_images.dart';
 
 class BottomNavigationBarEntity {

@@ -60,9 +60,11 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
               prefixIcon: Icons.email_outlined,
             ),
             const SizedBox(height: 16),
-             PasswordField(onSaved: (value){
-              password = value!;
-             },),
+            PasswordField(
+              onSaved: (value) {
+                password = value!;
+              },
+            ),
             const SizedBox(height: 24),
             CustomButton(
               text: 'Sign Up',

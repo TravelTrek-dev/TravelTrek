@@ -34,7 +34,7 @@ class AuthRepoImpleApi implements AuthRepo {
     } on DioException catch (e) {
       if (e.response != null && e.response!.data != null) {
         final String errorMessage =
-            e.response!.data ['message'] ?? 'An unexpected error occurred';
+            e.response!.data['message'] ?? 'An unexpected error occurred';
 
         return left(ServerFailure(errorMessage: errorMessage));
       } else {
@@ -73,13 +73,11 @@ class AuthRepoImpleApi implements AuthRepo {
   Future<Either<Failures, UserEntity>> signInWithGoogle() async {
     try {
       var user = await firebaseAuthService.signInWithGoogle();
-      return right(UserModel.formFireBaseUser( user: user));
+      return right(UserModel.formFireBaseUser(user: user));
     } on CustomException catch (e) {
       return left(ServerFailure(errorMessage: e.message));
     } catch (e) {
-      log(
-        'Exception in AuthRepoImple.signInWithGoogle: ${e.toString()}',
-      );
+      log('Exception in AuthRepoImple.signInWithGoogle: ${e.toString()}');
       return left(ServerFailure(errorMessage: e.toString()));
     }
   }

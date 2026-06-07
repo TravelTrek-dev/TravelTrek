@@ -2,8 +2,8 @@ class ExpenseEntity {
   final String description;
   final double price;
   final String category;
-   num? spent;
-   num? remaining;
+  num? spent;
+  num? remaining;
 
   ExpenseEntity({
     required this.description,

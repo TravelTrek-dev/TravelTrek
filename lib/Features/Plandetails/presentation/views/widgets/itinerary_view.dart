@@ -7,9 +7,7 @@ import 'package:travel_trek/Features/Plandetails/presentation/views/widgets/sliv
 import 'package:travel_trek/core/widgets/custom_button.dart';
 
 class ItineraryView extends StatelessWidget {
-  const ItineraryView({
-    super.key,
-  });
+  const ItineraryView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,32 +39,30 @@ class ItineraryView extends StatelessWidget {
                 const SizedBox(height: 24),
                 const LocalCurrencyCard(),
                 const SizedBox(height: 24),
-    
+
                 const Text(
                   'Travel Tips',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                 ),
-    
+
                 const SizedBox(height: 16),
               ],
             ),
           ),
         ),
         SliverListBuilderTrivelTrip(),
-    
+
         SliverToBoxAdapter(child: const SizedBox(height: 24)),
-    
+
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: CustomButton(text: 'Save Plan', onPressed: () {}),
           ),
         ),
-    
+
         SliverToBoxAdapter(child: const SizedBox(height: 24)),
       ],
     );
   }
 }
-
-

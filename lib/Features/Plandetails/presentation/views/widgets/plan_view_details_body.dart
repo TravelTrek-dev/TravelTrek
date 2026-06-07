@@ -4,19 +4,16 @@ import 'package:travel_trek/Features/day_details/presentation/views/day_details_
 import 'package:travel_trek/Features/Plandetails/presentation/views/widgets/itinerary_view.dart';
 import 'package:travel_trek/Features/note/presentation/views/tips_view.dart';
 
-
 class PlanViewDetailsBody extends StatelessWidget {
   const PlanViewDetailsBody({super.key, required this.currentindex});
 
- final int currentindex;
+  final int currentindex;
 
   @override
   Widget build(BuildContext context) {
     return IndexedStack(
       index: currentindex,
-      children: [ItineraryView() , BudgetView() , TipsView() , DayDetailsView()],
+      children: [ItineraryView(), BudgetView(), TipsView(), DayDetailsView()],
     );
   }
 }
-
-

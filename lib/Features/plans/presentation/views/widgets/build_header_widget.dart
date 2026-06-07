@@ -3,9 +3,7 @@ import 'package:travel_trek/core/utils/app_colors.dart';
 import 'package:travel_trek/core/utils/app_styles.dart';
 
 class BuildHeaderWidget extends StatelessWidget {
-  const BuildHeaderWidget({
-    super.key,
-  });
+  const BuildHeaderWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

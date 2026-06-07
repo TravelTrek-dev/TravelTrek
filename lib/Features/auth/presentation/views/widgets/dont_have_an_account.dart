@@ -16,7 +16,10 @@ class DontHaveAnAccount extends StatelessWidget {
           },
           child: const Text(
             "Create Account",
-            style: TextStyle(fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.underline,
+            ),
           ),
         ),
       ],

@@ -24,7 +24,7 @@ class _TravelTripsCardState extends State<TravelTripsCard> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFF2F2EE), 
+        color: const Color(0xFFF2F2EE),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -54,7 +54,7 @@ class _TravelTripsCardState extends State<TravelTripsCard> {
                   ),
                   AnimatedRotation(
                     duration: const Duration(milliseconds: 300),
-                    turns: _isExpanded ? 0.5 : 0, 
+                    turns: _isExpanded ? 0.5 : 0,
                     child: const Icon(
                       Icons.keyboard_arrow_down,
                       color: Color(0xFF66595B),

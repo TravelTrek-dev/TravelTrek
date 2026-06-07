@@ -7,12 +7,13 @@ class SliverListBuilderDayCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverList.builder(
-      itemCount: 4, 
+      itemCount: 4,
       itemBuilder: (context, index) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: DayCard(),
-      );
-    });
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: DayCard(),
+        );
+      },
+    );
   }
 }

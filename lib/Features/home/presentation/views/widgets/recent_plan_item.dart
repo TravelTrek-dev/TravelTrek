@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class RecentPlanItem extends StatelessWidget {
   const RecentPlanItem({super.key, required this.text});
-  
+
   final String text;
   @override
   Widget build(BuildContext context) {

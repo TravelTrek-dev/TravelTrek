@@ -8,7 +8,7 @@ class ItineraryCardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAlias, 
+      clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       child: Stack(
         children: [
@@ -21,7 +21,6 @@ class ItineraryCardHeader extends StatelessWidget {
             ),
           ),
 
-        
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
@@ -31,7 +30,7 @@ class ItineraryCardHeader extends StatelessWidget {
                   colors: [
                     Colors.black.withValues(alpha: .3),
                     Colors.transparent,
-                    Colors.black.withValues(alpha: 0.7), 
+                    Colors.black.withValues(alpha: 0.7),
                   ],
                   stops: const [0.0, 0.5, 1.0],
                 ),

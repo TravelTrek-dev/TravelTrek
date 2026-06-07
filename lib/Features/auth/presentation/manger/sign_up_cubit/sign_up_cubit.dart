@@ -1,4 +1,3 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_trek/Features/auth/domain/entity/user_entity.dart';
 import 'package:travel_trek/Features/auth/domain/repos/auth_repo.dart';
@@ -10,7 +9,7 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   final AuthRepo authRepo;
 
-   Future<void> createUserWithEmailAndPassword({
+  Future<void> createUserWithEmailAndPassword({
     required String name,
     required String email,
     required String password,
@@ -27,5 +26,4 @@ class SignUpCubit extends Cubit<SignUpState> {
       (userEntity) => emit(SignUpSuccess(userEntity: userEntity)),
     );
   }
-
 }

@@ -16,6 +16,6 @@ class NaivgationBarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return isSelected
         ? ActiveItem(image: entity.activeImage, text: entity.text)
-        : InActiveItem(image: entity.inActiveImage, text: entity.text,);
+        : InActiveItem(image: entity.inActiveImage, text: entity.text);
   }
 }

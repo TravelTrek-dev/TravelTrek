@@ -8,13 +8,17 @@ class BuildSocialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Row(
+    return Row(
       children: [
-        CustomSocialButton(label: 'Google', iconPath: '', onPressed: () { 
-          BlocProvider.of<SignInCubit>(context).signInWithGoogle();
-         },),
+        CustomSocialButton(
+          label: 'Google',
+          iconPath: '',
+          onPressed: () {
+            BlocProvider.of<SignInCubit>(context).signInWithGoogle();
+          },
+        ),
         SizedBox(width: 16),
-        CustomSocialButton(label: 'Apple', iconPath: '', onPressed: () {  },),
+        CustomSocialButton(label: 'Apple', iconPath: '', onPressed: () {}),
       ],
     );
   }

@@ -39,7 +39,7 @@ class AuthRepoImple implements AuthRepo {
     required String email,
     required String password,
   }) async {
-      try {
+    try {
       var user = await firebaseAuthService.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -51,20 +51,17 @@ class AuthRepoImple implements AuthRepo {
     } catch (e) {
       return left(ServerFailure(errorMessage: e.toString()));
     }
-
   }
-  
- @override
+
+  @override
   Future<Either<Failures, UserEntity>> signInWithGoogle() async {
     try {
       var user = await firebaseAuthService.signInWithGoogle();
-      return right(UserModel.formFireBaseUser( user: user));
+      return right(UserModel.formFireBaseUser(user: user));
     } on CustomException catch (e) {
       return left(ServerFailure(errorMessage: e.message));
     } catch (e) {
-      log(
-        'Exception in AuthRepoImple.signInWithGoogle: ${e.toString()}',
-      );
+      log('Exception in AuthRepoImple.signInWithGoogle: ${e.toString()}');
       return left(ServerFailure(errorMessage: e.toString()));
     }
   }

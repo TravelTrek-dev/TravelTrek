@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 class ExpenseCategoryCard extends StatelessWidget {
   const ExpenseCategoryCard({
-    super.key, required this.category, required this.description, required this.amount,
+    super.key,
+    required this.category,
+    required this.description,
+    required this.amount,
   });
-  final String category ;
-  final String description ;
-  final double amount ;
+  final String category;
+  final String description;
+  final double amount;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,7 +20,7 @@ class ExpenseCategoryCard extends StatelessWidget {
         border: Border.all(
           color: const Color(0xFFC9BFB0),
           width: 1.5,
-        
+
           style: BorderStyle.solid,
         ),
       ),
@@ -50,9 +53,9 @@ class ExpenseCategoryCard extends StatelessWidget {
               ],
             ),
           ),
-    
+
           const SizedBox(width: 16),
-    
+
           Text(
             '\$${amount.toStringAsFixed(2)}',
             style: const TextStyle(
@@ -62,14 +65,8 @@ class ExpenseCategoryCard extends StatelessWidget {
               letterSpacing: -0.2,
             ),
           ),
-    
+
           const SizedBox(width: 14),
-    
-          const Icon(
-            Icons.edit_outlined,
-            size: 18,
-            color: Color(0xFF9E9183),
-          ),
         ],
       ),
     );

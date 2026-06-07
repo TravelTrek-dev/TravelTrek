@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_trek/Features/Plandetails/presentation/views/widgets/build_detail_chip.dart';
 
 class ItineraryCardInfo extends StatelessWidget {
-  const ItineraryCardInfo({
-    super.key,
-  });
+  const ItineraryCardInfo({super.key});
 
   @override
   Widget build(BuildContext context) {

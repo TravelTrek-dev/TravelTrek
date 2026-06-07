@@ -9,8 +9,8 @@ class DateTextfiled extends StatefulWidget {
 }
 
 class _DateTextfiledState extends State<DateTextfiled> {
-    final TextEditingController _dateController = TextEditingController();
-  
+  final TextEditingController _dateController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     const Color labelColor = Color(0xFF5D5451);
@@ -57,7 +57,7 @@ class _DateTextfiledState extends State<DateTextfiled> {
     );
   }
 
-   Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -80,19 +80,19 @@ class _DateTextfiledState extends State<DateTextfiled> {
     if (picked != null) {
       setState(() {
         String formattedDate = DateFormat('MM/dd/yyyy').format(picked);
-        
+
         _dateController.text = formattedDate;
-        
+
         if (widget.onChangedDateField != null) {
           widget.onChangedDateField!(formattedDate);
         }
       });
     }
   }
+
   @override
   void dispose() {
     _dateController.dispose();
     super.dispose();
   }
 }
-

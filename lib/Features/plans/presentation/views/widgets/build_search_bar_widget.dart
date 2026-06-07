@@ -3,9 +3,7 @@ import 'package:travel_trek/core/utils/app_colors.dart';
 import 'package:travel_trek/core/utils/app_styles.dart';
 
 class BuildSearchBarWidget extends StatelessWidget {
-  const BuildSearchBarWidget({
-    super.key,
-  });
+  const BuildSearchBarWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +33,7 @@ class BuildSearchBarWidget extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: AppColors.primaryColor,
-                ),
+                borderSide: const BorderSide(color: AppColors.primaryColor),
               ),
               contentPadding: const EdgeInsets.symmetric(vertical: 10),
             ),

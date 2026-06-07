@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:travel_trek/Features/home/presentation/views/widgets/build_chip.dart';
 
 class TripPlannerInputField extends StatelessWidget {
-  const TripPlannerInputField({super.key, required this.controller, required this.onChanged});
+  const TripPlannerInputField({
+    super.key,
+    required this.controller,
+    required this.onChanged,
+  });
   final TextEditingController controller;
   final void Function(String)? onChanged;
 
@@ -21,24 +25,27 @@ class TripPlannerInputField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 20 , left:  24 , right:  24 , bottom: 24),
+            padding: const EdgeInsets.only(
+              top: 20,
+              left: 24,
+              right: 24,
+              bottom: 24,
+            ),
             child: TextField(
               controller: controller,
               onChanged: onChanged,
-              maxLines: 6, 
+              maxLines: 6,
               minLines: 1,
-              style: const TextStyle(
-                color: Color(0xFF4A4646),
-                fontSize: 16,
-              ),
-              decoration:  InputDecoration(
-                hintText: 'e.g., A 5-day family trip to Cairo\nwith kids and medium budget',
+              style: const TextStyle(color: Color(0xFF4A4646), fontSize: 16),
+              decoration: InputDecoration(
+                hintText:
+                    'e.g., A 5-day family trip to Cairo\nwith kids and medium budget',
                 hintStyle: TextStyle(
                   color: Color(0xFFD2C9CA).withValues(alpha: 0.8),
                   fontSize: 16,
                   height: 1.5,
                 ),
-                border: InputBorder.none, 
+                border: InputBorder.none,
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
               ),

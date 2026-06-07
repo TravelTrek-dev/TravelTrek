@@ -9,4 +9,3 @@ class TipsView extends StatelessWidget {
     return Scaffold(body: SafeArea(child: TipsViewBody()));
   }
 }
-  

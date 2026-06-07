@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomTabBar({super.key, required this.onTap});
- final  ValueChanged<int> onTap;
+  final ValueChanged<int> onTap;
   @override
   Size get preferredSize => const Size.fromHeight(50.0);
 
@@ -28,8 +28,8 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       overlayColor: WidgetStateProperty.all(Colors.transparent),
       dividerColor: const Color(0xFFE0E0E0),
-      tabs:  [
-        Tab(text: 'Itinerary' ,),
+      tabs: [
+        Tab(text: 'Itinerary'),
         Tab(text: 'Budget'),
         Tab(text: 'Tips'),
         Tab(text: 'Day Details'),

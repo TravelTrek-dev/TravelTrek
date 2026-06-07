@@ -44,7 +44,7 @@ class BudgetHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 28),
-        
+
         // Budget Card
         Container(
           width: double.infinity,
@@ -118,13 +118,13 @@ class BudgetHeader extends StatelessWidget {
                   ),
                 ],
               ),
-        
+
               const SizedBox(height: 24),
-        
+
               BudgetProgressBar(progress: utilizedPercent),
-        
+
               const SizedBox(height: 14),
-        
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -139,7 +139,7 @@ class BudgetHeader extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 6),
-                       Text(
+                      Text(
                         '${(utilizedPercent * 100).toStringAsFixed(1)}% utilized',
                         style: TextStyle(
                           fontSize: 13,
@@ -158,7 +158,7 @@ class BudgetHeader extends StatelessWidget {
                       color: const Color(0xFFF0EBE0),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child:  Text(
+                    child: Text(
                       '\$$remainingStr remaining',
                       style: TextStyle(
                         fontSize: 12,

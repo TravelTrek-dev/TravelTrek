@@ -14,8 +14,7 @@ class SignupViewBodyBlocConsumer extends StatelessWidget {
       listener: (context, state) {
         if (state is SignUpFailure) {
           showSnackBar(context, state.errorMessage);
-        }
-        else if( state is SignUpSuccess){ 
+        } else if (state is SignUpSuccess) {
           showSnackBar(context, 'Your account has been created successfully!');
         }
       },
@@ -27,6 +26,4 @@ class SignupViewBodyBlocConsumer extends StatelessWidget {
       },
     );
   }
-
-
 }

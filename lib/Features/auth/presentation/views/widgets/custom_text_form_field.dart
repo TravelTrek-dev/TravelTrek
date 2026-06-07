@@ -12,15 +12,15 @@ class CustomTextFormField extends StatelessWidget {
     required this.hintText,
     required this.prefixIcon,
     this.suffixIcon,
-    this.obscureText = false, this.onSaved, 
+    this.obscureText = false,
+    this.onSaved,
   });
-
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onSaved:onSaved ,
-      validator: (value){
+      onSaved: onSaved,
+      validator: (value) {
         if (value == null || value.isEmpty) {
           return 'This field is required.';
         }
@@ -34,15 +34,15 @@ class CustomTextFormField extends StatelessWidget {
         filled: true,
         fillColor: Colors.white,
         border: buildBorder(),
-        enabledBorder: buildBorder()
+        enabledBorder: buildBorder(),
       ),
     );
   }
 
   OutlineInputBorder buildBorder() {
     return OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xffE0E0E0)),
-      );
+      borderRadius: BorderRadius.circular(16),
+      borderSide: const BorderSide(color: Color(0xffE0E0E0)),
+    );
   }
 }

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -18,14 +17,16 @@ class SignInViewBodyBlocConsumer extends StatelessWidget {
       listener: (context, state) async {
         if (state is SignInFailure) {
           showSnackBar(context, state.errorMessage);
-        } else if (state is SignInSuccess)  {
-          
+        } else if (state is SignInSuccess) {
           Prefs.setString(kUserToken, state.userEntity.token);
           await Prefs.setUserEntity(state.userEntity);
           showSnackBar(context, 'Login successful. Welcome back.');
-         
-          Navigator.pushNamed(context, MainView.routeName , arguments: state.userEntity);
-          
+
+          Navigator.pushNamed(
+            context,
+            MainView.routeName,
+            arguments: state.userEntity,
+          );
         }
       },
       builder: (context, state) {

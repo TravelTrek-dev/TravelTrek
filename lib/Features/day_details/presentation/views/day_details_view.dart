@@ -6,9 +6,6 @@ class DayDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: DayDetailsViewBody(),
-    );
+    return Scaffold(body: DayDetailsViewBody());
   }
 }
-

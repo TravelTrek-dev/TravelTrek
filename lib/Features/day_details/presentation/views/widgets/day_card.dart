@@ -55,5 +55,3 @@ class DayDetailsCard extends StatelessWidget {
     );
   }
 }
-
-

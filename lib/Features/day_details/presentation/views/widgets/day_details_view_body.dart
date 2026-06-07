@@ -18,21 +18,21 @@ class DayDetailsViewBody extends StatelessWidget {
                   children: [
                     Text(
                       'Day 1',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ],
                 ),
                 SizedBox(height: 12),
-               
               ],
             ),
           ),
         ),
-         DayDetailsSliverList(),
+        DayDetailsSliverList(),
 
-         SliverToBoxAdapter(
-          child: SizedBox(height: 24),
-         )
+        SliverToBoxAdapter(child: SizedBox(height: 24)),
       ],
     );
   }

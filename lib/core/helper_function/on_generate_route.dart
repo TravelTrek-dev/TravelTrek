@@ -16,13 +16,16 @@ Route<dynamic> onGenerateRoute(RouteSettings setting) {
     case SignInView.routeName:
       return MaterialPageRoute(builder: (context) => const SignInView());
     case SignUpView.routeName:
-      return MaterialPageRoute(builder: (context) => const SignUpView()); 
-     case MainView.routeName:
-      return MaterialPageRoute(builder: (context) => const MainView() , settings: RouteSettings(arguments: setting.arguments));
-      case PlanViewDetails.routeName:
+      return MaterialPageRoute(builder: (context) => const SignUpView());
+    case MainView.routeName:
+      return MaterialPageRoute(
+        builder: (context) => const MainView(),
+        settings: RouteSettings(arguments: setting.arguments),
+      );
+    case PlanViewDetails.routeName:
       return MaterialPageRoute(builder: (context) => const PlanViewDetails());
-      case AddExpenseView.routeName:
-      return MaterialPageRoute(builder: (context) => const AddExpenseView());          
+    case AddExpenseView.routeName:
+      return MaterialPageRoute(builder: (context) => const AddExpenseView());
     default:
       return MaterialPageRoute(builder: (context) => const Scaffold());
   }

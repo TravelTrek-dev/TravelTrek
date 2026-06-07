@@ -10,7 +10,7 @@ class TripTipsCard extends StatelessWidget {
     const Color bodyTextColor = Color(0xFF7A706D);
 
     return Container(
-      width: double.infinity, 
+      width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: cardBackground,
@@ -42,7 +42,7 @@ class TripTipsCard extends StatelessWidget {
             style: TextStyle(
               color: bodyTextColor,
               fontSize: 15,
-              height: 1.6, 
+              height: 1.6,
               fontWeight: FontWeight.w400,
             ),
           ),

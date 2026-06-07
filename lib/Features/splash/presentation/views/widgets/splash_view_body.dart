@@ -109,16 +109,16 @@ class _SplashViewBodyState extends State<SplashViewBody> {
     );
   }
 
- Future<void> _fetchAndSaveCurrency() async {
-  try {
-    final service = CurrencyLocationService();
-    String currency = await service.getUserCurrency();
-    
-    debugPrint('======> Currency From Location Service: $currency'); 
-    
-    await Prefs.setString(kSavedCurrency, currency); 
-  } catch (e) {
-    debugPrint('Error in fetchAndSaveCurrency: $e');
+  Future<void> _fetchAndSaveCurrency() async {
+    try {
+      final service = CurrencyLocationService();
+      String currency = await service.getUserCurrency();
+
+      debugPrint('======> Currency From Location Service: $currency');
+
+      await Prefs.setString(kSavedCurrency, currency);
+    } catch (e) {
+      debugPrint('Error in fetchAndSaveCurrency: $e');
+    }
   }
-}
 }

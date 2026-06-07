@@ -22,7 +22,7 @@ class _AddExpenseViewBodyState extends State<AddExpenseViewBody> {
   String description = '';
   String date = '';
   String category = '';
-  String userToken = Prefs.getString(kUserToken); 
+  String userToken = Prefs.getString(kUserToken);
   String tripId = '17964615-9485-43b3-caf1-08dec47a5379';
   @override
   Widget build(BuildContext context) {
@@ -65,10 +65,9 @@ class _AddExpenseViewBodyState extends State<AddExpenseViewBody> {
                   userToken: userToken,
                   tripId: tripId,
                 );
-                await BlocProvider.of<ExpenseCubit>(context).getExpenseHistory(
-                  tripId: tripId,
-                  userToken: userToken,
-                );
+                await BlocProvider.of<ExpenseCubit>(
+                  context,
+                ).getExpenseHistory(tripId: tripId, userToken: userToken);
                 if (mounted) Navigator.pop(context);
               },
             ),

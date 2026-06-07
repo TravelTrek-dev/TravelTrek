@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:travel_trek/core/utils/app_styles.dart';
 
 class CardInfo extends StatelessWidget {
-  const CardInfo({super.key, required this.iconData, required this.title, required this.description});
+  const CardInfo({
+    super.key,
+    required this.iconData,
+    required this.title,
+    required this.description,
+  });
 
   final IconData iconData;
   final String title;
@@ -29,12 +34,8 @@ class CardInfo extends StatelessWidget {
                 color: const Color(0xffEBEBE0),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child:  Center(
-                child: Icon(
-                  iconData,
-                  color: Color(0xff5C5850),
-                  size: 28,
-                ),
+              child: Center(
+                child: Icon(iconData, color: Color(0xff5C5850), size: 28),
               ),
             ),
             const SizedBox(width: 16),

@@ -13,12 +13,11 @@ class _AddAmountFieldState extends State<AddAmountField> {
   @override
   void initState() {
     price = 0.00;
-    _controller = TextEditingController( text: price.toStringAsFixed(2)); 
+    _controller = TextEditingController(text: price.toStringAsFixed(2));
     super.initState();
   }
 
-  late  TextEditingController _controller; 
-   
+  late TextEditingController _controller;
 
   @override
   Widget build(BuildContext context) {

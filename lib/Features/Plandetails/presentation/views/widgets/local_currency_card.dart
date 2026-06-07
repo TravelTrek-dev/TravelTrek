@@ -20,16 +20,15 @@ class LocalCurrencyCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-        
           Container(
             height: 48,
             width: 48,
             decoration: BoxDecoration(
-              color: const Color(0xFFE0E0DA), 
+              color: const Color(0xFFE0E0DA),
               shape: BoxShape.circle,
             ),
             child: const Icon(
-              Icons.currency_exchange, 
+              Icons.currency_exchange,
               color: Color(0xFF66595B),
               size: 24,
             ),

@@ -23,7 +23,7 @@ class ExpenseRepoImple implements ExpenseRepo {
         'description': expenseEntity.description,
         'price': expenseEntity.price,
       };
-    
+
       await apiService.post(
         url: '${BackendService.addExpenseUrl}$tripId?',
         body: body,
@@ -40,7 +40,7 @@ class ExpenseRepoImple implements ExpenseRepo {
     required String tripId,
     required String userToken,
   }) async {
-     List<ExpenseModel> expenseModelsList = [];
+    List<ExpenseModel> expenseModelsList = [];
     try {
       Response response = await apiService.get(
         url: '${BackendService.getExpenseHistoryUrl}$tripId?',
@@ -51,10 +51,9 @@ class ExpenseRepoImple implements ExpenseRepo {
         expenseModelsList.add(ExpenseModel.fromJson(expense));
       }
 
-      for (var expense in  expenseModelsList) {
+      for (var expense in expenseModelsList) {
         expense.spent = response.data['value']['spent'];
         expense.remaining = response.data['value']['remaining'];
-
       }
       return right(expenseModelsList);
     } on Exception catch (e) {

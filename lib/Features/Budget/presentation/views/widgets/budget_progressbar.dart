@@ -37,4 +37,3 @@ class BudgetProgressBar extends StatelessWidget {
     );
   }
 }
-

@@ -4,10 +4,11 @@ import 'package:travel_trek/core/entities/bottom_navigation_bar_entity.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   const CustomBottomNavigationBar({super.key, required this.onItemTapped});
-   final ValueChanged<int>  onItemTapped;
+  final ValueChanged<int> onItemTapped;
 
   @override
-  State<CustomBottomNavigationBar> createState() => _CustomBottomNavigationBarState();
+  State<CustomBottomNavigationBar> createState() =>
+      _CustomBottomNavigationBarState();
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {

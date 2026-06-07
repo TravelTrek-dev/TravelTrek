@@ -23,11 +23,10 @@ class MyPlansViewBody extends StatelessWidget {
               ],
             ),
           ),
-          
-          const BuildPlanItemsSliverListBuilder(),
+
+          // const BuildPlanItemsSliverListBuilder(),
         ],
       ),
     );
   }
 }
-

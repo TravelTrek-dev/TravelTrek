@@ -25,6 +25,5 @@ AppBar customAppBar({required String name}) {
         ],
       ),
     ),
-   
   );
 }

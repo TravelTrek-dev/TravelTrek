@@ -1,10 +1,9 @@
 import 'package:equatable/equatable.dart';
 
 class TravelTipEntity extends Equatable {
-
-  final String title; 
-  final String content; 
-  final String iconName; 
+  final String title;
+  final String content;
+  final String iconName;
 
   const TravelTipEntity({
     required this.title,
@@ -13,5 +12,5 @@ class TravelTipEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [ title, content, iconName];
+  List<Object?> get props => [title, content, iconName];
 }

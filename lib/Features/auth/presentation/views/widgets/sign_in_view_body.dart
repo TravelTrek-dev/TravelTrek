@@ -91,9 +91,11 @@ class _SignInViewBodyState extends State<SignInViewBody> {
                 ),
               ],
             ),
-            PasswordField(onSaved: (value){
-              password = value!;
-            },),
+            PasswordField(
+              onSaved: (value) {
+                password = value!;
+              },
+            ),
             const SizedBox(height: 16),
 
             const TermsAndCondtions(),
@@ -131,4 +133,3 @@ class _SignInViewBodyState extends State<SignInViewBody> {
     );
   }
 }
-

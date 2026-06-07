@@ -4,15 +4,12 @@ import 'package:travel_trek/Features/onboarding/presentation/views/widgets/page_
 
 class OnBoardingPageView extends StatelessWidget {
   const OnBoardingPageView({super.key, required this.pageController});
- final PageController pageController;
+  final PageController pageController;
   @override
   Widget build(BuildContext context) {
     return PageView(
       controller: pageController,
-      children: [
-      PageViewItem(),
-      OnBoardingFinalPageView(),
-    ],);
+      children: [PageViewItem(), OnBoardingFinalPageView()],
+    );
   }
 }
-

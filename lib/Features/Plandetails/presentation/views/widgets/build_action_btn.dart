@@ -3,8 +3,8 @@ import 'package:travel_trek/Features/Plandetails/presentation/views/widgets/acti
 import 'package:travel_trek/core/utils/app_colors.dart';
 
 class BuildActionBtn extends StatefulWidget {
-  const BuildActionBtn({super.key,});
-  
+  const BuildActionBtn({super.key});
+
   @override
   State<BuildActionBtn> createState() => _BuildActionBtnState();
 }
@@ -23,7 +23,7 @@ class _BuildActionBtnState extends State<BuildActionBtn> {
           ActionBtn(
             icon: Icons.copy_outlined,
             label: 'Copy',
-            onTap: () =>   showActionBtn = false,
+            onTap: () => showActionBtn = false,
           ),
           Container(width: 1, height: 40, color: AppColors.border),
           ActionBtn(
@@ -35,6 +35,5 @@ class _BuildActionBtnState extends State<BuildActionBtn> {
         ],
       ),
     );
-    
   }
 }

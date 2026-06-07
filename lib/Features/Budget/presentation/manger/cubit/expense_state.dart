@@ -20,11 +20,13 @@ final class AddExpenseFailure extends ExpenseState {
 }
 
 final class GetExpenseHistoryLoading extends ExpenseState {}
+
 final class GetExpenseHistorySuccess extends ExpenseState {
   final List<ExpenseEntity> expenses;
 
   const GetExpenseHistorySuccess({required this.expenses});
 }
+
 final class GetExpenseHistoryFailure extends ExpenseState {
   final String errorMessage;
 

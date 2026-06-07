@@ -8,7 +8,7 @@ class DayDetailsSliverList extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverList.builder(
       itemBuilder: (context, index) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12 , horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
         child: DayDetailsCard(),
       ),
       itemCount: 5,

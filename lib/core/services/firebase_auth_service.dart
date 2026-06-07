@@ -28,48 +28,45 @@ class FirebaseAuthService {
         throw CustomException(message: 'Error. pls try again later!');
       }
     } catch (e) {
-       log(
+      log(
         'Exception in  FirebaseAuthService.createUserWithEmailandPassword : ${e.toString()} ',
       );
       throw CustomException(message: 'Error. pls try again later!');
     }
   }
 
-
   Future<User> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
     try {
-      final credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       return credential.user!;
     } on FirebaseAuthException catch (e) {
-       log(
+      log(
         'Exception in  FirebaseAuthService.signInWithEmailAndPassword : ${e.toString()} and code is ${e.code}',
       );
       if (e.code == 'user-not-found') {
         throw CustomException(message: 'password or email not vaild');
       } else if (e.code == 'wrong-password') {
-        throw CustomException(
-          message: 'password or email not vaild',
-        );
-      } else  if (e.code == 'invalid-credential'){
         throw CustomException(message: 'password or email not vaild');
-      }
-      else{
+      } else if (e.code == 'invalid-credential') {
+        throw CustomException(message: 'password or email not vaild');
+      } else {
         throw CustomException(message: 'Error. pls try again later!');
       }
     } catch (e) {
-       log(
+      log(
         'Exception in  FirebaseAuthService.signInWithEmailAndPassword : ${e.toString()} ',
       );
       throw CustomException(message: 'Error. pls try again later!');
     }
   }
 
-
-    Future<User> signInWithGoogle() async {
+  Future<User> signInWithGoogle() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn.instance;
 
@@ -87,12 +84,14 @@ class FirebaseAuthService {
         idToken: googleAuth.idToken,
       );
 
-      return (await FirebaseAuth.instance.signInWithCredential(credential)).user!;
+      return (await FirebaseAuth.instance.signInWithCredential(
+        credential,
+      )).user!;
     } catch (e) {
-      log(' Exception in  FirebaseAuthService.signInWithGoogle Google Sign-In Error: ${e.toString()}');
+      log(
+        ' Exception in  FirebaseAuthService.signInWithGoogle Google Sign-In Error: ${e.toString()}',
+      );
       throw CustomException(message: 'خطاء في تسجيل دخول بواسطه جوجل');
     }
   }
-
-
 }

@@ -12,16 +12,14 @@ import 'package:travel_trek/core/services/simple_bloc_observer.dart';
 import 'package:travel_trek/core/utils/app_colors.dart';
 import 'package:travel_trek/firebase_options.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Bloc.observer = SimpleBlocObserver();    
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  Bloc.observer = SimpleBlocObserver();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   setup();
   await Prefs.init();
-    final localCurrency = Prefs.getString(kSavedCurrency);
+  final localCurrency = Prefs.getString(kSavedCurrency);
   log('Saved Local Currency: $localCurrency'); // Debug print to check the value
 
   runApp(const TravelTrek());
@@ -34,7 +32,7 @@ class TravelTrek extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor)
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
       ),
       onGenerateRoute: onGenerateRoute,
       debugShowCheckedModeBanner: false,
@@ -42,5 +40,3 @@ class TravelTrek extends StatelessWidget {
     );
   }
 }
-
-

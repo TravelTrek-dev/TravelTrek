@@ -11,7 +11,7 @@ class AppLogo extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color:Color(0xFF6B5B4E),
+          color: Color(0xFF6B5B4E),
         ),
         child: Center(
           child: Text(

@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:travel_trek/Features/home/presentation/views/widgets/recent_plan_list_view_builder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_trek/Features/home/presentation/manger/generate_plan/generate_plan_cubit_cubit.dart';
+import 'package:travel_trek/Features/home/presentation/views/widgets/recent_plan_list_view_builder_bloc_builder.dart';
 import 'package:travel_trek/Features/home/presentation/views/widgets/trip_planner_input_field.dart';
 import 'package:travel_trek/constants.dart';
-import 'package:travel_trek/core/helper_function/show_snack_bar.dart';
+import 'package:travel_trek/core/services/prefs.dart';
+
 import 'package:travel_trek/core/utils/app_styles.dart';
 import 'package:travel_trek/core/widgets/custom_button.dart';
 
@@ -15,6 +20,7 @@ class HomeViewBody extends StatefulWidget {
 
 class _HomeViewBodyState extends State<HomeViewBody> {
   final TextEditingController _promptController = TextEditingController();
+  final userToken = Prefs.getString(kUserToken);
 
   @override
   void dispose() {
@@ -58,22 +64,28 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               ),
             ),
             const SizedBox(height: 30),
-            SizedBox(height: 180, child: RecentPlanListViewBuilder()),
+            SizedBox(height: 180, child: RecentPlanListViewBuilderBlocBuilder()),
             const SizedBox(height: 70),
             CustomButton(
               text: 'Generate My Plan',
               onPressed: () {
-                final prompt = _promptController.text.trim();
-                if (prompt.isNotEmpty) {
-                  kRecentSearches.add(prompt);
-                  _promptController.clear();
-                  setState(() {});
-                } else {
-                  showSnackBar(
-                    context,
-                    'Please enter a description of your dream trip.',
-                  );
-                }
+                log('User Token: $userToken');
+                BlocProvider.of<GeneratePlanCubitCubit>(context).generatePlan(
+                  userToken: userToken,
+                  promot: _promptController.text.trim(),
+                );
+
+                BlocProvider.of<GeneratePlanCubitCubit>(context).stream.listen((
+                  state,
+                ) {
+                  if (state is GeneratePlanCubitLoading) {
+                    log('Generating plan...');
+                  } else if (state is GeneratePlanCubitSuccess) {
+                    log('Plan generated successfully: ${state.planModel}');
+                  } else if (state is GeneratePlanCubitFailure) {
+                    log('Failed to generate plan: ${state.errorMessage}');
+                  }
+                });
               },
             ),
             const SizedBox(height: 32),

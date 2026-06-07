@@ -8,17 +8,25 @@ class Api {
 
   Future<dynamic> get({required String url, String? token}) async {
     Map<String, String> headers = {};
-
     if (token != null) {
       headers.addAll({'Authorization': 'Bearer $token'});
     }
 
     try {
-      Response response = await dio.get(url , options: Options(headers: headers));
-      return response;
+      Response response = await dio.get(
+        url,
+        options: Options(headers: headers),
+      );
+      return response.data;
     } on DioException catch (e) {
-      throw Exception(
-        'there is a problem with status code ${e.response?.statusCode ?? 400}',
+      final errorData = e.response?.data;
+      final message = errorData is Map<String, dynamic>
+          ? errorData['message']?.toString()
+          : null;
+      throw CustomException(
+        message: message ??
+            e.message ??
+            'Connection error with status ${e.response?.statusCode}',
       );
     }
   }
@@ -34,20 +42,20 @@ class Api {
     }
 
     try {
-      Response response = await Dio().post(
+      Response response = await dio.post(
         url,
         data: body,
         options: Options(headers: headers),
       );
       return response.data;
     } on DioException catch (e) {
-      if (e.response != null && e.response!.data != null) {
-        throw CustomException(
-          message: e.response!.data['message'] ?? 'Connection error',
-        );
-      } else {
-        throw CustomException(message: e.message ?? 'Connection error');
-      }
+      final errorData = e.response?.data;
+      final message = errorData is Map<String, dynamic>
+          ? errorData['message']?.toString()
+          : null;
+      throw CustomException(
+        message: message ?? e.message ?? 'Connection error',
+      );
     }
   }
 
@@ -57,23 +65,26 @@ class Api {
     required String url,
   }) async {
     Map<String, String> headers = {};
-
     if (token != null) {
       headers.addAll({'Authorization': 'Bearer $token'});
     }
 
     try {
-      Response response = await Dio().put(
+      Response response = await dio.put(
         url,
         data: body,
         options: Options(headers: headers),
       );
-      Map<String, dynamic> data = response.data;
-      print(data);
-      return data;
+      return response.data;
     } on DioException catch (e) {
-      throw Exception(
-        'there is a problem with status code ${e.response?.statusCode ?? 408}',
+      final errorData = e.response?.data;
+      final message = errorData is Map<String, dynamic>
+          ? errorData['message']?.toString()
+          : null;
+      throw CustomException(
+        message: message ??
+            e.message ??
+            'Connection error with status ${e.response?.statusCode}',
       );
     }
   }

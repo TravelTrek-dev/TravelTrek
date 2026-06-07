@@ -38,8 +38,10 @@ class BudgetViewBody extends StatelessWidget {
 
                 if (state is GetExpenseHistoryFailure) {
                   return Center(
-                    child: Text(state.errorMessage,
-                        style: const TextStyle(color: Color(0xFF7A6F5E))),
+                    child: Text(
+                      state.errorMessage,
+                      style: const TextStyle(color: Color(0xFF7A6F5E)),
+                    ),
                   );
                 }
 
