@@ -55,8 +55,8 @@ class _AddExpenseViewBodyState extends State<AddExpenseViewBody> {
             SizedBox(height: 250),
             CustomButton(
               text: 'Add Expense',
-              onPressed: () {
-                BlocProvider.of<ExpenseCubit>(context).addExpense(
+              onPressed: () async {
+                await BlocProvider.of<ExpenseCubit>(context).addExpense(
                   expenseEntity: ExpenseEntity(
                     description: description,
                     price: price,
@@ -65,7 +65,11 @@ class _AddExpenseViewBodyState extends State<AddExpenseViewBody> {
                   userToken: userToken,
                   tripId: tripId,
                 );
-                Navigator.pop(context);
+                await BlocProvider.of<ExpenseCubit>(context).getExpenseHistory(
+                  tripId: tripId,
+                  userToken: userToken,
+                );
+                if (mounted) Navigator.pop(context);
               },
             ),
           ],

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:travel_trek/Features/Budget/presentation/views/widgets/build_budget_header.dart';
 import 'package:travel_trek/Features/Budget/presentation/views/widgets/expense_summary_section.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_trek/Features/Budget/presentation/manger/cubit/expense_cubit.dart';
 
 class BudgetViewBody extends StatelessWidget {
   const BudgetViewBody({super.key});
@@ -24,7 +26,26 @@ class BudgetViewBody extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            const ExpenseSummarySection(),
+            BlocBuilder<ExpenseCubit, ExpenseState>(
+              builder: (context, state) {
+                if (state is GetExpenseHistoryLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (state is GetExpenseHistorySuccess) {
+                  return ExpenseSummarySection(expenses: state.expenses);
+                }
+
+                if (state is GetExpenseHistoryFailure) {
+                  return Center(
+                    child: Text(state.errorMessage,
+                        style: const TextStyle(color: Color(0xFF7A6F5E))),
+                  );
+                }
+
+                return const SizedBox.shrink();
+              },
+            ),
           ],
         ),
       ),

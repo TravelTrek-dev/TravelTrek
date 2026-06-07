@@ -10,11 +10,11 @@ class Api {
     Map<String, String> headers = {};
 
     if (token != null) {
-  headers.addAll({'Authorization': 'Bearer $token'});
-}
+      headers.addAll({'Authorization': 'Bearer $token'});
+    }
 
     try {
-      Response response = await dio.get(url);
+      Response response = await dio.get(url , options: Options(headers: headers));
       return response;
     } on DioException catch (e) {
       throw Exception(
@@ -42,7 +42,9 @@ class Api {
       return response.data;
     } on DioException catch (e) {
       if (e.response != null && e.response!.data != null) {
-        throw CustomException(message: e.response!.data['message'] ?? 'Connection error');
+        throw CustomException(
+          message: e.response!.data['message'] ?? 'Connection error',
+        );
       } else {
         throw CustomException(message: e.message ?? 'Connection error');
       }
@@ -56,9 +58,9 @@ class Api {
   }) async {
     Map<String, String> headers = {};
 
-  if (token != null) {
-  headers.addAll({'Authorization': 'Bearer $token'});
-}
+    if (token != null) {
+      headers.addAll({'Authorization': 'Bearer $token'});
+    }
 
     try {
       Response response = await Dio().put(

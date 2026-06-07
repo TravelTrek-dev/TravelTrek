@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:travel_trek/Features/Budget/presentation/views/add_expense_view.dart';
 import 'package:travel_trek/Features/Budget/presentation/views/widgets/budget_progressbar.dart';
 import 'package:travel_trek/Features/Budget/presentation/views/widgets/log_expense_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_trek/Features/Budget/presentation/manger/cubit/expense_cubit.dart';
 
 class BudgetHeader extends StatelessWidget {
   const BudgetHeader({
@@ -171,7 +173,19 @@ class BudgetHeader extends StatelessWidget {
           ),
         ),
         SizedBox(height: 24),
-        LogExpenseButton(onTap: () {Navigator.pushNamed(context, AddExpenseView.routeName);}),
+        LogExpenseButton(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (ctx) => BlocProvider.value(
+                  value: BlocProvider.of<ExpenseCubit>(context),
+                  child: const AddExpenseView(),
+                ),
+              ),
+            );
+          },
+        ),
       ],
     );
   }

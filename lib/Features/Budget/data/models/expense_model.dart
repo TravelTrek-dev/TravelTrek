@@ -5,6 +5,8 @@ class ExpenseModel extends ExpenseEntity {
     required super.description,
     required super.price,
     required super.category,
+    super.spent,
+    super.remaining,
   });
 
   Map<String, dynamic> toJson() {
@@ -12,6 +14,8 @@ class ExpenseModel extends ExpenseEntity {
       'description': description,
       'price': price,
       'category': category,
+      if (spent != null) 'spent': spent,
+      if (remaining != null) 'remaining': remaining,
     };
   }
 
@@ -20,6 +24,8 @@ class ExpenseModel extends ExpenseEntity {
       description: description,
       price: price,
       category: category,
+      spent: spent,
+      remaining: remaining,
     );
   }
 
@@ -27,7 +33,9 @@ class ExpenseModel extends ExpenseEntity {
     return ExpenseModel(
       description: json['description'],
       price: json['price'].toDouble(),
-      category: json['category'],
+      category: json['name'],
+      spent: json['spent'] ?? 0.0,
+      remaining: json['remaining'] ?? 0.0,
     );
   }
 }

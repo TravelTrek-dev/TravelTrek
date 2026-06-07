@@ -10,7 +10,7 @@ class ExpenseCubit extends Cubit<ExpenseState> {
 
   final ExpenseRepo expenseRepo;
 
-  void addExpense({
+  Future<void> addExpense({
     required ExpenseEntity expenseEntity,
     required String userToken,
     required String tripId,
@@ -31,6 +31,30 @@ class ExpenseCubit extends Cubit<ExpenseState> {
       (expenseData) {
         if (!isClosed) {
           emit(AddExpenseSuccess());
+        }
+      },
+    );
+  }
+
+  Future<void> getExpenseHistory({
+    required String tripId,
+    required String userToken,
+  }) async {
+    emit(GetExpenseHistoryLoading());
+
+    var result = await expenseRepo.getExpenseHistory(
+      tripId: tripId,
+      userToken: userToken,
+    );
+    result.fold(
+      (failure) {
+        if (!isClosed) {
+          emit(GetExpenseHistoryFailure(errorMessage: failure.errorMessage));
+        }
+      },
+      (expenseData) {
+        if (!isClosed) {
+          emit(GetExpenseHistorySuccess(expenses: expenseData));
         }
       },
     );
