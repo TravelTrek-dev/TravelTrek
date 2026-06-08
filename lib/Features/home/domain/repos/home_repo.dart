@@ -9,5 +9,7 @@ abstract class HomeRepo {
     required String promot,
   });
 
-  Future<Either<Failures, UserTripInfo>> getPrompts({required String userToken});
+  Future<Either<Failures, UserTripInfo>> getPrompts({
+    required String userToken,
+  });
 }

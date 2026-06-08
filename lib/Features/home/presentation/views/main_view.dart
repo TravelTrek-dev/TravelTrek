@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_trek/Features/home/presentation/views/widgets/bottom_navigation_bar.dart';
 import 'package:travel_trek/Features/home/presentation/views/widgets/main_view_body.dart';
+import 'package:travel_trek/Features/plans/domain/repos/plans_repo.dart';
+import 'package:travel_trek/Features/plans/presentation/manger/cubit/get_all_plans_cubit.dart';
 import 'package:travel_trek/core/services/prefs.dart';
+import 'package:travel_trek/core/services/service_locator.dart';
 import 'package:travel_trek/core/widgets/custom_app_bar.dart';
 
 class MainView extends StatefulWidget {
@@ -19,7 +23,6 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     final userEntity = Prefs.getUserEntity();
     return Scaffold(
-      
       bottomNavigationBar: CustomBottomNavigationBar(
         onItemTapped: (int value) {
           setState(() {
@@ -27,7 +30,9 @@ class _MainViewState extends State<MainView> {
           });
         },
       ),
-      appBar: currentindex == 2 ? null : customAppBar(name: userEntity?.name ?? 'NNNNN'),
+      appBar: currentindex == 2
+          ? null
+          : customAppBar(name: userEntity?.name ?? 'NNNNN'),
       body: MainViewBody(currentindex: currentindex),
     );
   }

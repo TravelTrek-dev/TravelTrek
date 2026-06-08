@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_trek/Features/home/data/models/user_trip_info/user_trip_info.dart';

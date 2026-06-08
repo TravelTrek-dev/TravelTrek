@@ -10,7 +10,8 @@ class PlanItem extends StatelessWidget {
   final PlanModel planEntity;
   @override
   Widget build(BuildContext context) {
-    final days = int.parse(planEntity.value!.duration!.split(' ')[0]);
+    final duration = planEntity.value?.duration;
+    final days = duration != null ? (int.tryParse(duration.split(' ')[0]) ?? 0) : 0;
     final String dateRange = getDateRange(days: days);
     return Row(
       children: [

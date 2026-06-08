@@ -19,7 +19,7 @@ class PlanModel extends Equatable {
     this.isFailure,
     this.error,
   });
-
+  
   factory PlanModel.fromJson(Map<String, dynamic> json) => PlanModel(
     value: json['value'] == null
         ? null
@@ -33,6 +33,33 @@ class PlanModel extends Equatable {
         : Error.fromJson(json['error'] as Map<String, dynamic>),
   );
 
+  static List<PlanModel> fromHistoryJson(Map<String, dynamic> json) {
+    final valuesList = json['value'] as List<dynamic>?;
+    
+    if (valuesList == null || valuesList.isEmpty) {
+      return [];
+    }
+
+    final validationErrors = json['validationErrors'] as List<dynamic>?;
+    final hasValidationErrors = json['hasValidationErrors'] as bool?;
+    final isSuccess = json['isSuccess'] as bool?;
+    final isFailure = json['isFailure'] as bool?;
+    final error = json['error'] == null
+        ? null
+        : Error.fromJson(json['error'] as Map<String, dynamic>);
+
+    return valuesList.map((item) {
+      return PlanModel(
+        value: Value.fromJson(item as Map<String, dynamic>),
+        validationErrors: validationErrors,
+        hasValidationErrors: hasValidationErrors,
+        isSuccess: isSuccess,
+        isFailure: isFailure,
+        error: error,
+      );
+    }).toList();
+  }
+
   Map<String, dynamic> toJson() => {
     'value': value?.toJson(),
     'validationErrors': validationErrors,
@@ -42,7 +69,7 @@ class PlanModel extends Equatable {
     'error': error?.toJson(),
   };
 
- Map<String, dynamic> toSavePlan() => {
+  Map<String, dynamic> toSavePlan() => {
     'prompt': value!.prompt,
     'city': value!.city,
     'country': value!.country,
@@ -52,8 +79,8 @@ class PlanModel extends Equatable {
     'groupSize': value!.groupSize,
     'weather': value!.weather?.toJson(),
     'days': value!.days?.map((e) => e.toJson()).toList(),
-    'packingTips':value!.packingTips,
-    'generalAdvice':value!. generalAdvice,
+    'packingTips': value!.packingTips,
+    'generalAdvice': value!.generalAdvice,
   };
 
   @override

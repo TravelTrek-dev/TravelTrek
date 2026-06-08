@@ -6,8 +6,7 @@ import 'package:travel_trek/Features/home/data/models/plan_model/plan_model.dart
 class PlanViewDetails extends StatefulWidget {
   const PlanViewDetails({super.key, required this.planModel});
   static const routeName = 'PlanViewDetails';
-
-  final PlanModel? planModel;
+ final PlanModel planModel ;
 
   @override
   State<PlanViewDetails> createState() => _PlanViewDetailsState();

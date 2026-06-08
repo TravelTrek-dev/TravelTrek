@@ -44,7 +44,7 @@ class ItineraryView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 24),
-                 LocalCurrencyCard(userCurrency: planModel!.value!.currency!,),
+                LocalCurrencyCard(userCurrency: planModel!.value!.currency!),
                 const SizedBox(height: 24),
                 const Text(
                   'Travel Tips',
@@ -60,7 +60,10 @@ class ItineraryView extends StatelessWidget {
                   ...planModel!.value!.packingTips!.map(
                     (tip) => Padding(
                       padding: const EdgeInsets.only(top: 12),
-                      child: Text('• $tip', style: const TextStyle(fontSize: 16, height: 1.5)),
+                      child: Text(
+                        '• $tip',
+                        style: const TextStyle(fontSize: 16, height: 1.5),
+                      ),
                     ),
                   ),
                 const SizedBox(height: 16),

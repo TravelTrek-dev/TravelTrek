@@ -7,9 +7,6 @@ class RecentPlanListViewBuilder extends StatelessWidget {
   final List<String> prompts;
   @override
   Widget build(BuildContext context) {
-
-
-
     if (prompts.isEmpty) {
       return Text(
         'No recent searches',

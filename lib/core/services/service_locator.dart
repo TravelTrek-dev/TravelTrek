@@ -8,6 +8,8 @@ import 'package:travel_trek/Features/Plandetails/data/repos/plan_repo_imple.dart
 import 'package:travel_trek/Features/Plandetails/domain/repos/plan_repo.dart';
 import 'package:travel_trek/Features/home/data/repos/home_repo_imple.dart';
 import 'package:travel_trek/Features/home/domain/repos/home_repo.dart';
+import 'package:travel_trek/Features/plans/data/repos/plans_repo_imple.dart';
+import 'package:travel_trek/Features/plans/domain/repos/plans_repo.dart';
 import 'package:travel_trek/core/helper_function/api.dart';
 import 'package:travel_trek/core/services/firebase_auth_service.dart';
 
@@ -39,7 +41,6 @@ void setup() {
     ExpenseRepoImple(apiService: getIt<Api>()),
   );
   getIt.registerSingleton<HomeRepo>(HomeRepoImple(apiService: getIt<Api>()));
-  getIt.registerSingleton<PlanRepo>(
-    PlanRepoImple(apiService: getIt<Api>()),
-  );
+  getIt.registerSingleton<PlanRepo>(PlanRepoImple(apiService: getIt<Api>()));
+  getIt.registerSingleton<PlansRepo>(PlansRepoImple(apiService: getIt<Api>()));
 }

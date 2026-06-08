@@ -12,8 +12,6 @@ final class PlanDetailsInitial extends PlanDetailsState {}
 final class PlanDetailsLoading extends PlanDetailsState {}
 
 final class PlanDetailsSuccess extends PlanDetailsState {
-
-
   @override
   List<Object> get props => [];
 }

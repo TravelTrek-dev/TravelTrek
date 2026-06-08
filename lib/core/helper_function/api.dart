@@ -24,7 +24,8 @@ class Api {
           ? errorData['message']?.toString()
           : null;
       throw CustomException(
-        message: message ??
+        message:
+            message ??
             e.message ??
             'Connection error with status ${e.response?.statusCode}',
       );
@@ -82,7 +83,8 @@ class Api {
           ? errorData['message']?.toString()
           : null;
       throw CustomException(
-        message: message ??
+        message:
+            message ??
             e.message ??
             'Connection error with status ${e.response?.statusCode}',
       );

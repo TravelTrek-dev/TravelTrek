@@ -13,7 +13,8 @@ class DayCard extends StatelessWidget {
     final title = day?.activities?.isNotEmpty == true
         ? 'Day $dayNumber: ${day!.activities!.first.name ?? 'Activity'}'
         : 'Day $dayNumber';
-    final description = day?.activities?.first.description ??
+    final description =
+        day?.activities?.first.description ??
         'No itinerary details available for this day.';
     final meals = day?.meals;
 

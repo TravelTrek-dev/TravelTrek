@@ -4,6 +4,7 @@ import 'package:travel_trek/Features/Budget/presentation/views/widgets/budget_pr
 import 'package:travel_trek/Features/Budget/presentation/views/widgets/log_expense_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_trek/Features/Budget/presentation/manger/cubit/expense_cubit.dart';
+import 'package:travel_trek/Features/home/data/models/plan_model/plan_model.dart';
 
 class BudgetHeader extends StatelessWidget {
   const BudgetHeader({
@@ -11,13 +12,14 @@ class BudgetHeader extends StatelessWidget {
     required this.spentAmountStr,
     required this.totalBudgetStr,
     required this.utilizedPercent,
-    required this.remainingStr,
+    required this.remainingStr, required this.planModel,
   });
 
   final String spentAmountStr;
   final String totalBudgetStr;
   final double utilizedPercent;
   final String remainingStr;
+  final PlanModel planModel;
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +182,7 @@ class BudgetHeader extends StatelessWidget {
               MaterialPageRoute(
                 builder: (ctx) => BlocProvider.value(
                   value: BlocProvider.of<ExpenseCubit>(context),
-                  child: const AddExpenseView(),
+                  child:  AddExpenseView(planModel: planModel,),
                 ),
               ),
             );

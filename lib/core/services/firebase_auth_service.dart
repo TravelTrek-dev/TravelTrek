@@ -85,13 +85,17 @@ class FirebaseAuthService {
       await user.reauthenticateWithCredential(credential);
       await user.updatePassword(newPassword);
     } on FirebaseAuthException catch (e) {
-      log('Exception in FirebaseAuthService.changePassword: ${e.toString()} and code is ${e.code}');
+      log(
+        'Exception in FirebaseAuthService.changePassword: ${e.toString()} and code is ${e.code}',
+      );
       if (e.code == 'wrong-password') {
         throw CustomException(message: 'The current password is incorrect.');
       } else if (e.code == 'weak-password') {
         throw CustomException(message: 'The new password is too weak.');
       } else if (e.code == 'requires-recent-login') {
-        throw CustomException(message: 'Please sign in again before changing your password.');
+        throw CustomException(
+          message: 'Please sign in again before changing your password.',
+        );
       } else {
         throw CustomException(message: 'Error. pls try again later!');
       }

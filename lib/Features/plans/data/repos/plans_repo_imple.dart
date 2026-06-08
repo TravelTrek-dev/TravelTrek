@@ -1,27 +1,26 @@
 import 'package:dartz/dartz.dart';
 import 'package:travel_trek/Features/home/data/models/plan_model/plan_model.dart';
-import 'package:travel_trek/Features/Plandetails/domain/repos/plan_repo.dart';
+import 'package:travel_trek/Features/plans/domain/repos/plans_repo.dart';
 import 'package:travel_trek/core/errors/failures.dart';
 import 'package:travel_trek/core/helper_function/api.dart';
 import 'package:travel_trek/core/services/backend_service.dart';
 
-class PlanRepoImple implements PlanRepo {
+class PlansRepoImple implements PlansRepo {
   final Api apiService;
 
-  PlanRepoImple({required this.apiService});
-
+  PlansRepoImple({required this.apiService});
   @override
-  Future<Either<Failures, void>> savePlan({
-    required PlanModel planModel,
-    required String userToken,
+  Future<Either<Failures, List<PlanModel>>> getAllPlans({
+    required String token,
   }) async {
     try {
-      final response = await apiService.post(
-        url: BackendService.savePlanUrl,
-        body: planModel.toSavePlan(),
-        token: userToken,
+      var response = await apiService.get(
+        url: BackendService.getAllPlans,
+        token: token,
       );
-      return right(null);
+      List<PlanModel> plans = PlanModel.fromHistoryJson(response);
+     
+      return right(plans);
     } on Exception catch (e) {
       return left(ServerFailure(errorMessage: e.toString()));
     }

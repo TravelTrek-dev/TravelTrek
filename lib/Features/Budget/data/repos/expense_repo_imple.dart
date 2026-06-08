@@ -35,29 +35,29 @@ class ExpenseRepoImple implements ExpenseRepo {
     }
   }
 
-  @override
+ @override
   Future<Either<Failures, List<ExpenseEntity>>> getExpenseHistory({
     required String tripId,
     required String userToken,
   }) async {
     List<ExpenseModel> expenseModelsList = [];
     try {
-      Response response = await apiService.get(
+      var responseData = await apiService.get(
         url: '${BackendService.getExpenseHistoryUrl}$tripId?',
         token: userToken,
       );
 
-      for (var expense in response.data['value']['expenses']) {
+      for (var expense in responseData['value']['expenses']) {
         expenseModelsList.add(ExpenseModel.fromJson(expense));
       }
 
       for (var expense in expenseModelsList) {
-        expense.spent = response.data['value']['spent'];
-        expense.remaining = response.data['value']['remaining'];
+        expense.spent = responseData['value']['spent'];
+        expense.remaining = responseData['value']['remaining'];
       }
       return right(expenseModelsList);
     } on Exception catch (e) {
-      return left(throw ServerFailure(errorMessage: e.toString()));
+      return left(ServerFailure(errorMessage: e.toString()));
     }
   }
 }

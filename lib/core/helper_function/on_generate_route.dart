@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:travel_trek/Features/Budget/presentation/views/add_expense_view.dart';
 import 'package:travel_trek/Features/auth/presentation/views/sign_in_view.dart';
 import 'package:travel_trek/Features/auth/presentation/views/sign_up_view.dart';
 import 'package:travel_trek/Features/home/presentation/views/main_view.dart';
@@ -27,12 +26,11 @@ Route<dynamic> onGenerateRoute(RouteSettings setting) {
     case PlanViewDetails.routeName:
       final planModel = setting.arguments as PlanModel?;
       return MaterialPageRoute(
-        builder: (context) => PlanViewDetails(planModel: planModel),
+        builder: (context) => PlanViewDetails(planModel: planModel!,),
       );
     case ProfileView.routeName:
       return MaterialPageRoute(builder: (context) => const ProfileView());
-    case AddExpenseView.routeName:
-      return MaterialPageRoute(builder: (context) => const AddExpenseView());
+   
     default:
       return MaterialPageRoute(builder: (context) => const Scaffold());
   }

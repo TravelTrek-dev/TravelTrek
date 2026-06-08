@@ -45,7 +45,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   listener: (context, planState) {
                     if (planState is PlanDetailsSuccess) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Plan saved successfully')),
+                        const SnackBar(
+                          content: Text('Plan saved successfully'),
+                        ),
                       );
                     } else if (planState is PlanDetailsFailure) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -61,9 +63,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             ),
           );
         } else if (state is GeneratePlanCubitFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
         }
       },
       child: Padding(
@@ -75,7 +77,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               const SizedBox(height: 32),
               Text(
                 'Describe Your Dream Trip',
-                style: AppStyles.bold26.copyWith(color: const Color(0xff2D2A2A)),
+                style: AppStyles.bold26.copyWith(
+                  color: const Color(0xff2D2A2A),
+                ),
               ),
               const SizedBox(height: 3),
               Text(
@@ -100,7 +104,10 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 ),
               ),
               const SizedBox(height: 30),
-              SizedBox(height: 180, child: RecentPlanListViewBuilderBlocBuilder()),
+              SizedBox(
+                height: 180,
+                child: RecentPlanListViewBuilderBlocBuilder(),
+              ),
               const SizedBox(height: 70),
               CustomButton(
                 text: 'Generate My Plan',

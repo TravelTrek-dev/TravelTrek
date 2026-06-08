@@ -10,7 +10,7 @@ class MainViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return IndexedStack(
       index: currentindex,
-      children: const [HomeView(), PlansView(), ProfileView() ],
+      children: const [HomeView(), PlansView(), ProfileView()],
     );
   }
 }

@@ -32,7 +32,9 @@ class ItineraryCardInfo extends StatelessWidget {
               const SizedBox(height: 16),
               buildDetailChip(
                 Icons.money,
-                budget != null ? '${budget} ${planModel?.value?.currency ?? ''}' : 'Budget not set',
+                budget != null
+                    ? '${budget} ${planModel?.value?.currency ?? ''}'
+                    : 'Budget not set',
               ),
               const SizedBox(height: 16),
               Row(

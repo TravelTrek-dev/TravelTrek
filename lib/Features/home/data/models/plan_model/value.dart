@@ -4,6 +4,7 @@ import 'day.dart';
 import 'weather.dart';
 
 class Value extends Equatable {
+  final String? id;
   final String? prompt;
   final String? city;
   final String? country;
@@ -27,15 +28,16 @@ class Value extends Equatable {
     this.weather,
     this.days,
     this.packingTips,
-    this.generalAdvice,
+    this.generalAdvice, this.id,
   });
 
   factory Value.fromJson(Map<String, dynamic> json) => Value(
+    id:   json['id'] as String?,
     prompt: json['prompt'] as String?,
     city: json['city'] as String?,
     country: json['country'] as String?,
     duration: json['duration'] as String?,
-    budget: json['budget'] as int?,
+    budget: (json['budget'] as num?)?.toInt(),
     currency: json['currency'] as String?,
     groupSize: json['groupSize'] as String?,
     weather: json['weather'] == null
@@ -49,6 +51,7 @@ class Value extends Equatable {
   );
 
   Map<String, dynamic> toJson() => {
+    'id' :id,
     'prompt': prompt,
     'city': city,
     'country': country,
@@ -65,6 +68,7 @@ class Value extends Equatable {
   @override
   List<Object?> get props {
     return [
+      id,
       prompt,
       city,
       country,

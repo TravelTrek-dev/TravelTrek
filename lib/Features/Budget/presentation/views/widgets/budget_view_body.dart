@@ -3,10 +3,11 @@ import 'package:travel_trek/Features/Budget/presentation/views/widgets/build_bud
 import 'package:travel_trek/Features/Budget/presentation/views/widgets/expense_summary_section.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_trek/Features/Budget/presentation/manger/cubit/expense_cubit.dart';
+import 'package:travel_trek/Features/home/data/models/plan_model/plan_model.dart';
 
 class BudgetViewBody extends StatelessWidget {
-  const BudgetViewBody({super.key});
-
+  const BudgetViewBody({super.key, required this.planModel});
+  final PlanModel planModel;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -15,7 +16,7 @@ class BudgetViewBody extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const BuildBudgetHeader(),
+             BuildBudgetHeader(planModel: planModel,),
             const SizedBox(height: 32),
             const Text(
               'Expense Categories',

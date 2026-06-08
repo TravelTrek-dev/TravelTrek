@@ -6,7 +6,8 @@ import 'package:travel_trek/core/utils/app_colors.dart';
 
 class BuildPlanItem extends StatefulWidget {
   const BuildPlanItem({super.key, required this.plan, required this.onTap});
-  final PlanModel plan;
+  final PlanModel? plan;
+
   final VoidCallback onTap;
   @override
   State<BuildPlanItem> createState() => _BuildPlanItemState();
@@ -43,7 +44,7 @@ class _BuildPlanItemState extends State<BuildPlanItem> {
         ),
         child: Column(
           children: [
-            PlanItem(planEntity: widget.plan),
+            PlanItem(planEntity: widget.plan!),
             if (showActions) BuildActionBtn(),
           ],
         ),
