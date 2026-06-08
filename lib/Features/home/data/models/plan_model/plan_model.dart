@@ -42,6 +42,20 @@ class PlanModel extends Equatable {
     'error': error?.toJson(),
   };
 
+ Map<String, dynamic> toSavePlan() => {
+    'prompt': value!.prompt,
+    'city': value!.city,
+    'country': value!.country,
+    'duration': value!.duration,
+    'budget': value!.budget,
+    'currency': value!.currency,
+    'groupSize': value!.groupSize,
+    'weather': value!.weather?.toJson(),
+    'days': value!.days?.map((e) => e.toJson()).toList(),
+    'packingTips':value!.packingTips,
+    'generalAdvice':value!. generalAdvice,
+  };
+
   @override
   List<Object?> get props {
     return [

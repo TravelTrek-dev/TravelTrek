@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TravelTrek Project Documentation</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background: #f6f8fb; color: #222; }
+    .container { max-width: 980px; margin: 0 auto; padding: 32px; }
+    header { text-align: center; margin-bottom: 32px; }
+    header h1 { margin: 0; font-size: 2.6rem; }
+    header p { color: #555; font-size: 1rem; }
+    .section { background: #fff; border-radius: 12px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); margin-bottom: 24px; padding: 28px; }
+    .section h2 { margin-top: 0; color: #0f172a; }
+    .section h3 { margin-top: 24px; color: #1f2937; }
+    ul { margin: 0 0 16px 20px; }
+    pre { background: #f0f4ff; padding: 16px; overflow-x: auto; border-radius: 8px; }
+    .note { background: #f8fafc; border-left: 4px solid #60a5fa; padding: 16px; margin: 16px 0; }
+    .badge { display: inline-block; background: #e2e8f0; color: #1e293b; border-radius: 999px; padding: 6px 14px; font-size: 0.9rem; margin-right: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>TravelTrek Project Documentation</h1>
+      <p>وثيقة HTML منظمة إلى 4 أجزاء لتوثيق مشروع Flutter TravelTrek.</p>
+    </header>
+
+    <section class="section" id="part-1">
+      <h2>Part 1: Project Overview</h2>
+      <p><strong>TravelTrek</strong> هو تطبيق سفر ذكي مبني باستخدام Flutter، يهدف إلى توليد خطط سياحية مخصصة، إدارة الميزانية، وعرض تفاصيل الرحلة للمستخدم.</p>
+      <h3>النقاط الأساسية</h3>
+      <ul>
+        <li>اسم المشروع: <strong>travel_trek</strong></li>
+        <li>إطار العمل: <strong>Flutter</strong></li>
+        <li>إصدارات مهمة: <strong>Dart SDK ^3.11.4</strong></li>
+        <li>التبعيات الرئيسية: <strong>flutter_bloc</strong>, <strong>dio</strong>, <strong>get_it</strong>, <strong>firebase_auth</strong>, <strong>shared_preferences</strong></li>
+      </ul>
+      <h3>الوظائف المتوقعة</h3>
+      <ul>
+        <li>توليد خطط سفر عبر API ذكي.</li>
+        <li>عرض تفاصيل الخطة ضمن شاشة Itinerary.</li>
+        <li>دعم تسجيل الدخول والحساب باستخدام Firebase أو بريد إلكتروني.</li>
+        <li>إدارة ميزانية الرحلة ونفقات السفر.</li>
+      </ul>
+    </section>
+
+    <section class="section" id="part-2">
+      <h2>Part 2: Architecture & Modules</h2>
+      <p>المشروع منظم بشكل أساسي إلى وحدات Features وطبقات Core لدعم بنية نظيفة ومفصولة.</p>
+      <h3>هيكل المجلدات الرئيسة</h3>
+      <ul>
+        <li><strong>lib/core</strong>: خدمات عامة، مساعدة، إعدادات Service Locator، وإدارة الأخطاء.</li>
+        <li><strong>lib/Features</strong>: يحتوي على وحدات التطبيق الرئيسية مثل auth, home, Budget, Plandetails, plans, onboarding, splash.</li>
+        <li><strong>lib/main.dart</strong>: نقطة البداية لتشغيل التطبيق.</li>
+      </ul>
+      <h3>نمط المعمارية</h3>
+      <ul>
+        <li><strong>Repository</strong>: واجهات ومطبقات للوصول إلى البيانات.</li>
+        <li><strong>Cubit / Bloc</strong>: لإدارة الحالة على مستوى الشاشة أو الميزة.</li>
+        <li><strong>Models</strong>: تفكيك JSON إلى كائنات Dart (PlanModel, UserEntity, etc.).</li>
+        <li><strong>Service Locator</strong>: استخدام GetIt لحقن التبعيات.</li>
+      </ul>
+      <h3>أهم الطبقات</h3>
+      <ul>
+        <li><span class="badge">Auth</span> تسجيل وتشغيل المستخدم ونماذج UserEntity.</li>
+        <li><span class="badge">Home</span> توليد خطة السفر وعرض القائمة.</li>
+        <li><span class="badge">Plandetails</span> عرض تفاصيل الخطة، حفظ الخطة، والشاشات المتصلة.</li>
+        <li><span class="badge">Budget</span> إضافة ومراجعة المصاريف.</li>
+      </ul>
+    </section>
+
+    <section class="section" id="part-3">
+      <h2>Part 3: Core Flow and Features</h2>
+      <h3>تدفق توليد الخطة</h3>
+      <ol>
+        <li>المستخدم يدخل وصف رحلة في شاشة Home.</li>
+        <li>يُستدعى Cubit خاص بالخطة (<code>GeneratePlanCubitCubit</code>).</li>
+        <li>يتم إرسال الطلب إلى <code>HomeRepoImple.generatePlan</code> باستخدام <code>BackendService.generatePlanUrl</code>.</li>
+        <li>عند النجاح، ينتقل المستخدم إلى شاشة Itinerary مع <code>PlanModel</code>.</li>
+      </ol>
+      <h3>حفظ خطة الرحلة</h3>
+      <ul>
+        <li>تم إنشاء <code>PlanRepo</code> و<code>PlanRepoImple</code> في <code>Features/Plandetails</code>.</li>
+        <li>تعتمد عملية الحفظ على <code>BackendService.savePlanUrl</code>.</li>
+        <li>تستخدم <code>PlanDetailsCubit</code> حالة التحميل والنجاح والفشل.</li>
+      </ul>
+      <h3>نقاط اتصال API</h3>
+      <ul>
+        <li><code>BackendService.generatePlanUrl</code> لتوليد خطط السفر.</li>
+        <li><code>BackendService.getPromptsUrl</code> لجلب تلميحات وأفكار الرحلة.</li>
+        <li><code>BackendService.savePlanUrl</code> لحفظ الخطة المولدة.</li>
+        <li><code>BackendService.addExpenseUrl</code> و<code>getExpenseHistoryUrl</code> لإدارة المصاريف.</li>
+      </ul>
+    </section>
+
+    <section class="section" id="part-4">
+      <h2>Part 4: Setup & Usage</h2>
+      <h3>تشغيل المشروع</h3>
+      <pre>flutter pub get
+flutter run</pre>
+      <h3>المتطلبات الأساسية</h3>
+      <ul>
+        <li>Flutter SDK متوافق مع <strong>3.11.4</strong> أو أحدث.</li>
+        <li>إعداد Firebase إذا كنت تستخدم تسجيل الدخول بجوجل أو البريد الإلكتروني.</li>
+        <li>تنفيذ <code>Prefs.init()</code> قبل استخدام بيانات <code>SharedPreferences</code>.</li>
+      </ul>
+      <h3>ملفات مهمة</h3>
+      <ul>
+        <li><code>lib/main.dart</code> - نقطة البداية للتطبيق.</li>
+        <li><code>lib/core/services/service_locator.dart</code> - تسجيل التبعيات.</li>
+        <li><code>lib/Features/home/presentation/views/widgets/home_view_body.dart</code> - واجهة توليد الخطة.</li>
+        <li><code>lib/Features/Plandetails/presentation/views/widgets/itinerary_view.dart</code> - شاشة تفاصيل الخطة.</li>
+      </ul>
+      <div class="note">
+        <strong>ملاحظة:</strong> هذا الوثيق يغطي المشروع الحالي المستند على الملفات الموجودة والعناصر الأساسية في الشجرة.
+      </div>
+    </section>
+  </div>
+</body>
+</html>

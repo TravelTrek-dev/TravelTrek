@@ -24,11 +24,6 @@ List<BottomNavigationBarEntity> get bottomNavigationBarItems => [
     text: 'My Plans',
   ),
   BottomNavigationBarEntity(
-    activeImage: Assets.imagesSavedIconInactive,
-    inActiveImage: Assets.imagesSavedIconInactive,
-    text: 'Saved',
-  ),
-  BottomNavigationBarEntity(
     activeImage: Assets.imagesProfileIconActive,
     inActiveImage: Assets.imagesProfileIconInactive,
     text: 'Profile',

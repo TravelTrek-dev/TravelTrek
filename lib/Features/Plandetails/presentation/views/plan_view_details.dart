@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:travel_trek/Features/Plandetails/presentation/views/widgets/custom_tap_bar.dart';
 import 'package:travel_trek/Features/Plandetails/presentation/views/widgets/plan_view_details_body.dart';
+import 'package:travel_trek/Features/home/data/models/plan_model/plan_model.dart';
 
 class PlanViewDetails extends StatefulWidget {
-  const PlanViewDetails({super.key});
+  const PlanViewDetails({super.key, required this.planModel});
   static const routeName = 'PlanViewDetails';
+
+  final PlanModel? planModel;
 
   @override
   State<PlanViewDetails> createState() => _PlanViewDetailsState();
@@ -28,7 +31,10 @@ class _PlanViewDetailsState extends State<PlanViewDetails> {
 
           backgroundColor: Colors.transparent,
         ),
-        body: PlanViewDetailsBody(currentindex: currentindex),
+        body: PlanViewDetailsBody(
+          currentindex: currentindex,
+          planModel: widget.planModel,
+        ),
       ),
     );
   }

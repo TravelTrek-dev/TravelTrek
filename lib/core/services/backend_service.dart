@@ -13,4 +13,8 @@ class BackendService {
 
   static const String getPromptsUrl =
       'http://traveltrek.runasp.net/api/trip-plan/prompts?';
+
+  static const String savePlanUrl =
+      'http://traveltrek.runasp.net/api/trip-plan/save-created?';
 }
+

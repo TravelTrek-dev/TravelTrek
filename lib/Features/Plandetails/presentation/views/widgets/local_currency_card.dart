@@ -5,8 +5,8 @@ import 'package:travel_trek/constants.dart';
 import 'package:travel_trek/core/services/prefs.dart';
 
 class LocalCurrencyCard extends StatelessWidget {
-  const LocalCurrencyCard({super.key});
-
+  const LocalCurrencyCard({super.key, required this.userCurrency});
+  final String userCurrency;
   @override
   Widget build(BuildContext context) {
     final savedCurrency = Prefs.getString(kSavedCurrency);
@@ -47,7 +47,7 @@ class LocalCurrencyCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                '1 $localCurrency = 48.50 EGP',
+                '1 $localCurrency = 48.50 $userCurrency',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
