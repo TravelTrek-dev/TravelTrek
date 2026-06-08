@@ -10,3 +10,6 @@ class OnBoardingView extends StatelessWidget {
     return Scaffold(body: OnBoardingViewBody());
   }
 }
+
+//FIXBUG 1
+//FIXBUG 2
