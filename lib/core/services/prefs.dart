@@ -35,6 +35,10 @@ class Prefs {
     await _instance.setString(kUserEntity, jsonString);
   }
 
+  static Future<void> removeUserEntity() async {
+    await _instance.remove(kUserEntity);
+  }
+
   static UserEntity? getUserEntity() {
     String? jsonString = _instance.getString(kUserEntity);
     if (jsonString == null || jsonString.isEmpty) {

@@ -14,5 +14,11 @@ abstract class AuthRepo {
     required String password,
   });
 
+  Future<Either<Failures, bool>> updatePassword({
+    required String email,
+    required String token,
+    required String password,
+  });
+
   Future<Either<Failures, UserEntity>> signInWithGoogle();
 }

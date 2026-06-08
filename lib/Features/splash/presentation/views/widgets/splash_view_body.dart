@@ -17,7 +17,7 @@ class SplashViewBody extends StatefulWidget {
 }
 
 class _SplashViewBodyState extends State<SplashViewBody> {
-  var kRemeberMeSelectet = !Prefs.getBool(kSelectedRemeberMe);
+  var kRemeberMeSelectet = Prefs.getBool(kSelectedRemeberMe);
   var isOnBoardingSeen = Prefs.getBool(kIsOnBoardingSeen);
   @override
   void initState() {

@@ -2,6 +2,8 @@ class BackendService {
   static const String singupUrl =
       'http://traveltrek.runasp.net/api/auth/register';
   static const String signinUrl = 'http://traveltrek.runasp.net/api/auth/login';
+  static const String forgotPasswordUrl =
+      'http://traveltrek.runasp.net/api/auth/forgot-password';
 
   static const String addExpenseUrl =
       'http://traveltrek.runasp.net/api/trip-plan/expense/';
@@ -17,4 +19,3 @@ class BackendService {
   static const String savePlanUrl =
       'http://traveltrek.runasp.net/api/trip-plan/save-created?';
 }
-

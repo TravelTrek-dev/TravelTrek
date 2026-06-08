@@ -19,6 +19,7 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     final userEntity = Prefs.getUserEntity();
     return Scaffold(
+      
       bottomNavigationBar: CustomBottomNavigationBar(
         onItemTapped: (int value) {
           setState(() {
@@ -26,7 +27,7 @@ class _MainViewState extends State<MainView> {
           });
         },
       ),
-      appBar: customAppBar(name: userEntity?.name ?? 'NNNNN'),
+      appBar: currentindex == 2 ? null : customAppBar(name: userEntity?.name ?? 'NNNNN'),
       body: MainViewBody(currentindex: currentindex),
     );
   }

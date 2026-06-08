@@ -6,6 +6,7 @@ import 'package:travel_trek/Features/home/presentation/views/main_view.dart';
 import 'package:travel_trek/Features/Plandetails/presentation/views/plan_view_details.dart';
 import 'package:travel_trek/Features/home/data/models/plan_model/plan_model.dart';
 import 'package:travel_trek/Features/onboarding/presentation/views/on_boarding_view.dart';
+import 'package:travel_trek/Features/profile/presentation/views/profile_view.dart';
 import 'package:travel_trek/Features/splash/presentation/views/splash_view.dart';
 
 Route<dynamic> onGenerateRoute(RouteSettings setting) {
@@ -28,6 +29,8 @@ Route<dynamic> onGenerateRoute(RouteSettings setting) {
       return MaterialPageRoute(
         builder: (context) => PlanViewDetails(planModel: planModel),
       );
+    case ProfileView.routeName:
+      return MaterialPageRoute(builder: (context) => const ProfileView());
     case AddExpenseView.routeName:
       return MaterialPageRoute(builder: (context) => const AddExpenseView());
     default:

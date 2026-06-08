@@ -54,6 +54,26 @@ class AuthRepoImple implements AuthRepo {
   }
 
   @override
+  Future<Either<Failures, bool>> updatePassword({
+    required String email,
+    required String token,
+    required String password,
+  }) async {
+    try {
+      await firebaseAuthService.changePassword(
+        email: email,
+        oldPassword: token,
+        newPassword: password,
+      );
+      return right(true);
+    } on CustomException catch (e) {
+      return left(ServerFailure(errorMessage: e.message));
+    } catch (e) {
+      return left(ServerFailure(errorMessage: e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failures, UserEntity>> signInWithGoogle() async {
     try {
       var user = await firebaseAuthService.signInWithGoogle();

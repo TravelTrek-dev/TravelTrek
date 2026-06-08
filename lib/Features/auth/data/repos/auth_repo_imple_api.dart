@@ -70,6 +70,26 @@ class AuthRepoImpleApi implements AuthRepo {
   }
 
   @override
+  Future<Either<Failures, bool>> updatePassword({
+    required String email,
+    required String token,
+    required String password,
+  }) async {
+    try {
+      await api.post(
+        url: '${BackendService.forgotPasswordUrl}?token=$token',
+        body: {'email': email, 'password': password},
+      );
+      return right(true);
+    } on CustomException catch (e) {
+      return left(ServerFailure(errorMessage: e.message));
+    } catch (e) {
+      log('Exception in AuthRepoImpleApi.updatePassword: ${e.toString()}');
+      return left(ServerFailure(errorMessage: e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failures, UserEntity>> signInWithGoogle() async {
     try {
       var user = await firebaseAuthService.signInWithGoogle();

@@ -66,18 +66,48 @@ class FirebaseAuthService {
     }
   }
 
+  Future<void> changePassword({
+    required String email,
+    required String oldPassword,
+    required String newPassword,
+  }) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw CustomException(message: 'Please sign in again.');
+      }
+
+      final credential = EmailAuthProvider.credential(
+        email: email,
+        password: oldPassword,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      await user.updatePassword(newPassword);
+    } on FirebaseAuthException catch (e) {
+      log('Exception in FirebaseAuthService.changePassword: ${e.toString()} and code is ${e.code}');
+      if (e.code == 'wrong-password') {
+        throw CustomException(message: 'The current password is incorrect.');
+      } else if (e.code == 'weak-password') {
+        throw CustomException(message: 'The new password is too weak.');
+      } else if (e.code == 'requires-recent-login') {
+        throw CustomException(message: 'Please sign in again before changing your password.');
+      } else {
+        throw CustomException(message: 'Error. pls try again later!');
+      }
+    } catch (e) {
+      log('Exception in FirebaseAuthService.changePassword: ${e.toString()}');
+      throw CustomException(message: 'Error. pls try again later!');
+    }
+  }
+
   Future<User> signInWithGoogle() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn.instance;
 
       await googleSignIn.initialize();
 
-      final GoogleSignInAccount? googleUser = await googleSignIn.authenticate();
-
-      if (googleUser == null) {
-        throw CustomException(message: 'خطاء في تسجيل دخول بواسطه جوجل');
-      }
-
+      final googleUser = await googleSignIn.authenticate();
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
       final credential = GoogleAuthProvider.credential(
