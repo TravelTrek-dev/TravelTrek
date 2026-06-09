@@ -27,7 +27,7 @@ class AuthRepoImpleApi implements AuthRepo {
     try {
       await api.post(url: BackendService.singupUrl, body: body);
       return right(
-        UserEntity(name: name, email: email, uId: 'N/A', token: 'N/A'),
+        UserEntity(name: name, email: email, uId: 'N/A', accessToken: 'N/A', refreshToken: 'N/A'),
       );
     } on CustomException catch (e) {
       return left(ServerFailure(errorMessage: e.message));

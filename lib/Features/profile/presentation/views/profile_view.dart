@@ -96,7 +96,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                       name: updatedName,
                       email: existing.email,
                       uId: existing.uId,
-                      token: existing.token,
+                      accessToken: existing.accessToken, refreshToken: existing.refreshToken,
                     );
                     await Prefs.setUserEntity(updatedUser);
                     setState(() {

@@ -6,7 +6,8 @@ class UserModel extends UserEntity {
     required super.name,
     required super.email,
     required super.uId,
-    required super.token,
+    required super.accessToken,
+    required super.refreshToken,
   });
 
   factory UserModel.formFireBaseUser({required User user}) {
@@ -14,7 +15,8 @@ class UserModel extends UserEntity {
       name: user.displayName ?? 'Alex',
       email: user.email ?? "",
       uId: user.uid,
-      token: user.phoneNumber ?? "",
+      accessToken: user.phoneNumber ?? "",
+      refreshToken: '',
     );
   }
 
@@ -23,7 +25,8 @@ class UserModel extends UserEntity {
       name: json['value']['user']['fullName'] ?? 'Alex',
       email: json['value']['user']['email'] ?? "",
       uId: json['value']['user']['id'] ?? "id",
-      token: json['value']['accessToken'] ?? "accessToken",
+      accessToken: json['value']['accessToken'] ?? "accessToken N/A",
+      refreshToken: json['value']['refreshToken'] ?? 'refreshToken N/A',
     );
   }
 }

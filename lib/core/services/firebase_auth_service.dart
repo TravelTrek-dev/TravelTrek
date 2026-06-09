@@ -125,7 +125,7 @@ class FirebaseAuthService {
       log(
         ' Exception in  FirebaseAuthService.signInWithGoogle Google Sign-In Error: ${e.toString()}',
       );
-      throw CustomException(message: 'خطاء في تسجيل دخول بواسطه جوجل');
+      throw CustomException(message: 'Google Sign-In Error');
     }
   }
 }

@@ -13,7 +13,7 @@ class BudgetView extends StatelessWidget {
   final PlanModel planModel;
   @override
   Widget build(BuildContext context) {
-    final userToken = Prefs.getString(kUserToken);
+    final userToken = Prefs.getString(kUserAccessToken);
     final tripId = planModel.value!.id;
 
     return Scaffold(

@@ -27,7 +27,7 @@ class _MainViewState extends State<MainView> {
   @override
   void initState() {
     super.initState();
-    final userToken = Prefs.getString(kUserToken);
+    final userToken = Prefs.getString(kUserAccessToken);
     _userTripInfoCubit = UserTripInfoCubit(homeRepo: getIt<HomeRepo>());
     _getAllPlansCubit = GetAllPlansCubit(plansRepo: getIt<PlansRepo>());
 
@@ -44,7 +44,7 @@ class _MainViewState extends State<MainView> {
   }
 
   void _onTabTapped(int index) {
-    final userToken = Prefs.getString(kUserToken);
+    final userToken = Prefs.getString(kUserAccessToken);
     setState(() => currentindex = index);
 
     if (index == 0 && userToken.isNotEmpty) {

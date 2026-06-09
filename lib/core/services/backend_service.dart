@@ -5,6 +5,13 @@ class BackendService {
   static const String forgotPasswordUrl =
       'http://traveltrek.runasp.net/api/auth/forgot-password';
 
+  static const String refreshTokenUrl =
+      'http://traveltrek.runasp.net/api/auth/refresh-token';
+  static const String revokeTokenUrl =
+      'http://traveltrek.runasp.net/api/auth/revoke-token';
+  static const String revokeAllTokensUrl =
+      'http://traveltrek.runasp.net/api/auth/revoke-all';
+
   static const String addExpenseUrl =
       'http://traveltrek.runasp.net/api/trip-plan/expense/';
 

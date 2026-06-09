@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_trek/Features/auth/presentation/manger/sign_in_cubit/sign_in_cubit.dart';
@@ -28,7 +30,8 @@ class SignInViewBodyBlocConsumer extends StatelessWidget {
             showErrorSnackBar(context, state.errorMessage);
           }
         } else if (state is SignInSuccess) {
-          Prefs.setString(kUserToken, state.userEntity.token);
+          Prefs.setString(kUserAccessToken, state.userEntity.accessToken);
+          Prefs.setString(kRefreshToken, state.userEntity.refreshToken);
           await Prefs.setUserEntity(state.userEntity);
           showSuccessSnackBar(context, 'Login successful. Welcome back.');
 

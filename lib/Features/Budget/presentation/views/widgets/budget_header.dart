@@ -27,9 +27,9 @@ class BudgetHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Header
-        const Text(
-          'Paris Getaway Budget',
-          style: TextStyle(
+        Text(
+          '${planModel.value?.city ?? ''} ${planModel.value?.country != null ? ', ${planModel.value!.country}' : ''} Budget',
+          style: const TextStyle(
             fontSize: 26,
             fontWeight: FontWeight.bold,
             color: Color(0xFF1A1207),
@@ -37,9 +37,9 @@ class BudgetHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        const Text(
-          'May 12 – May 19, 2024',
-          style: TextStyle(
+        Text(
+          planModel.value?.duration ?? '',
+          style: const TextStyle(
             fontSize: 14,
             color: Color(0xFF7A6F5E),
             letterSpacing: 0.1,

@@ -14,7 +14,14 @@ class BuildBudgetHeader extends StatefulWidget {
 
 class _BuildBudgetHeaderState extends State<BuildBudgetHeader> {
   double spentAmount = 0.0;
-  double totalBudget = 0.0; // ملحوظة: يستحسن تمرر القيمة دي في الـ Constructor عشان الحسابات تظبط
+  double totalBudget = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Always load budget from planModel regardless of expenses
+    totalBudget = widget.planModel.value?.budget?.toDouble() ?? 0.0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +34,10 @@ class _BuildBudgetHeaderState extends State<BuildBudgetHeader> {
     return BlocListener<ExpenseCubit, ExpenseState>(
       listener: (context, state) {
         if (state is GetExpenseHistorySuccess) {
+          // Always update totalBudget from planModel
+          totalBudget = widget.planModel.value?.budget?.toDouble() ?? 0.0;
           if (state.expenses.isNotEmpty) {
             spentAmount = state.expenses[0].spent?.toDouble() ?? 0.0;
-            totalBudget = widget.planModel.value!.budget!.toDouble();
           } else {
             spentAmount = 0.0;
           }

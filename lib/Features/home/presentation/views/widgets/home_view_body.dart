@@ -25,7 +25,7 @@ class HomeViewBody extends StatefulWidget {
 
 class _HomeViewBodyState extends State<HomeViewBody> {
   final TextEditingController _promptController = TextEditingController();
-  final userToken = Prefs.getString(kUserToken);
+  final userToken = Prefs.getString(kUserAccessToken);
 
   @override
   void dispose() {

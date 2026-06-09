@@ -107,7 +107,7 @@ class _ItineraryViewState extends State<ItineraryView> {
                             if (widget.planModel == null) return;
                             BlocProvider.of<PlanDetailsCubit>(context).savePlan(
                               planModel: widget.planModel!,
-                              userToken: Prefs.getString(kUserToken),
+                              userToken: Prefs.getString(kUserAccessToken),
                             );
                           },
                   );

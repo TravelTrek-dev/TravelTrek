@@ -55,7 +55,7 @@ class _BuildPlanItemState extends State<BuildPlanItem> {
                   setState(() => showActions = false);
                   final planId = widget.plan?.value?.id;
                   if (planId == null) return;
-                  final token = Prefs.getString(kUserToken);
+                  final token = Prefs.getString(kUserAccessToken);
                   BlocProvider.of<GetAllPlansCubit>(context).deletePlan(
                     token: token,
                     planId: planId,

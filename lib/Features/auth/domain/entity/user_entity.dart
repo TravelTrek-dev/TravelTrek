@@ -2,10 +2,17 @@ class UserEntity {
   final String name;
   final String email;
   final String uId;
-  final String token;
+  final String accessToken;
+  final String refreshToken;
 
   Map<String, dynamic> toJson() {
-    return {'name': name, 'email': email, 'uId': uId, 'token': token};
+    return {
+      'name': name,
+      'email': email,
+      'uId': uId,
+      'token': accessToken,
+      'refreshToken': refreshToken,
+    };
   }
 
   factory UserEntity.fromJson(Map<String, dynamic> json) {
@@ -13,7 +20,8 @@ class UserEntity {
       name: json['name'],
       email: json['email'],
       uId: json['uId'],
-      token: json['token'],
+      accessToken: json['token'],
+      refreshToken: json['refreshToken'],
     );
   }
 
@@ -21,6 +29,7 @@ class UserEntity {
     required this.name,
     required this.email,
     required this.uId,
-    required this.token,
+    required this.accessToken,
+    required this.refreshToken,
   });
 }

@@ -23,7 +23,7 @@ class _AddExpenseViewBodyState extends State<AddExpenseViewBody> {
   String description = '';
   String date = '';
   String category = '';
-  String userToken = Prefs.getString(kUserToken);
+  String userToken = Prefs.getString(kUserAccessToken);
 
   @override
   Widget build(BuildContext context) {
