@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_trek/Features/Plandetails/presentation/views/widgets/local_currency_card.dart';
 import 'package:travel_trek/Features/Plandetails/presentation/views/widgets/section_header.dart';
 import 'package:travel_trek/Features/Plandetails/presentation/views/widgets/sliver_list_builder_day_card.dart';
-import 'package:travel_trek/Features/Plandetails/presentation/views/widgets/sliver_list_builder_trivel_trip.dart';
 import 'package:travel_trek/Features/Plandetails/presentation/views/widgets/sliver_plan_header.dart';
 import 'package:travel_trek/Features/Plandetails/presentation/manger/cubits/plan_details_cubit.dart';
 import 'package:travel_trek/Features/home/data/models/plan_model/plan_model.dart';
@@ -20,7 +19,6 @@ class ItineraryView extends StatefulWidget {
 
   final PlanModel? planModel;
 
-  /// true فقط لما يكون PlanDetailsCubit موجود في الشجرة
   final bool showSaveButton;
 
   @override

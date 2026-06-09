@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_trek/Features/home/data/models/plan_model/plan_model.dart';
 import 'package:travel_trek/core/utils/app_colors.dart';
-import 'package:travel_trek/core/utils/app_images.dart';
 import 'package:travel_trek/core/utils/app_styles.dart';
 
 class PlanItem extends StatelessWidget {

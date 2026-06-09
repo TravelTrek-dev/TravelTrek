@@ -16,7 +16,7 @@ class PlanRepoImple implements PlanRepo {
     required String userToken,
   }) async {
     try {
-      final response = await apiService.post(
+      await apiService.post(
         url: BackendService.savePlanUrl,
         body: planModel.toSavePlan(),
         token: userToken,

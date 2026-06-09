@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:travel_trek/core/utils/app_colors.dart';
 
 void showSuccessSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).clearSnackBars();
