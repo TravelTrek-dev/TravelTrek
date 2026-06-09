@@ -28,7 +28,7 @@ class PlanItem extends StatelessWidget {
                 ],
               ),
             ),
-            child: Image.asset(Assets.imagesTestImage, fit: BoxFit.fill),
+            child: Image.network(planEntity.value!.imageUrl!, fit: BoxFit.fill),
           ),
         ),
         const SizedBox(width: 14),

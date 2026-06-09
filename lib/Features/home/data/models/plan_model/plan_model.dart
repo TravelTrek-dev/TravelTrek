@@ -70,6 +70,7 @@ class PlanModel extends Equatable {
   };
 
   Map<String, dynamic> toSavePlan() => {
+    'imageUrl' : value!.imageUrl,
     'prompt': value!.prompt,
     'city': value!.city,
     'country': value!.country,

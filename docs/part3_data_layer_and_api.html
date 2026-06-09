@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TravelTrek Documentation – Part 3: Data Layer & API</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #847577; --primary-dark: #5c4e50; --accent: #D4A843;
+      --bg: #F5F0E8; --surface: #ffffff; --text: #2D2A2A;
+      --text-secondary: #4A4646; --text-muted: #847577;
+      --border: #E0D8D0; --success: #2C5F2E;
+      --code-bg: #1e1e2e; --code-text: #cdd6f4;
+      --blue: #1565c0; --blue-bg: #e3f2fd;
+    }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px; }
+    .cover { min-height: 55vh; background: linear-gradient(135deg, #0d1b2a 0%, #1565c0 55%, #1e88e5 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 40px; text-align: center; position: relative; overflow: hidden; }
+    .cover::before { content: ''; position: absolute; width: 500px; height: 500px; background: rgba(212,168,67,0.07); border-radius: 50%; top: -80px; right: -80px; }
+    .cover-badge { background: rgba(212,168,67,0.2); border: 1px solid var(--accent); color: var(--accent); padding: 6px 20px; border-radius: 40px; font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; }
+    .cover h1 { font-size: clamp(32px, 5vw, 56px); font-weight: 800; color: #fff; letter-spacing: -1px; line-height: 1.1; margin-bottom: 12px; }
+    .cover h1 span { color: var(--accent); }
+    .cover p.subtitle { font-size: 17px; color: rgba(255,255,255,0.75); max-width: 520px; margin: 0 auto 36px; }
+    .part-label { background: var(--accent); color: #1a1207; font-size: 14px; font-weight: 700; padding: 10px 32px; border-radius: 40px; letter-spacing: 1px; }
+    .nav-bar { background: var(--surface); border-bottom: 2px solid var(--border); padding: 0 40px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .nav-brand { font-weight: 800; font-size: 18px; color: var(--primary-dark); padding: 16px 24px 16px 0; border-right: 1px solid var(--border); margin-right: 24px; white-space: nowrap; }
+    .nav-brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 0; overflow-x: auto; flex: 1; }
+    .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 13px; font-weight: 500; padding: 18px 16px; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; }
+    .nav-links a:hover { color: var(--primary-dark); border-bottom-color: var(--primary); }
+    .nav-links a.active { color: var(--primary-dark); border-bottom-color: var(--accent); font-weight: 700; }
+    .doc-layout { display: grid; grid-template-columns: 240px 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; padding: 40px; }
+    .toc-sidebar { position: sticky; top: 80px; align-self: start; background: var(--surface); border-radius: 16px; padding: 24px; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .toc-sidebar h4 { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; }
+    .toc-sidebar ul { list-style: none; }
+    .toc-sidebar ul li { margin-bottom: 6px; }
+    .toc-sidebar ul li a { text-decoration: none; color: var(--text-secondary); font-size: 13px; padding: 4px 8px; border-radius: 6px; display: block; transition: all 0.2s; }
+    .toc-sidebar ul li a:hover { background: var(--bg); color: var(--primary-dark); }
+    .toc-sidebar ul li.sub a { padding-left: 20px; font-size: 12px; color: var(--text-muted); }
+    .section-header { display: flex; align-items: center; gap: 16px; margin: 56px 0 28px; }
+    .section-num { background: linear-gradient(135deg, #1565c0, #1e88e5); color: #fff; font-size: 13px; font-weight: 700; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .section-header h2 { font-size: 26px; font-weight: 700; color: var(--text); border-bottom: 2px solid var(--accent); padding-bottom: 4px; }
+    h3 { font-size: 18px; font-weight: 700; color: var(--primary-dark); margin: 32px 0 14px; display: flex; align-items: center; gap: 10px; }
+    h3::before { content: ''; display: block; width: 4px; height: 20px; background: var(--accent); border-radius: 2px; }
+    h4 { font-size: 15px; font-weight: 600; color: var(--text); margin: 20px 0 10px; }
+    p { margin-bottom: 14px; color: var(--text-secondary); }
+    strong { color: var(--text); }
+    .info-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+    .info-card.blue { border-left-color: var(--blue); background: var(--blue-bg); }
+    .info-card.green { border-left-color: var(--success); background: #e8f5e9; }
+    .info-card.red { border-left-color: #B00020; background: #fce4ec; }
+    pre { background: var(--code-bg); color: var(--code-text); border-radius: 12px; padding: 24px; overflow-x: auto; font-size: 13px; line-height: 1.6; margin: 16px 0 24px; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; }
+    code { background: rgba(132,117,119,0.12); color: var(--primary-dark); border-radius: 4px; padding: 2px 7px; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 13px; }
+    pre code { background: none; color: inherit; padding: 0; }
+    .kw { color: #cba6f7; } .cl { color: #89b4fa; } .st { color: #a6e3a1; } .cm { color: #6c7086; font-style: italic; } .nm { color: #fab387; } .fn { color: #89dceb; }
+    .table-wrapper { overflow-x: auto; margin: 20px 0; border-radius: 12px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); }
+    thead { background: linear-gradient(135deg, #0d1b2a, #1565c0); }
+    thead th { color: #fff; padding: 14px 18px; text-align: left; font-size: 13px; font-weight: 600; }
+    tbody td { padding: 13px 18px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-secondary); vertical-align: top; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--bg); }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-get { background: #e8f5e9; color: #2C5F2E; }
+    .badge-post { background: #e3f2fd; color: #1565c0; }
+    .badge-put { background: #fff8e1; color: #e65100; }
+    .badge-del { background: #fce4ec; color: #B00020; }
+    .method-tag { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 6px; display: inline-block; letter-spacing: 0.5px; }
+    .get { background: #e8f5e9; color: #1b5e20; }
+    .post { background: #e3f2fd; color: #0d47a1; }
+    .model-block { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin: 16px 0; }
+    .page-break { border: none; border-top: 2px dashed var(--border); margin: 60px 0; }
+    .footer { background: #2D2A2A; color: rgba(255,255,255,0.5); text-align: center; padding: 32px 40px; font-size: 13px; margin-top: 80px; }
+    .footer strong { color: rgba(255,255,255,0.8); }
+    .footer .parts-nav { display: flex; justify-content: center; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+    .footer .parts-nav a { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 13px; padding: 6px 16px; border: 1px solid rgba(212,168,67,0.4); border-radius: 20px; }
+    @media (max-width: 768px) { .doc-layout { grid-template-columns: 1fr; } .toc-sidebar { display: none; } }
+  </style>
+</head>
+<body>
+
+<!-- ═══ COVER ═══════════════════════════════════════════════════════════ -->
+<section class="cover">
+  <div class="cover-badge">Graduation Project Documentation</div>
+  <h1>Travel<span>Trek</span></h1>
+  <p class="subtitle">Complete Data Layer, Repository Pattern, Models &amp; REST API Reference</p>
+  <div class="part-label">Part 3 of 4 &nbsp;·&nbsp; Data Layer &amp; API</div>
+</section>
+
+<!-- ═══ NAV BAR ═════════════════════════════════════════════════════════ -->
+<nav class="nav-bar">
+  <div class="nav-brand">Travel<span>Trek</span> Docs</div>
+  <div class="nav-links">
+    <a href="part1_overview_and_architecture.html">Part 1: Overview</a>
+    <a href="part2_features_and_screens.html">Part 2: Features</a>
+    <a href="part3_data_layer_and_api.html" class="active">Part 3: Data Layer</a>
+    <a href="part4_services_and_deployment.html">Part 4: Services</a>
+  </div>
+</nav>
+
+<!-- ═══ MAIN LAYOUT ══════════════════════════════════════════════════════ -->
+<div class="doc-layout">
+  <aside class="toc-sidebar">
+    <h4>Contents — Part 3</h4>
+    <ul>
+      <li><a href="#data-overview">1. Data Layer Overview</a></li>
+      <li><a href="#entities">2. Domain Entities</a></li>
+      <li class="sub"><a href="#user-entity">2.1 UserEntity</a></li>
+      <li class="sub"><a href="#plan-models">2.2 Plan Models</a></li>
+      <li class="sub"><a href="#expense-entity">2.3 ExpenseEntity</a></li>
+      <li><a href="#repositories">3. Repository Pattern</a></li>
+      <li class="sub"><a href="#auth-repo">3.1 AuthRepo</a></li>
+      <li class="sub"><a href="#home-repo">3.2 HomeRepo</a></li>
+      <li class="sub"><a href="#plan-repo">3.3 PlanRepo</a></li>
+      <li class="sub"><a href="#plans-repo">3.4 PlansRepo</a></li>
+      <li class="sub"><a href="#expense-repo">3.5 ExpenseRepo</a></li>
+      <li><a href="#error-handling">4. Error Handling</a></li>
+      <li><a href="#api-client">5. API HTTP Client</a></li>
+      <li><a href="#api-endpoints">6. REST API Reference</a></li>
+      <li class="sub"><a href="#auth-endpoints">6.1 Auth Endpoints</a></li>
+      <li class="sub"><a href="#plan-endpoints">6.2 Plan Endpoints</a></li>
+      <li class="sub"><a href="#expense-endpoints">6.3 Expense Endpoints</a></li>
+      <li><a href="#data-flow">7. Data Flow Diagrams</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <!-- ─── 1. DATA LAYER OVERVIEW ───────────────────────────────── -->
+    <div class="section-header" id="data-overview">
+      <div class="section-num">1</div>
+      <h2>Data Layer Overview</h2>
+    </div>
+
+    <p>The data layer is the lowest application layer responsible for all <strong>network communication</strong>
+      and <strong>JSON serialization/deserialization</strong>. It implements the abstract repository interfaces
+      defined in the domain layer, keeping the domain and presentation layers completely decoupled from
+      implementation details.</p>
+
+    <div class="info-card blue">
+      <strong>Key Pattern:</strong> Every repository method returns
+      <code>Future&lt;Either&lt;Failures, T&gt;&gt;</code>. The <code>Either</code> monad (from the
+      <code>dartz</code> package) forces callers to handle both success (Right) and failure (Left) paths
+      explicitly. This eliminates silent failures.
+    </div>
+
+    <h4>Data Layer Responsibilities</h4>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Responsibility</th><th>How</th></tr></thead>
+        <tbody>
+          <tr><td>HTTP Communication</td><td>Via the <code>Api</code> class (Dio wrapper) with Bearer token auth</td></tr>
+          <tr><td>JSON Deserialization</td><td><code>Model.fromJson(Map)</code> factory constructors</td></tr>
+          <tr><td>JSON Serialization</td><td><code>model.toJson()</code> methods returning <code>Map&lt;String, dynamic&gt;</code></td></tr>
+          <tr><td>Error Translation</td><td>Converting <code>DioException</code> / <code>CustomException</code> into <code>ServerFailure</code></td></tr>
+          <tr><td>Domain Mapping</td><td>Data models extend domain entities; data classes are passed upward as entities</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="page-break" />
+
+    <!-- ─── 2. DOMAIN ENTITIES ───────────────────────────────────── -->
+    <div class="section-header" id="entities">
+      <div class="section-num">2</div>
+      <h2>Domain Entities</h2>
+    </div>
+
+    <h3 id="user-entity">2.1 UserEntity</h3>
+    <p>The <code>UserEntity</code> is the core domain object representing an authenticated user.
+      It is defined in the domain layer and has no dependencies on external packages.</p>
+
+    <pre><code><span class="cm">// lib/Features/auth/domain/entity/user_entity.dart</span>
+<span class="kw">class</span> <span class="cl">UserEntity</span> {
+  <span class="kw">final</span> <span class="cl">String</span> name;
+  <span class="kw">final</span> <span class="cl">String</span> email;
+  <span class="kw">final</span> <span class="cl">String</span> uId;
+  <span class="kw">final</span> <span class="cl">String</span> token;  <span class="cm">// JWT access token from backend</span>
+
+  <span class="kw">const</span> <span class="cl">UserEntity</span>({
+    <span class="kw">required this</span>.name,
+    <span class="kw">required this</span>.email,
+    <span class="kw">required this</span>.uId,
+    <span class="kw">required this</span>.token,
+  });
+
+  <span class="cm">// JSON serialization for SharedPreferences storage</span>
+  <span class="cl">Map</span>&lt;<span class="cl">String</span>, <span class="kw">dynamic</span>&gt; <span class="fn">toJson</span>() =&gt; {
+    <span class="st">'name'</span>: name, <span class="st">'email'</span>: email,
+    <span class="st">'uId'</span>: uId, <span class="st">'token'</span>: token,
+  };
+
+  <span class="kw">factory</span> <span class="cl">UserEntity</span>.<span class="fn">fromJson</span>(<span class="cl">Map</span>&lt;<span class="cl">String</span>, <span class="kw">dynamic</span>&gt; json) =&gt; <span class="cl">UserEntity</span>(
+    name: json[<span class="st">'name'</span>], email: json[<span class="st">'email'</span>],
+    uId: json[<span class="st">'uId'</span>], token: json[<span class="st">'token'</span>],
+  );
+}</code></pre>
+
+    <p>The <code>UserModel</code> extends <code>UserEntity</code> in the data layer and adds two factory
+      constructors: one for Firebase User objects (Google Sign-In) and one for backend API JSON responses.</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Factory Constructor</th><th>Source</th><th>Field Mapping</th></tr></thead>
+        <tbody>
+          <tr><td><code>UserModel.fromJson(json)</code></td><td>Backend API response</td><td><code>json['value']['user']['fullName']</code> → name<br><code>json['value']['accessToken']</code> → token</td></tr>
+          <tr><td><code>UserModel.fromFireBaseUser(user)</code></td><td>Firebase Auth User</td><td><code>user.displayName</code> → name<br><code>user.uid</code> → uId</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="plan-models">2.2 Plan Data Models</h3>
+    <p>The plan data model hierarchy represents the complete AI-generated trip plan. All models use
+      the <code>Equatable</code> mixin for value equality, which is essential for BLoC state comparisons.</p>
+
+    <div class="model-block">
+      <strong>Model Hierarchy:</strong>
+      <pre style="background:none;color:var(--text-secondary);padding:12px 0 0;margin:0;font-size:13px"><code>PlanModel
+  ├─ Value                    (main plan data)
+  │   ├─ id, prompt, city, country
+  │   ├─ duration, budget, currency, groupSize
+  │   ├─ Weather
+  │   │   └─ description, temperature, condition
+  │   ├─ List&lt;Day&gt;
+  │   │   ├─ dayNumber
+  │   │   ├─ List&lt;Activity&gt;
+  │   │   │   ├─ name, description, type
+  │   │   │   ├─ googleMapsLink, website
+  │   │   │   ├─ city, approximateCost
+  │   │   └─ Meals
+  │   │       ├─ breakfast, lunch, dinner
+  │   ├─ packingTips: List&lt;String&gt;
+  │   └─ generalAdvice: String
+  └─ Error (on API failure)
+      └─ code, message</code></pre>
+    </div>
+
+    <h4>PlanModel — Key Methods</h4>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Method</th><th>Returns</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>PlanModel.fromJson(json)</code></td><td><code>PlanModel</code></td><td>Parse single plan from generate API response</td></tr>
+          <tr><td><code>PlanModel.fromHistoryJson(json)</code></td><td><code>List&lt;PlanModel&gt;</code></td><td>Parse array of saved plans from history API</td></tr>
+          <tr><td><code>toJson()</code></td><td><code>Map</code></td><td>Serialize full plan for debugging/caching</td></tr>
+          <tr><td><code>toSavePlan()</code></td><td><code>Map</code></td><td>Serialize minimal plan payload for save API call</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Value Model Fields</h4>
+    <pre><code><span class="kw">class</span> <span class="cl">Value</span> <span class="kw">extends</span> <span class="cl">Equatable</span> {
+  <span class="kw">final</span> <span class="cl">String</span>? id;            <span class="cm">// Plan ID (assigned by backend)</span>
+  <span class="kw">final</span> <span class="cl">String</span>? prompt;        <span class="cm">// Original user prompt</span>
+  <span class="kw">final</span> <span class="cl">String</span>? city;          <span class="cm">// Destination city</span>
+  <span class="kw">final</span> <span class="cl">String</span>? country;       <span class="cm">// Destination country</span>
+  <span class="kw">final</span> <span class="cl">String</span>? duration;      <span class="cm">// e.g. "5 days"</span>
+  <span class="kw">final</span> <span class="cl">int</span>? budget;           <span class="cm">// Estimated budget amount</span>
+  <span class="kw">final</span> <span class="cl">String</span>? currency;      <span class="cm">// e.g. "USD", "EGP"</span>
+  <span class="kw">final</span> <span class="cl">String</span>? groupSize;     <span class="cm">// e.g. "2 people"</span>
+  <span class="kw">final</span> <span class="cl">Weather</span>? weather;
+  <span class="kw">final</span> <span class="cl">List</span>&lt;<span class="cl">Day</span>&gt;? days;
+  <span class="kw">final</span> <span class="cl">List</span>&lt;<span class="cl">String</span>&gt;? packingTips;
+  <span class="kw">final</span> <span class="cl">String</span>? generalAdvice;
+}</code></pre>
+
+    <h3 id="expense-entity">2.3 ExpenseEntity &amp; ExpenseModel</h3>
+    <p>The expense entity represents a single logged expense item within a trip plan.</p>
+
+    <pre><code><span class="kw">class</span> <span class="cl">ExpenseEntity</span> {
+  <span class="kw">final</span> <span class="cl">String</span> description;  <span class="cm">// e.g. "Dinner at Eiffel Tower restaurant"</span>
+  <span class="kw">final</span> <span class="kw">double</span> price;        <span class="cm">// Amount spent</span>
+  <span class="kw">final</span> <span class="cl">String</span> category;    <span class="cm">// e.g. "food", "transport"</span>
+  <span class="kw">final</span> <span class="kw">double</span>? spent;       <span class="cm">// Total spent in category (from API)</span>
+  <span class="kw">final</span> <span class="kw">double</span>? remaining;   <span class="cm">// Remaining budget in category (from API)</span>
+}
+
+<span class="cm">// Data layer model with JSON support</span>
+<span class="kw">class</span> <span class="cl">ExpenseModel</span> <span class="kw">extends</span> <span class="cl">ExpenseEntity</span> {
+  <span class="cl">Map</span>&lt;<span class="cl">String</span>, <span class="kw">dynamic</span>&gt; <span class="fn">toJson</span>() =&gt; {
+    <span class="st">'description'</span>: description, <span class="st">'price'</span>: price, <span class="st">'category'</span>: category,
+  };
+
+  <span class="kw">factory</span> <span class="cl">ExpenseModel</span>.<span class="fn">fromJson</span>(<span class="cl">Map</span>&lt;<span class="cl">String</span>, <span class="kw">dynamic</span>&gt; json) =&gt; <span class="cl">ExpenseModel</span>(
+    description: json[<span class="st">'description'</span>],
+    price: json[<span class="st">'price'</span>].<span class="fn">toDouble</span>(),
+    category: json[<span class="st">'name'</span>],
+    spent: json[<span class="st">'spent'</span>] ?? <span class="nm">0.0</span>,
+    remaining: json[<span class="st">'remaining'</span>] ?? <span class="nm">0.0</span>,
+  );
+}</code></pre>
+
+    <hr class="page-break" />
+
+    <!-- ─── 3. REPOSITORY PATTERN ─────────────────────────────────── -->
+    <div class="section-header" id="repositories">
+      <div class="section-num">3</div>
+      <h2>Repository Pattern</h2>
+    </div>
+
+    <p>Each feature follows the <strong>Repository Pattern</strong>: an abstract interface in the domain layer
+      defines the contract, and a concrete implementation in the data layer fulfills it. This separation enables
+      easy mocking for tests and future backend replacements.</p>
+
+    <h3 id="auth-repo">3.1 AuthRepo</h3>
+    <div class="info-card blue">
+      <strong>Interface:</strong> <code>Features/auth/domain/repos/auth_repo.dart</code><br>
+      <strong>Implementation:</strong> <code>Features/auth/data/repos/auth_repo_imple_api.dart</code>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Method</th><th>Parameters</th><th>Returns</th><th>API Call</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>createUserWithEmailAndPassword</code></td>
+            <td>name, email, password</td>
+            <td><code>Either&lt;Failures, UserEntity&gt;</code></td>
+            <td><span class="method-tag post">POST</span> <code>/api/auth/register</code></td>
+          </tr>
+          <tr>
+            <td><code>signInWithEmailAndPassword</code></td>
+            <td>email, password</td>
+            <td><code>Either&lt;Failures, UserEntity&gt;</code></td>
+            <td><span class="method-tag post">POST</span> <code>/api/auth/login</code></td>
+          </tr>
+          <tr>
+            <td><code>signInWithGoogle</code></td>
+            <td>—</td>
+            <td><code>Either&lt;Failures, UserEntity&gt;</code></td>
+            <td>Firebase SDK (no API call)</td>
+          </tr>
+          <tr>
+            <td><code>updatePassword</code></td>
+            <td>email, token, password</td>
+            <td><code>Either&lt;Failures, bool&gt;</code></td>
+            <td><span class="method-tag post">POST</span> <code>/api/auth/forgot-password?token=</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="home-repo">3.2 HomeRepo</h3>
+    <div class="info-card blue">
+      <strong>Interface:</strong> <code>Features/home/domain/repos/home_repo.dart</code><br>
+      <strong>Implementation:</strong> <code>Features/home/data/repos/home_repo_imple.dart</code>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Method</th><th>Parameters</th><th>Returns</th><th>API Call</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>generatePlan</code></td>
+            <td>prompt: String, userToken: String, currency: String</td>
+            <td><code>Either&lt;Failures, PlanModel&gt;</code></td>
+            <td><span class="method-tag get">GET</span> <code>/api/trip-plan/generate?prompt=&amp;currency=</code></td>
+          </tr>
+          <tr>
+            <td><code>getRecentPrompts</code></td>
+            <td>userToken: String</td>
+            <td><code>Either&lt;Failures, List&lt;PlanModel&gt;&gt;</code></td>
+            <td><span class="method-tag get">GET</span> <code>/api/trip-plan/prompts?</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="plan-repo">3.3 PlanRepo</h3>
+    <div class="info-card blue">
+      <strong>Interface:</strong> <code>Features/Plandetails/domain/repos/plan_repo.dart</code><br>
+      <strong>Implementation:</strong> <code>Features/Plandetails/data/repos/plan_repo_imple.dart</code>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Method</th><th>Parameters</th><th>Returns</th><th>API Call</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>savePlan</code></td>
+            <td>planModel: PlanModel, userToken: String</td>
+            <td><code>Either&lt;Failures, bool&gt;</code></td>
+            <td><span class="method-tag post">POST</span> <code>/api/trip-plan/save-created?token=</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="plans-repo">3.4 PlansRepo</h3>
+    <div class="info-card blue">
+      <strong>Interface:</strong> <code>Features/plans/domain/repos/plans_repo.dart</code><br>
+      <strong>Implementation:</strong> <code>Features/plans/data/repos/plans_repo_imple.dart</code>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Method</th><th>Parameters</th><th>Returns</th><th>API Call</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>getAllPlans</code></td>
+            <td>userToken: String</td>
+            <td><code>Either&lt;Failures, List&lt;PlanModel&gt;&gt;</code></td>
+            <td><span class="method-tag get">GET</span> <code>/api/trip-plan?token=</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="expense-repo">3.5 ExpenseRepo</h3>
+    <div class="info-card blue">
+      <strong>Interface:</strong> <code>Features/Budget/domain/repos/expense_repo.dart</code><br>
+      <strong>Implementation:</strong> <code>Features/Budget/data/repos/expense_repo_imple.dart</code>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Method</th><th>Parameters</th><th>Returns</th><th>API Call</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>addExpense</code></td>
+            <td>expenseModel, planId, userToken</td>
+            <td><code>Either&lt;Failures, bool&gt;</code></td>
+            <td><span class="method-tag post">POST</span> <code>/api/trip-plan/expense/{planId}</code></td>
+          </tr>
+          <tr>
+            <td><code>getExpenseHistory</code></td>
+            <td>planId, userToken</td>
+            <td><code>Either&lt;Failures, List&lt;ExpenseEntity&gt;&gt;</code></td>
+            <td><span class="method-tag get">GET</span> <code>/api/trip-plan/expense/{planId}</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="page-break" />
+
+    <!-- ─── 4. ERROR HANDLING ──────────────────────────────────────── -->
+    <div class="section-header" id="error-handling">
+      <div class="section-num">4</div>
+      <h2>Error Handling Architecture</h2>
+    </div>
+
+    <p>TravelTrek uses a two-tier error handling system: <strong>CustomException</strong> for low-level
+      errors that propagate within the data layer, and <strong>Failures</strong> (sealed class) for
+      domain-safe errors that flow up to the presentation layer.</p>
+
+    <pre><code><span class="cm">// lib/core/errors/custom_exception.dart</span>
+<span class="kw">class</span> <span class="cl">CustomException</span> <span class="kw">implements</span> <span class="cl">Exception</span> {
+  <span class="kw">final</span> <span class="cl">String</span> message;
+  <span class="kw">const</span> <span class="cl">CustomException</span>({<span class="kw">required this</span>.message});
+}
+
+<span class="cm">// lib/core/errors/failures.dart</span>
+<span class="kw">abstract class</span> <span class="cl">Failures</span> {
+  <span class="kw">final</span> <span class="cl">String</span> errorMessage;
+  <span class="kw">const</span> <span class="cl">Failures</span>({<span class="kw">required this</span>.errorMessage});
+}
+
+<span class="kw">class</span> <span class="cl">ServerFailure</span> <span class="kw">extends</span> <span class="cl">Failures</span> {
+  <span class="kw">const</span> <span class="cl">ServerFailure</span>({<span class="kw">required super</span>.errorMessage});
+}</code></pre>
+
+    <h4>Error Flow</h4>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Error Source</th><th>Caught As</th><th>Transformed To</th><th>Reaches Presentation As</th></tr></thead>
+        <tbody>
+          <tr><td>Firebase Auth error</td><td><code>FirebaseAuthException</code></td><td><code>CustomException</code></td><td><code>left(ServerFailure(...))</code></td></tr>
+          <tr><td>Network/HTTP error</td><td><code>DioException</code></td><td><code>ServerFailure</code></td><td><code>left(ServerFailure(...))</code></td></tr>
+          <tr><td>Backend error response</td><td><code>DioException.response.data['message']</code></td><td><code>ServerFailure</code></td><td><code>left(ServerFailure(...))</code></td></tr>
+          <tr><td>Unknown exception</td><td><code>catch(e)</code></td><td><code>ServerFailure(e.toString())</code></td><td><code>left(ServerFailure(...))</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Firebase Auth Specific Error Codes</h4>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Firebase Error Code</th><th>User-Facing Message</th></tr></thead>
+        <tbody>
+          <tr><td><code>weak-password</code></td><td>"The password provided is too weak."</td></tr>
+          <tr><td><code>email-already-in-use</code></td><td>"The account already exists for that email."</td></tr>
+          <tr><td><code>user-not-found</code></td><td>"password or email not valid"</td></tr>
+          <tr><td><code>wrong-password</code></td><td>"password or email not valid"</td></tr>
+          <tr><td><code>invalid-credential</code></td><td>"password or email not valid"</td></tr>
+          <tr><td><code>requires-recent-login</code></td><td>"Please sign in again before changing your password."</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="page-break" />
+
+    <!-- ─── 5. API HTTP CLIENT ─────────────────────────────────────── -->
+    <div class="section-header" id="api-client">
+      <div class="section-num">5</div>
+      <h2>API HTTP Client</h2>
+    </div>
+
+    <p>The <code>Api</code> class (<code>lib/core/helper_function/api.dart</code>) is a thin wrapper around
+      the <strong>Dio</strong> HTTP client. It provides three methods — <code>get</code>, <code>post</code>,
+      and <code>put</code> — each of which automatically handles:</p>
+
+    <ul style="margin:12px 0 20px 28px;color:var(--text-secondary)">
+      <li style="margin-bottom:8px">Setting the <code>Authorization: Bearer {token}</code> header when a token is provided</li>
+      <li style="margin-bottom:8px">Catching <code>DioException</code> and rethrowing as <code>CustomException</code> with a user-friendly message</li>
+      <li style="margin-bottom:8px">Extracting error messages from structured API response bodies (<code>response.data['message']</code>)</li>
+    </ul>
+
+    <pre><code><span class="cm">// lib/core/helper_function/api.dart</span>
+<span class="kw">class</span> <span class="cl">Api</span> {
+  <span class="kw">final</span> <span class="cl">Dio</span> dio;
+
+  <span class="kw">Future</span>&lt;<span class="kw">dynamic</span>&gt; <span class="fn">get</span>({<span class="kw">required</span> <span class="cl">String</span> url, <span class="cl">String</span>? token}) <span class="kw">async</span> {
+    <span class="kw">final</span> headers = token != <span class="kw">null</span>
+        ? {<span class="st">'Authorization'</span>: <span class="st">'Bearer $token'</span>}
+        : &lt;<span class="cl">String</span>, <span class="cl">String</span>&gt;{};
+    <span class="kw">try</span> {
+      <span class="kw">final</span> response = <span class="kw">await</span> dio.<span class="fn">get</span>(url, options: <span class="cl">Options</span>(headers: headers));
+      <span class="kw">return</span> response.data;
+    } <span class="kw">on</span> <span class="cl">DioException</span> <span class="kw">catch</span> (e) {
+      <span class="kw">final</span> message = e.response?.data?[<span class="st">'message'</span>];
+      <span class="kw">throw</span> <span class="cl">CustomException</span>(
+        message: message ?? e.message ?? <span class="st">'Connection error'</span>
+      );
+    }
+  }
+  <span class="cm">// post() and put() follow same pattern</span>
+}</code></pre>
+
+    <h4>Dio Configuration</h4>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Setting</th><th>Value</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>connectTimeout</code></td><td>60 seconds</td><td>Max time to establish TCP connection</td></tr>
+          <tr><td><code>receiveTimeout</code></td><td>60 seconds</td><td>Max time to receive full response</td></tr>
+          <tr><td><code>sendTimeout</code></td><td>60 seconds</td><td>Max time to send request body</td></tr>
+          <tr><td>Base URL</td><td><code>http://traveltrek.runasp.net</code></td><td>Shared base via <code>BackendService</code> constants</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="page-break" />
+
+    <!-- ─── 6. REST API REFERENCE ──────────────────────────────────── -->
+    <div class="section-header" id="api-endpoints">
+      <div class="section-num">6</div>
+      <h2>REST API Reference</h2>
+    </div>
+
+    <p>All API endpoints are hosted at <strong><code>http://traveltrek.runasp.net</code></strong> and are
+      defined as constants in <code>BackendService</code> class. Authenticated endpoints require a
+      <code>Bearer</code> token in the <code>Authorization</code> header.</p>
+
+    <h3 id="auth-endpoints">6.1 Authentication Endpoints</h3>
+
+    <div class="model-block">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span class="method-tag post">POST</span>
+        <code>/api/auth/register</code>
+        <span style="color:var(--text-muted);font-size:13px">Register new user</span>
+      </div>
+      <strong>Request Body:</strong>
+      <pre><code>{
+  <span class="st">"email"</span>: <span class="st">"user@example.com"</span>,
+  <span class="st">"password"</span>: <span class="st">"securepassword"</span>,
+  <span class="st">"fullName"</span>: <span class="st">"Saeed Ahmed"</span>
+}</code></pre>
+      <strong>Success Response (200):</strong>
+      <pre><code>{ <span class="st">"isSuccess"</span>: <span class="kw">true</span>, <span class="st">"value"</span>: { <span class="st">"message"</span>: <span class="st">"User registered successfully"</span> } }</code></pre>
+      <strong>Error Response:</strong>
+      <pre><code>{ <span class="st">"isSuccess"</span>: <span class="kw">false</span>, <span class="st">"message"</span>: <span class="st">"Email already in use"</span> }</code></pre>
+    </div>
+
+    <div class="model-block">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span class="method-tag post">POST</span>
+        <code>/api/auth/login</code>
+        <span style="color:var(--text-muted);font-size:13px">Authenticate existing user</span>
+      </div>
+      <strong>Request Body:</strong>
+      <pre><code>{ <span class="st">"email"</span>: <span class="st">"user@example.com"</span>, <span class="st">"password"</span>: <span class="st">"securepassword"</span> }</code></pre>
+      <strong>Success Response (200):</strong>
+      <pre><code>{
+  <span class="st">"isSuccess"</span>: <span class="kw">true</span>,
+  <span class="st">"value"</span>: {
+    <span class="st">"accessToken"</span>: <span class="st">"eyJhbGciOiJIUzI1NiIs..."</span>,
+    <span class="st">"user"</span>: {
+      <span class="st">"id"</span>: <span class="st">"user-uuid"</span>,
+      <span class="st">"fullName"</span>: <span class="st">"Saeed Ahmed"</span>,
+      <span class="st">"email"</span>: <span class="st">"user@example.com"</span>
+    }
+  }
+}</code></pre>
+    </div>
+
+    <div class="model-block">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span class="method-tag post">POST</span>
+        <code>/api/auth/forgot-password?token={token}</code>
+        <span style="color:var(--text-muted);font-size:13px">Update password</span>
+      </div>
+      <strong>Request Body:</strong>
+      <pre><code>{ <span class="st">"email"</span>: <span class="st">"user@example.com"</span>, <span class="st">"password"</span>: <span class="st">"newSecurePassword"</span> }</code></pre>
+    </div>
+
+    <h3 id="plan-endpoints">6.2 Trip Plan Endpoints</h3>
+
+    <div class="model-block">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span class="method-tag get">GET</span>
+        <code>/api/trip-plan/generate?prompt={text}&amp;currency={code}</code>
+        <span style="color:var(--text-muted);font-size:13px">AI plan generation</span>
+      </div>
+      <strong>Headers:</strong> <code>Authorization: Bearer {token}</code><br><br>
+      <strong>Query Parameters:</strong>
+      <div class="table-wrapper" style="margin-top:12px">
+        <table>
+          <thead><tr><th>Parameter</th><th>Type</th><th>Example</th><th>Required</th></tr></thead>
+          <tbody>
+            <tr><td><code>prompt</code></td><td>string</td><td>"5 days in Paris for a couple on a $2000 budget"</td><td>Yes</td></tr>
+            <tr><td><code>currency</code></td><td>string</td><td>"USD", "EGP", "SAR"</td><td>Yes</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <strong>Success Response (200):</strong>
+      <pre><code>{
+  <span class="st">"isSuccess"</span>: <span class="kw">true</span>,
+  <span class="st">"value"</span>: {
+    <span class="st">"id"</span>: <span class="st">"plan-uuid"</span>,
+    <span class="st">"prompt"</span>: <span class="st">"5 days in Paris..."</span>,
+    <span class="st">"city"</span>: <span class="st">"Paris"</span>,
+    <span class="st">"country"</span>: <span class="st">"France"</span>,
+    <span class="st">"duration"</span>: <span class="st">"5 days"</span>,
+    <span class="st">"budget"</span>: <span class="nm">2000</span>,
+    <span class="st">"currency"</span>: <span class="st">"USD"</span>,
+    <span class="st">"groupSize"</span>: <span class="st">"2 people"</span>,
+    <span class="st">"weather"</span>: { <span class="st">"description"</span>: <span class="st">"Mild spring weather"</span>, ... },
+    <span class="st">"days"</span>: [
+      {
+        <span class="st">"dayNumber"</span>: <span class="nm">1</span>,
+        <span class="st">"activities"</span>: [
+          {
+            <span class="st">"name"</span>: <span class="st">"Eiffel Tower Visit"</span>,
+            <span class="st">"description"</span>: <span class="st">"Iconic iron lattice tower..."</span>,
+            <span class="st">"type"</span>: <span class="st">"sightseeing"</span>,
+            <span class="st">"approximateCost"</span>: <span class="st">"$20-30 per person"</span>,
+            <span class="st">"googleMapsLink"</span>: <span class="st">"https://maps.google.com/..."</span>,
+            <span class="st">"city"</span>: <span class="st">"Paris"</span>
+          }
+        ],
+        <span class="st">"meals"</span>: { <span class="st">"breakfast"</span>: <span class="st">"Croissant at local café"</span>, ... }
+      }
+    ],
+    <span class="st">"packingTips"</span>: [<span class="st">"Comfortable walking shoes"</span>, <span class="st">"Portable charger"</span>],
+    <span class="st">"generalAdvice"</span>: <span class="st">"Book the Louvre in advance to skip lines..."</span>
+  }
+}</code></pre>
+    </div>
+
+    <div class="model-block">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span class="method-tag post">POST</span>
+        <code>/api/trip-plan/save-created?token={token}</code>
+        <span style="color:var(--text-muted);font-size:13px">Save a generated plan</span>
+      </div>
+      <strong>Request Body</strong> (from <code>PlanModel.toSavePlan()</code>):
+      <pre><code>{
+  <span class="st">"prompt"</span>: <span class="st">"5 days in Paris..."</span>,
+  <span class="st">"city"</span>: <span class="st">"Paris"</span>,
+  <span class="st">"country"</span>: <span class="st">"France"</span>,
+  <span class="st">"duration"</span>: <span class="st">"5 days"</span>,
+  <span class="st">"budget"</span>: <span class="nm">2000</span>,
+  <span class="st">"currency"</span>: <span class="st">"USD"</span>,
+  <span class="st">"groupSize"</span>: <span class="st">"2 people"</span>,
+  <span class="st">"weather"</span>: { ... },
+  <span class="st">"days"</span>: [ ... ],
+  <span class="st">"packingTips"</span>: [ ... ],
+  <span class="st">"generalAdvice"</span>: <span class="st">"..."</span>
+}</code></pre>
+    </div>
+
+    <div class="model-block">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span class="method-tag get">GET</span>
+        <code>/api/trip-plan?token={token}</code>
+        <span style="color:var(--text-muted);font-size:13px">Retrieve all saved plans</span>
+      </div>
+      <strong>Success Response:</strong>
+      <pre><code>{
+  <span class="st">"isSuccess"</span>: <span class="kw">true</span>,
+  <span class="st">"value"</span>: [ <span class="cm">/* array of plan objects */</span> ]
+}</code></pre>
+    </div>
+
+    <div class="model-block">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span class="method-tag get">GET</span>
+        <code>/api/trip-plan/prompts?token={token}</code>
+        <span style="color:var(--text-muted);font-size:13px">Get recent prompts history</span>
+      </div>
+      <p style="margin:0">Returns the last N trip prompts for the current user, used in the "Recent" section of the Home screen.</p>
+    </div>
+
+    <h3 id="expense-endpoints">6.3 Expense Endpoints</h3>
+
+    <div class="model-block">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span class="method-tag post">POST</span>
+        <code>/api/trip-plan/expense/{planId}</code>
+        <span style="color:var(--text-muted);font-size:13px">Log a new expense</span>
+      </div>
+      <strong>Headers:</strong> <code>Authorization: Bearer {token}</code><br><br>
+      <strong>Request Body:</strong>
+      <pre><code>{
+  <span class="st">"description"</span>: <span class="st">"Dinner at Café de Flore"</span>,
+  <span class="st">"price"</span>: <span class="nm">85.50</span>,
+  <span class="st">"category"</span>: <span class="st">"food"</span>
+}</code></pre>
+    </div>
+
+    <div class="model-block">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <span class="method-tag get">GET</span>
+        <code>/api/trip-plan/expense/{planId}</code>
+        <span style="color:var(--text-muted);font-size:13px">Get expense history for a plan</span>
+      </div>
+      <strong>Headers:</strong> <code>Authorization: Bearer {token}</code><br><br>
+      <strong>Success Response:</strong>
+      <pre><code>{
+  <span class="st">"isSuccess"</span>: <span class="kw">true</span>,
+  <span class="st">"value"</span>: [
+    {
+      <span class="st">"description"</span>: <span class="st">"Dinner at Café de Flore"</span>,
+      <span class="st">"price"</span>: <span class="nm">85.50</span>,
+      <span class="st">"name"</span>: <span class="st">"food"</span>,
+      <span class="st">"spent"</span>: <span class="nm">320.00</span>,
+      <span class="st">"remaining"</span>: <span class="nm">480.00</span>
+    }
+  ]
+}</code></pre>
+    </div>
+
+    <hr class="page-break" />
+
+    <!-- ─── 7. DATA FLOW ──────────────────────────────────────────── -->
+    <div class="section-header" id="data-flow">
+      <div class="section-num">7</div>
+      <h2>Data Flow Diagrams</h2>
+    </div>
+
+    <h3>7.1 Plan Generation Flow (Happy Path)</h3>
+    <pre><code><span class="cm">User taps "Generate My Plan"</span>
+         │
+         ▼
+<span class="cl">HomeViewBody</span>.<span class="fn">onPressed</span>()
+  GeneratePlanCubitCubit.<span class="fn">generatePlan</span>(token, prompt)
+         │  emit(GeneratePlanCubitLoading)   →  UI shows spinner
+         ▼
+<span class="cl">HomeRepo</span>.<span class="fn">generatePlan</span>(prompt, token, currency)
+         │
+         ▼
+<span class="cl">Api</span>.<span class="fn">get</span>(url: <span class="st">'/api/trip-plan/generate?...'</span>, token: token)
+         │
+         ▼ (Dio HTTP GET)
+  <span class="cl">Backend API</span> → AI processes prompt → returns JSON
+         │
+         ▼
+<span class="cl">PlanModel</span>.<span class="fn">fromJson</span>(response)
+         │  return <span class="fn">right</span>(planModel)
+         ▼
+<span class="cm">emit(GeneratePlanCubitSuccess(planModel))</span>
+         │
+         ▼
+<span class="cl">BlocListener</span> in <span class="cl">HomeViewBody</span>
+  → Navigator.push → <span class="cl">ItineraryView</span>(planModel: planModel)</code></pre>
+
+    <h3>7.2 Authentication Flow (Sign In)</h3>
+    <pre><code><span class="cl">SignInViewBodyBlocConsumer</span>
+  → <span class="cl">BlocProvider</span>(<span class="cl">SignInCubit</span>)
+
+<span class="cm">User submits form</span>
+         │
+         ▼
+<span class="cl">SignInCubit</span>.<span class="fn">signIn</span>(email, password)
+  emit(<span class="cl">SignInLoading</span>) → ModalProgressHUD shows
+         │
+         ▼
+<span class="cl">AuthRepo</span>.<span class="fn">signInWithEmailAndPassword</span>(email, password)
+  <span class="cl">Api</span>.<span class="fn">post</span>(<span class="st">'/api/auth/login'</span>, {email, password})
+         │
+         ▼ (Success)
+<span class="cl">UserModel</span>.<span class="fn">fromJson</span>(response)
+  <span class="fn">right</span>(userEntity)
+  emit(<span class="cl">SignInSuccess</span>(userEntity))
+         │
+         ▼
+<span class="cm">Save to SharedPreferences (token + user entity)</span>
+  Navigator.pushNamedAndRemoveUntil → <span class="cl">MainView</span></code></pre>
+
+    <h3>7.3 Expense Logging Flow</h3>
+    <pre><code><span class="cm">User fills expense form and taps "Log Expense"</span>
+         │
+         ▼
+<span class="cl">ExpenseCubit</span>.<span class="fn">addExpense</span>(model, planId, token)
+  emit(<span class="cl">ExpenseLoading</span>)
+         │
+         ▼
+<span class="cl">ExpenseRepo</span>.<span class="fn">addExpense</span>(expenseModel, planId, token)
+  <span class="cl">Api</span>.<span class="fn">post</span>(<span class="st">'/api/trip-plan/expense/{planId}'</span>, body)
+         │
+         ▼ (Success)
+  <span class="fn">right</span>(<span class="kw">true</span>)
+  emit(<span class="cl">ExpenseSuccess</span>)
+         │
+         ▼
+<span class="cm">BlocListener in AddExpenseView</span>
+  → Navigator.pop → BudgetView refreshes expense list</code></pre>
+
+  </main>
+</div>
+
+<!-- ═══ FOOTER ══════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <strong>TravelTrek — Complete Technical Documentation</strong><br>
+  Graduation Project | Flutter &amp; Dart | 2026
+  <div class="parts-nav">
+    <a href="part1_overview_and_architecture.html">Part 1: Overview &amp; Architecture</a>
+    <a href="part2_features_and_screens.html">Part 2: Features &amp; Screens</a>
+    <a href="part3_data_layer_and_api.html">Part 3: Data Layer &amp; API</a>
+    <a href="part4_services_and_deployment.html">Part 4: Services &amp; Deployment</a>
+  </div>
+</footer>
+
+</body>
+</html>

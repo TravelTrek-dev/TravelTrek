@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TravelTrek — Complete Documentation Index</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #847577; --primary-dark: #5c4e50; --accent: #D4A843;
+      --bg: #F5F0E8; --surface: #ffffff; --text: #2D2A2A; --text-secondary: #4A4646;
+    }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+    .hero {
+      background: linear-gradient(135deg, #2D2A2A 0%, #4A4646 45%, #847577 100%);
+      min-height: 60vh; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; text-align: center; padding: 80px 40px; position: relative; overflow: hidden;
+    }
+    .hero::before { content:''; position:absolute; width:600px;height:600px;background:rgba(212,168,67,0.07);border-radius:50%;top:-100px;right:-100px; }
+    .hero::after { content:''; position:absolute; width:400px;height:400px;background:rgba(255,255,255,0.03);border-radius:50%;bottom:-80px;left:-80px; }
+    .badge { display:inline-block;background:rgba(212,168,67,0.2);border:1px solid var(--accent);color:var(--accent);padding:6px 24px;border-radius:40px;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px; }
+    .hero h1 { font-size:clamp(48px,7vw,80px);font-weight:900;color:#fff;letter-spacing:-2px;margin-bottom:16px;line-height:1; }
+    .hero h1 span { color:var(--accent); }
+    .hero p { font-size:18px;color:rgba(255,255,255,0.7);max-width:560px;margin:0 auto 40px;line-height:1.6; }
+    .hero-meta { display:flex;gap:32px;justify-content:center;flex-wrap:wrap; }
+    .hero-meta div { text-align:center; }
+    .hero-meta .num { font-size:36px;font-weight:800;color:var(--accent); }
+    .hero-meta .lbl { font-size:12px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px; }
+    .main { max-width:1000px;margin:0 auto;padding:80px 40px; }
+    .section-title { font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--primary);margin-bottom:32px; }
+    .parts-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:24px;margin-bottom:80px; }
+    .part-card {
+      background:var(--surface);border-radius:20px;border:1px solid #E0D8D0;
+      overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06);
+      transition:transform 0.2s,box-shadow 0.2s;text-decoration:none;display:block;
+    }
+    .part-card:hover { transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.12); }
+    .part-card-header { padding:28px 28px 20px;position:relative; }
+    .part-num { font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:0.6;margin-bottom:8px; }
+    .part-title { font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px; }
+    .part-subtitle { font-size:14px;color:var(--text-secondary);line-height:1.5; }
+    .part-body { padding:0 28px 28px; }
+    .part-topics { display:flex;flex-wrap:wrap;gap:8px;margin-top:16px; }
+    .topic-chip { background:rgba(132,117,119,0.08);border:1px solid rgba(132,117,119,0.2);color:var(--primary-dark);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500; }
+    .part-cta { display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-size:14px;font-weight:700;color:var(--primary-dark);border-bottom:2px solid var(--accent);padding-bottom:2px; }
+    .p1 .part-card-header { background:linear-gradient(135deg,#2D2A2A,#4A4646); }
+    .p1 .part-num,.p1 .part-title,.p1 .part-subtitle { color:rgba(255,255,255,0.9)!important; }
+    .p1 .part-cta { color:var(--accent); }
+    .p2 .part-card-header { background:linear-gradient(135deg,#1a3a2a,#2C5F2E); }
+    .p2 .part-num,.p2 .part-title,.p2 .part-subtitle { color:rgba(255,255,255,0.9)!important; }
+    .p2 .part-cta { color:#4a8a4c; }
+    .p3 .part-card-header { background:linear-gradient(135deg,#0d1b2a,#1565c0); }
+    .p3 .part-num,.p3 .part-title,.p3 .part-subtitle { color:rgba(255,255,255,0.9)!important; }
+    .p3 .part-cta { color:#1e88e5; }
+    .p4 .part-card-header { background:linear-gradient(135deg,#1a0533,#6a1b9a); }
+    .p4 .part-num,.p4 .part-title,.p4 .part-subtitle { color:rgba(255,255,255,0.9)!important; }
+    .p4 .part-cta { color:#ab47bc; }
+    .overview-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:32px 0; }
+    .overview-card { background:var(--surface);border:1px solid #E0D8D0;border-radius:14px;padding:24px;text-align:center; }
+    .overview-card .ov-icon { font-size:32px;margin-bottom:12px; }
+    .overview-card .ov-title { font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px; }
+    .overview-card .ov-text { font-size:13px;color:var(--text-secondary); }
+    .footer { background:#2D2A2A;color:rgba(255,255,255,0.5);text-align:center;padding:32px 40px;font-size:13px; }
+    .footer strong { color:rgba(255,255,255,0.8); }
+    @media(max-width:600px){.parts-grid{grid-template-columns:1fr}.hero h1{font-size:40px}}
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="badge">Graduation Project — June 2026</div>
+  <h1>Travel<span>Trek</span></h1>
+  <p>Complete technical documentation for the AI-powered travel planning Flutter application. Divided into 4 comprehensive parts covering every aspect of the project.</p>
+  <div class="hero-meta">
+    <div><div class="num">4</div><div class="lbl">Document Parts</div></div>
+    <div><div class="num">10</div><div class="lbl">Feature Modules</div></div>
+    <div><div class="num">16</div><div class="lbl">Dependencies</div></div>
+    <div><div class="num">~50</div><div class="lbl">Pages Total</div></div>
+  </div>
+</section>
+
+<main class="main">
+
+  <p class="section-title">📚 Documentation Parts</p>
+
+  <div class="parts-grid">
+
+    <a href="part1_overview_and_architecture.html" class="part-card p1">
+      <div class="part-card-header">
+        <div class="part-num">Part 1 of 4</div>
+        <div class="part-title">Project Overview &amp; Architecture</div>
+        <div class="part-subtitle">Introduction to TravelTrek, the complete technology stack, Clean Architecture design, BLoC state management, dependency injection, project structure, navigation system, and design system.</div>
+      </div>
+      <div class="part-body">
+        <div class="part-topics">
+          <span class="topic-chip">Clean Architecture</span>
+          <span class="topic-chip">BLoC / Cubit</span>
+          <span class="topic-chip">GetIt DI</span>
+          <span class="topic-chip">Navigation</span>
+          <span class="topic-chip">Color Palette</span>
+          <span class="topic-chip">Typography</span>
+          <span class="topic-chip">Flutter SDK</span>
+          <span class="topic-chip">Firebase</span>
+        </div>
+        <div class="part-cta">Open Part 1 →</div>
+      </div>
+    </a>
+
+    <a href="part2_features_and_screens.html" class="part-card p2">
+      <div class="part-card-header">
+        <div class="part-num">Part 2 of 4</div>
+        <div class="part-title">Features &amp; Screens</div>
+        <div class="part-subtitle">Deep-dive into every screen: Splash, Onboarding, Authentication (email + Google), Home with AI prompt, Itinerary view, My Plans, Budget Tracker, Profile, and Tips screens.</div>
+      </div>
+      <div class="part-body">
+        <div class="part-topics">
+          <span class="topic-chip">Splash Screen</span>
+          <span class="topic-chip">Onboarding</span>
+          <span class="topic-chip">Sign In/Up</span>
+          <span class="topic-chip">Google OAuth</span>
+          <span class="topic-chip">AI Generation</span>
+          <span class="topic-chip">Itinerary View</span>
+          <span class="topic-chip">Budget Tracker</span>
+          <span class="topic-chip">Profile</span>
+        </div>
+        <div class="part-cta">Open Part 2 →</div>
+      </div>
+    </a>
+
+    <a href="part3_data_layer_and_api.html" class="part-card p3">
+      <div class="part-card-header">
+        <div class="part-num">Part 3 of 4</div>
+        <div class="part-title">Data Layer &amp; API Reference</div>
+        <div class="part-subtitle">Complete data layer documentation: domain entities (UserEntity, PlanModel, ExpenseEntity), all 5 repository patterns, error handling with Either monad, the HTTP API client, and full REST API endpoint reference.</div>
+      </div>
+      <div class="part-body">
+        <div class="part-topics">
+          <span class="topic-chip">UserEntity</span>
+          <span class="topic-chip">PlanModel</span>
+          <span class="topic-chip">Repository Pattern</span>
+          <span class="topic-chip">Either&lt;Failure,T&gt;</span>
+          <span class="topic-chip">Dio HTTP Client</span>
+          <span class="topic-chip">REST API Endpoints</span>
+          <span class="topic-chip">JSON Serialization</span>
+          <span class="topic-chip">Error Handling</span>
+        </div>
+        <div class="part-cta">Open Part 3 →</div>
+      </div>
+    </a>
+
+    <a href="part4_services_and_deployment.html" class="part-card p4">
+      <div class="part-card-header">
+        <div class="part-num">Part 4 of 4</div>
+        <div class="part-title">Services, Security &amp; Deployment</div>
+        <div class="part-subtitle">Firebase Auth Service internals, SharedPreferences local storage, GPS-based currency detection, BLoC Observer debugging, app initialization sequence, Firebase config, Android/iOS build guides, security analysis, and future enhancements.</div>
+      </div>
+      <div class="part-body">
+        <div class="part-topics">
+          <span class="topic-chip">Firebase Service</span>
+          <span class="topic-chip">SharedPreferences</span>
+          <span class="topic-chip">GPS Currency</span>
+          <span class="topic-chip">BLoC Observer</span>
+          <span class="topic-chip">Android Build</span>
+          <span class="topic-chip">iOS Build</span>
+          <span class="topic-chip">Security</span>
+          <span class="topic-chip">Future Plans</span>
+        </div>
+        <div class="part-cta">Open Part 4 →</div>
+      </div>
+    </a>
+
+  </div>
+
+  <p class="section-title">🏗️ Technology Overview</p>
+
+  <div class="overview-grid">
+    <div class="overview-card">
+      <div class="ov-icon">📱</div>
+      <div class="ov-title">Flutter</div>
+      <div class="ov-text">Cross-platform SDK — Android, iOS, Web from one codebase</div>
+    </div>
+    <div class="overview-card">
+      <div class="ov-icon">🔥</div>
+      <div class="ov-title">Firebase</div>
+      <div class="ov-text">Authentication service — Email/Password + Google Sign-In</div>
+    </div>
+    <div class="overview-card">
+      <div class="ov-icon">🌐</div>
+      <div class="ov-title">REST API</div>
+      <div class="ov-text">Custom backend at traveltrek.runasp.net — AI, plans, expenses</div>
+    </div>
+    <div class="overview-card">
+      <div class="ov-icon">🧱</div>
+      <div class="ov-title">Clean Architecture</div>
+      <div class="ov-text">Presentation → Domain → Data with strict dependency rules</div>
+    </div>
+    <div class="overview-card">
+      <div class="ov-icon">⚡</div>
+      <div class="ov-title">BLoC / Cubit</div>
+      <div class="ov-text">Reactive state management with 7 feature cubits</div>
+    </div>
+    <div class="overview-card">
+      <div class="ov-icon">📍</div>
+      <div class="ov-title">GPS Currency</div>
+      <div class="ov-text">Auto-detect local currency using device GPS and geocoding</div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <strong>TravelTrek Technical Documentation</strong><br>
+  AI-Powered Travel Planning Application · Graduation Project · Flutter &amp; Dart · 2026
+</footer>
+
+</body>
+</html>

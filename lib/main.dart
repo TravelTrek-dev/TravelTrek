@@ -20,7 +20,7 @@ void main() async {
   setup();
   await Prefs.init();
   final localCurrency = Prefs.getString(kSavedCurrency);
-  log('Saved Local Currency: $localCurrency'); // Debug print to check the value
+  log('Saved Local Currency: $localCurrency'); 
 
   runApp(const TravelTrek());
 }

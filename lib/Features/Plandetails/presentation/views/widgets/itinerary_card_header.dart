@@ -27,7 +27,7 @@ class ItineraryCardHeader extends StatelessWidget {
           AspectRatio(
             aspectRatio: 16 / 10,
             child: Image.network(
-              'https://ichef.bbci.co.uk/news/raw/cpsprodpb/2d65/live/8af4b6c0-144f-11ef-9b12-1ba8f95c4917.jpg',
+              planModel!.value!.imageUrl!,
               width: double.infinity,
               fit: BoxFit.fill,
             ),

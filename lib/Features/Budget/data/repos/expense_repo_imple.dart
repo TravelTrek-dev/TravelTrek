@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:travel_trek/Features/Budget/data/models/expense_model.dart';
 import 'package:travel_trek/Features/Budget/domain/entites/expense_entity.dart';
 import 'package:travel_trek/Features/Budget/domain/repos/expense_repo.dart';

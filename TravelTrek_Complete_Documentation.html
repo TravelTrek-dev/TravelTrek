@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TravelTrek — Complete Technical Documentation</title>
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #847577;
+      --primary-dark: #5c4e50;
+      --accent: #D4A843;
+      --bg: #F5F0E8;
+      --surface: #ffffff;
+      --text: #2D2A2A;
+      --text-secondary: #4A4646;
+      --text-muted: #847577;
+      --border: #E0D8D0;
+      --success: #2C5F2E;
+      --code-bg: #1e1e2e;
+      --code-text: #cdd6f4;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 14.5px;
+    }
+
+    /* ══════════════════════════════════════════════
+       COVER PAGE
+    ══════════════════════════════════════════════ */
+    .main-cover {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1718 0%, #2D2A2A 40%, #4A4646 75%, #847577 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 40px;
+      position: relative;
+      overflow: hidden;
+      page-break-after: always;
+    }
+    .main-cover::before {
+      content: '';
+      position: absolute;
+      width: 700px; height: 700px;
+      background: rgba(212,168,67,0.06);
+      border-radius: 50%;
+      top: -150px; right: -150px;
+    }
+    .main-cover::after {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 50%;
+      bottom: -100px; left: -100px;
+    }
+    .cover-badge {
+      background: rgba(212,168,67,0.18);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 8px 28px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 36px;
+      position: relative;
+    }
+    .main-cover h1 {
+      font-size: 80px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -3px;
+      line-height: 1;
+      margin-bottom: 8px;
+      position: relative;
+    }
+    .main-cover h1 span { color: var(--accent); }
+    .main-cover .app-subtitle {
+      font-size: 20px;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .main-cover .doc-description {
+      font-size: 18px;
+      color: rgba(255,255,255,0.7);
+      max-width: 580px;
+      margin: 0 auto 56px;
+      line-height: 1.6;
+      position: relative;
+    }
+    .cover-stats {
+      display: flex;
+      gap: 48px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      margin-bottom: 60px;
+    }
+    .cover-stat { text-align: center; }
+    .cover-stat .num { font-size: 42px; font-weight: 900; color: var(--accent); line-height: 1; }
+    .cover-stat .lbl { font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 6px; }
+    .cover-parts {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .cover-parts a {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.8);
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .cover-footer {
+      position: absolute;
+      bottom: 36px;
+      color: rgba(255,255,255,0.3);
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ══════════════════════════════════════════════
+       PART DIVIDER (between parts)
+    ══════════════════════════════════════════════ */
+    .part-divider {
+      page-break-before: always;
+      padding: 60px 40px;
+      text-align: center;
+      background: var(--surface);
+      border-bottom: 3px solid var(--border);
+      margin-bottom: 0;
+    }
+    .part-divider .pd-num {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .part-divider h2 {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .part-divider p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 580px;
+      margin: 0 auto;
+    }
+    .part-divider .pd-bar {
+      width: 60px;
+      height: 4px;
+      border-radius: 2px;
+      margin: 20px auto 0;
+    }
+
+    /* ══════════════════════════════════════════════
+       TABLE OF CONTENTS
+    ══════════════════════════════════════════════ */
+    .toc-page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 40px;
+      page-break-after: always;
+    }
+    .toc-page h2 { font-size: 28px; font-weight: 800; color: var(--text); margin-bottom: 32px; }
+    .toc-section { margin-bottom: 28px; }
+    .toc-section h3 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .toc-list { list-style: none; }
+    .toc-list li {
+      display: flex;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px dotted var(--border);
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .toc-list li .toc-num { min-width: 40px; font-weight: 700; color: var(--primary-dark); }
+    .toc-list li .toc-title { flex: 1; }
+    .toc-list li .toc-dots { flex: 1; border-bottom: 1px dotted #ccc; margin: 0 12px; }
+    .toc-list li.sub { padding-left: 28px; font-size: 13px; }
+    .toc-list li.sub .toc-num { color: var(--text-muted); font-weight: 500; }
+
+    /* ══════════════════════════════════════════════
+       MAIN CONTENT
+    ══════════════════════════════════════════════ */
+    .content-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 50px 40px;
+    }
+
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 52px 0 24px;
+    }
+    .section-num {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 4px;
+    }
+    h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin: 28px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h3::before {
+      content: '';
+      display: block;
+      width: 4px; height: 18px;
+      background: var(--accent);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    h4 { font-size: 14px; font-weight: 700; color: var(--text); margin: 18px 0 10px; }
+    p { margin-bottom: 13px; color: var(--text-secondary); }
+    strong { color: var(--text); }
+
+    /* Info Cards */
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    .info-card.green { border-left-color: var(--success); background: #f0f9f0; }
+    .info-card.blue { border-left-color: #1565c0; background: #f0f6ff; }
+    .info-card.red { border-left-color: #B00020; background: #fff0f0; }
+    .info-card.purple { border-left-color: #6a1b9a; background: #f9f0ff; }
+
+    /* Code */
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: 10px;
+      padding: 20px;
+      overflow-x: auto;
+      font-size: 12.5px;
+      line-height: 1.6;
+      margin: 14px 0 20px;
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+    code {
+      background: rgba(132,117,119,0.12);
+      color: var(--primary-dark);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 12.5px;
+    }
+    pre code { background: none; color: inherit; padding: 0; }
+    .kw { color: #cba6f7; } .cl { color: #89b4fa; } .st { color: #a6e3a1; }
+    .cm { color: #6c7086; font-style: italic; } .nm { color: #fab387; } .fn { color: #89dceb; }
+
+    /* Tables */
+    .table-wrapper { overflow-x: auto; margin: 16px 0; border-radius: 10px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); }
+    thead { background: linear-gradient(135deg, #2D2A2A, #4A4646); }
+    thead th { color: #fff; padding: 12px 16px; text-align: left; font-size: 12.5px; font-weight: 600; }
+    tbody td { padding: 11px 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-secondary); vertical-align: top; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:nth-child(even) td { background: #faf9f7; }
+
+    /* Badges */
+    .badge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-green { background: #e8f5e9; color: #2C5F2E; }
+    .badge-blue  { background: #e3f2fd; color: #1565c0; }
+    .badge-amber { background: #fff8e1; color: #e65100; }
+    .badge-red   { background: #fce4ec; color: #B00020; }
+
+    /* Method Tags */
+    .method-tag { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 5px; display: inline-block; letter-spacing: 0.5px; }
+    .get  { background: #e8f5e9; color: #1b5e20; }
+    .post { background: #e3f2fd; color: #0d47a1; }
+
+    /* Chips */
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+    .chip { padding: 4px 12px; border-radius: 40px; font-size: 12px; font-weight: 500; border: 1px solid; }
+    .chip-primary { background: rgba(132,117,119,0.08); border-color: var(--primary); color: var(--primary-dark); }
+    .chip-green   { background: rgba(44,95,46,0.08);  border-color: var(--success);  color: var(--success); }
+    .chip-blue    { background: rgba(21,101,192,0.08); border-color: #1565c0;         color: #1565c0; }
+
+    /* Diagram box */
+    .diagram-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 18px 0;
+      font-family: 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.9;
+      color: var(--text-secondary);
+      overflow-x: auto;
+    }
+    .arch-layer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+    .arch-layer .lyr-lbl { font-weight: 700; min-width: 120px; font-size: 12px; }
+    .layer-pres { background: #e8f5e9; }
+    .layer-dom  { background: #fff8e1; }
+    .layer-data { background: #fce4ec; }
+    .layer-core { background: #e3f2fd; }
+
+    /* Screen Flow */
+    .screen-flow {
+      background: var(--bg);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 14px 0;
+      font-family: 'Consolas', monospace;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.9;
+    }
+
+    /* Model Block */
+    .model-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin: 14px 0;
+    }
+
+    /* Page Break */
+    .page-break { border: none; border-top: 2px dashed var(--border); margin: 48px 0; }
+    .print-break { page-break-before: always; }
+
+    /* Service Card */
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .service-card h4 { font-size: 15px; margin: 0 0 10px; }
+
+    /* Conclusion */
+    .conclusion-box {
+      background: linear-gradient(135deg, #2D2A2A, #4A4646);
+      color: #fff;
+      border-radius: 16px;
+      padding: 36px;
+      margin: 32px 0;
+      text-align: center;
+    }
+    .conclusion-box h2 { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+    .conclusion-box p  { color: rgba(255,255,255,0.7); margin: 0 auto 24px; max-width: 520px; }
+    .conclusion-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .conclusion-item {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .conclusion-item .ci-num { font-size: 28px; font-weight: 900; color: var(--accent); }
+    .conclusion-item .ci-lbl { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+    /* Footer */
+    .doc-footer {
+      background: #2D2A2A;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 32px 40px;
+      font-size: 13px;
+      margin-top: 60px;
+    }
+    .doc-footer strong { color: rgba(255,255,255,0.85); }
+
+    ul.styled { margin: 10px 0 16px 28px; color: var(--text-secondary); }
+    ul.styled li { margin-bottom: 7px; }
+
+    /* ══════════════════════════════════════════════
+       PRINT STYLES
+    ══════════════════════════════════════════════ */
+    @media print {
+      body { font-size: 12px; }
+      .main-cover { page-break-after: always; }
+      .part-divider { page-break-before: always; }
+      .print-break { page-break-before: always; }
+      pre { font-size: 11px; }
+      .section-header { margin: 36px 0 18px; }
+      .content-wrap { padding: 30px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     MAIN COVER PAGE
+════════════════════════════════════════════════════════════════════ -->
+<div class="main-cover">
+  <div class="cover-badge">Graduation Project · Technical Documentation</div>
+  <h1>Travel<span>Trek</span></h1>
+  <div class="app-subtitle">AI-Powered Travel Planning Application</div>
+  <p class="doc-description">
+    A complete technical documentation covering architecture, all features &amp; screens,
+    data layer &amp; REST API, and core services — written in English for academic submission.
+  </p>
+  <div class="cover-stats">
+    <div class="cover-stat"><div class="num">4</div><div class="lbl">Parts</div></div>
+    <div class="cover-stat"><div class="num">10</div><div class="lbl">Features</div></div>
+    <div class="cover-stat"><div class="num">7</div><div class="lbl">Cubits</div></div>
+    <div class="cover-stat"><div class="num">16</div><div class="lbl">Dependencies</div></div>
+    <div class="cover-stat"><div class="num">~50</div><div class="lbl">Pages</div></div>
+  </div>
+  <div class="cover-parts">
+    <a href="#part1">Part 1: Overview &amp; Architecture</a>
+    <a href="#part2">Part 2: Features &amp; Screens</a>
+    <a href="#part3">Part 3: Data Layer &amp; API</a>
+    <a href="#part4">Part 4: Services &amp; Deployment</a>
+  </div>
+  <div class="cover-footer">Flutter · Dart · Firebase · REST API &nbsp;|&nbsp; Version 1.0.0 &nbsp;|&nbsp; June 2026</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     TABLE OF CONTENTS
+════════════════════════════════════════════════════════════════════ -->
+<div class="toc-page">
+  <h2>📋 Table of Contents</h2>
+
+  <div class="toc-section">
+    <h3>Part 1 — Project Overview &amp; Architecture</h3>
+    <ul class="toc-list">
+      <li><span class="toc-num">1.</span><span class="toc-title">Introduction &amp; Project Overview</span></li>
+      <li class="sub"><span class="toc-num">1.1</span><span class="toc-title">Project Objectives</span></li>
+      <li class="sub"><span class="toc-num">1.2</span><span class="toc-title">Application Scope</span></li>
+      <li><span class="toc-num">2.</span><span class="toc-title">Technology Stack</span></li>
+      <li class="sub"><span class="toc-num">2.1</span><span class="toc-title">Flutter Framework &amp; Dart SDK</span></li>
+      <li class="sub"><span class="toc-num">2.2</span><span class="toc-title">Backend &amp; Cloud Services</span></li>
+      <li><span class="toc-num">3.</span><span class="toc-title">Architecture Design</span></li>
+      <li class="sub"><span class="toc-num">3.1</span><span class="toc-title">Clean Architecture Pattern</span></li>
+      <li class="sub"><span class="toc-num">3.2</span><span class="toc-title">BLoC / Cubit State Management</span></li>
+      <li class="sub"><span class="toc-num">3.3</span><span class="toc-title">Dependency Injection with GetIt</span></li>
+      <li><span class="toc-num">4.</span><span class="toc-title">Project File Structure</span></li>
+      <li><span class="toc-num">5.</span><span class="toc-title">Navigation System</span></li>
+      <li><span class="toc-num">6.</span><span class="toc-title">Design System (Colors &amp; Typography)</span></li>
+    </ul>
+  </div>
+
+  <div class="toc-section">
+    <h3>Part 2 — Features &amp; Screens</h3>
+    <ul class="toc-list">
+      <li><span class="toc-num">7.</span><span class="toc-title">Splash Screen</span></li>
+      <li><span class="toc-num">8.</span><span class="toc-title">Onboarding</span></li>
+      <li><span class="toc-num">9.</span><span class="toc-title">Authentication Feature</span></li>
+      <li class="sub"><span class="toc-num">9.1</span><span class="toc-title">Sign In Screen</span></li>
+      <li class="sub"><span class="toc-num">9.2</span><span class="toc-title">Sign Up Screen</span></li>
+      <li class="sub"><span class="toc-num">9.3</span><span class="toc-title">Google Sign-In</span></li>
+      <li class="sub"><span class="toc-num">9.4</span><span class="toc-title">Change Password</span></li>
+      <li><span class="toc-num">10.</span><span class="toc-title">Home Screen &amp; AI Plan Generation</span></li>
+      <li><span class="toc-num">11.</span><span class="toc-title">Plan Itinerary View</span></li>
+      <li><span class="toc-num">12.</span><span class="toc-title">My Plans Screen</span></li>
+      <li><span class="toc-num">13.</span><span class="toc-title">Budget Tracker Feature</span></li>
+      <li><span class="toc-num">14.</span><span class="toc-title">Profile Screen</span></li>
+      <li><span class="toc-num">15.</span><span class="toc-title">Tips / Notes Screen</span></li>
+    </ul>
+  </div>
+
+  <div class="toc-section">
+    <h3>Part 3 — Data Layer &amp; API Reference</h3>
+    <ul class="toc-list">
+      <li><span class="toc-num">16.</span><span class="toc-title">Data Layer Overview</span></li>
+      <li><span class="toc-num">17.</span><span class="toc-title">Domain Entities</span></li>
+      <li class="sub"><span class="toc-num">17.1</span><span class="toc-title">UserEntity &amp; UserModel</span></li>
+      <li class="sub"><span class="toc-num">17.2</span><span class="toc-title">Plan Data Models (PlanModel, Value, Day, Activity)</span></li>
+      <li class="sub"><span class="toc-num">17.3</span><span class="toc-title">ExpenseEntity &amp; ExpenseModel</span></li>
+      <li><span class="toc-num">18.</span><span class="toc-title">Repository Pattern (5 Repositories)</span></li>
+      <li><span class="toc-num">19.</span><span class="toc-title">Error Handling Architecture</span></li>
+      <li><span class="toc-num">20.</span><span class="toc-title">API HTTP Client (Dio Wrapper)</span></li>
+      <li><span class="toc-num">21.</span><span class="toc-title">REST API Endpoint Reference</span></li>
+      <li class="sub"><span class="toc-num">21.1</span><span class="toc-title">Authentication Endpoints</span></li>
+      <li class="sub"><span class="toc-num">21.2</span><span class="toc-title">Trip Plan Endpoints</span></li>
+      <li class="sub"><span class="toc-num">21.3</span><span class="toc-title">Expense Endpoints</span></li>
+      <li><span class="toc-num">22.</span><span class="toc-title">Data Flow Diagrams</span></li>
+    </ul>
+  </div>
+
+  <div class="toc-section">
+    <h3>Part 4 — Services, Security &amp; Deployment</h3>
+    <ul class="toc-list">
+      <li><span class="toc-num">23.</span><span class="toc-title">Firebase Authentication Service</span></li>
+      <li><span class="toc-num">24.</span><span class="toc-title">Local Storage — Prefs Service</span></li>
+      <li><span class="toc-num">25.</span><span class="toc-title">Currency &amp; Location Detection Service</span></li>
+      <li><span class="toc-num">26.</span><span class="toc-title">BLoC Observer (Debug Logging)</span></li>
+      <li><span class="toc-num">27.</span><span class="toc-title">App Initialization Sequence</span></li>
+      <li><span class="toc-num">28.</span><span class="toc-title">Firebase Configuration</span></li>
+      <li><span class="toc-num">29.</span><span class="toc-title">Build &amp; Deployment Guide</span></li>
+      <li><span class="toc-num">30.</span><span class="toc-title">Security Considerations</span></li>
+      <li><span class="toc-num">31.</span><span class="toc-title">Future Enhancements</span></li>
+      <li><span class="toc-num">32.</span><span class="toc-title">Conclusion</span></li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════
+     PART 1 DIVIDER
+════════════════════════════════════════════════════════════════════ -->
+<div id="part1" class="part-divider">
+  <div class="pd-num">Part 1 of 4</div>
+  <h2>Project Overview &amp; Architecture</h2>
+  <p>Introduction, technology stack, Clean Architecture design, BLoC state management, dependency injection, project structure, navigation &amp; design system.</p>
+  <div class="pd-bar" style="background:linear-gradient(90deg,#2D2A2A,#847577)"></div>
+</div>
+
+<div class="content-wrap">
+
+  <!-- 1. INTRODUCTION -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#2D2A2A,#847577)">1</div>
+    <h2>Introduction &amp; Project Overview</h2>
+  </div>
+
+  <p><strong>TravelTrek</strong> is an AI-powered travel planning mobile application developed as a graduation project. It enables users to plan personalized travel itineraries using natural language prompts, track budgets, view day-by-day activities, and manage their travel plans seamlessly from a mobile device.</p>
+
+  <p>The application integrates a custom <strong>RESTful backend API</strong> hosted at <code>traveltrek.runasp.net</code> with <strong>Google Firebase Authentication</strong>, providing a hybrid authentication strategy that supports both email/password and Google Sign-In.</p>
+
+  <div class="info-card green">
+    <strong>🎯 Core Value Proposition:</strong> Users simply describe their dream trip in one sentence, and TravelTrek's AI backend generates a complete, multi-day itinerary with activities, meals, weather info, packing tips, and budget estimates — all personalized to the user's preferences and local currency.
+  </div>
+
+  <h3>1.1 Project Objectives</h3>
+  <div class="chip-row">
+    <span class="chip chip-primary">AI Trip Generation</span>
+    <span class="chip chip-primary">Budget Tracking</span>
+    <span class="chip chip-primary">Plan Management</span>
+    <span class="chip chip-primary">Google Sign-In</span>
+    <span class="chip chip-primary">Currency Detection</span>
+    <span class="chip chip-primary">Travel Notes</span>
+    <span class="chip chip-primary">Itinerary View</span>
+    <span class="chip chip-primary">User Profile</span>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Objective</th><th>Description</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><strong>AI-Powered Planning</strong></td><td>Generate multi-day trip itineraries from natural language prompts via backend AI</td><td><span class="badge badge-green">Implemented</span></td></tr>
+        <tr><td><strong>User Authentication</strong></td><td>Secure sign-up/sign-in with email+password and Google OAuth via Firebase</td><td><span class="badge badge-green">Implemented</span></td></tr>
+        <tr><td><strong>Budget Management</strong></td><td>Log and categorize travel expenses; track spending vs. plan budget</td><td><span class="badge badge-green">Implemented</span></td></tr>
+        <tr><td><strong>Plan Persistence</strong></td><td>Save generated plans to user account; retrieve plan history</td><td><span class="badge badge-green">Implemented</span></td></tr>
+        <tr><td><strong>Location-Based Currency</strong></td><td>Detect user's country via GPS/locale and auto-select local currency</td><td><span class="badge badge-green">Implemented</span></td></tr>
+        <tr><td><strong>Travel Notes</strong></td><td>Allow users to add personal notes to their trip plans</td><td><span class="badge badge-blue">Scaffolded</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>1.2 Application Scope</h3>
+  <p>TravelTrek targets <strong>mobile platforms</strong> (Android &amp; iOS) as primary targets, with Flutter also making the code portable to web, Windows, macOS, and Linux. The app is designed for individual travelers and families planning short to medium-duration trips (1–14 days).</p>
+
+  <hr class="page-break" />
+
+  <!-- 2. TECH STACK -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#2D2A2A,#847577)">2</div>
+    <h2>Technology Stack</h2>
+  </div>
+
+  <h3>2.1 Flutter Framework &amp; Dependencies</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Package</th><th>Version</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Flutter SDK</strong></td><td>3.x stable</td><td>Cross-platform UI framework</td></tr>
+        <tr><td><strong>Dart SDK</strong></td><td>^3.11.4</td><td>Programming language</td></tr>
+        <tr><td><strong>firebase_core</strong></td><td>^4.7.0</td><td>Firebase initialization</td></tr>
+        <tr><td><strong>firebase_auth</strong></td><td>^6.4.0</td><td>Authentication (email + Google)</td></tr>
+        <tr><td><strong>flutter_bloc</strong></td><td>^9.1.1</td><td>State management — Cubit pattern</td></tr>
+        <tr><td><strong>dio</strong></td><td>^5.9.2</td><td>HTTP client for REST API</td></tr>
+        <tr><td><strong>dartz</strong></td><td>^0.10.1</td><td>Functional programming — Either types</td></tr>
+        <tr><td><strong>get_it</strong></td><td>^9.2.1</td><td>Dependency injection service locator</td></tr>
+        <tr><td><strong>go_router</strong></td><td>^17.2.2</td><td>Named route navigation</td></tr>
+        <tr><td><strong>google_sign_in</strong></td><td>^7.2.0</td><td>Google OAuth authentication</td></tr>
+        <tr><td><strong>shared_preferences</strong></td><td>^2.5.5</td><td>Local key-value storage</td></tr>
+        <tr><td><strong>equatable</strong></td><td>^2.0.8</td><td>Value equality for BLoC states</td></tr>
+        <tr><td><strong>geocoding</strong></td><td>^4.0.0</td><td>Reverse geocoding (coordinates → country)</td></tr>
+        <tr><td><strong>geolocator</strong></td><td>^14.0.2</td><td>GPS location access</td></tr>
+        <tr><td><strong>intl</strong></td><td>^0.20.2</td><td>Internationalization &amp; date formatting</td></tr>
+        <tr><td><strong>flutter_svg</strong></td><td>^2.2.4</td><td>SVG image rendering</td></tr>
+        <tr><td><strong>dots_indicator</strong></td><td>^4.0.1</td><td>Onboarding page indicator dots</td></tr>
+        <tr><td><strong>modal_progress_hud_nsn</strong></td><td>^0.5.1</td><td>Loading overlay for async operations</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>2.2 Backend &amp; Cloud Services</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Service</th><th>Role</th><th>Base URL / SDK</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Custom REST API</strong></td><td>Primary backend — auth, AI plan generation, expense management, plan storage</td><td><code>http://traveltrek.runasp.net/api/</code></td></tr>
+        <tr><td><strong>Firebase Authentication</strong></td><td>Google Sign-In OAuth flow + Firebase session management</td><td>Firebase Cloud (Google)</td></tr>
+        <tr><td><strong>Google Maps</strong></td><td>Activity location deep-links embedded in AI-generated plan data</td><td>External links</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="page-break" />
+
+  <!-- 3. ARCHITECTURE -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#2D2A2A,#847577)">3</div>
+    <h2>Architecture Design</h2>
+  </div>
+
+  <h3>3.1 Clean Architecture Pattern</h3>
+  <p>TravelTrek follows <strong>Clean Architecture</strong> (Robert C. Martin). Every feature module is divided into three independent layers:</p>
+
+  <div class="diagram-box">
+    <div class="arch-layer layer-pres">
+      <span class="lyr-lbl" style="color:#2C5F2E">🖥️ Presentation</span>
+      <span>Views · Widgets · BLoC Cubits · States</span>
+    </div>
+    <div style="text-align:center;font-size:18px;color:var(--text-muted);margin:2px 0">↓ depends on</div>
+    <div class="arch-layer layer-dom">
+      <span class="lyr-lbl" style="color:#8a6800">📐 Domain</span>
+      <span>Entities · Repository Interfaces · Business Logic</span>
+    </div>
+    <div style="text-align:center;font-size:18px;color:var(--text-muted);margin:2px 0">↓ implements</div>
+    <div class="arch-layer layer-data">
+      <span class="lyr-lbl" style="color:#B00020">🗄️ Data</span>
+      <span>Models (fromJson/toJson) · Repository Implementations · API Calls</span>
+    </div>
+    <div style="text-align:center;font-size:18px;color:var(--text-muted);margin:2px 0">↑ shared by all</div>
+    <div class="arch-layer layer-core">
+      <span class="lyr-lbl" style="color:#1565c0">⚙️ Core</span>
+      <span>Services · Utilities · Shared Widgets · Error Types · DI Setup</span>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Layer</th><th>Responsibility</th><th>Key Rule</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Presentation</strong></td><td>UI rendering, user interaction, state via Cubit</td><td>No data source knowledge</td></tr>
+        <tr><td><strong>Domain</strong></td><td>Business logic, entities, abstract repo contracts</td><td>Pure Dart — zero framework imports</td></tr>
+        <tr><td><strong>Data</strong></td><td>API calls, JSON parsing, concrete repository implementations</td><td>Implements domain contracts</td></tr>
+        <tr><td><strong>Core</strong></td><td>Shared utilities, DI, colors, styles, routing</td><td>Cross-cutting concerns only</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>3.2 BLoC / Cubit State Management</h3>
+  <p>TravelTrek uses <strong>Flutter BLoC's Cubit</strong> pattern throughout. A Cubit is a simplified BLoC without explicit Events — state changes are triggered by directly calling methods. Every repository call returns <code>Either&lt;Failure, T&gt;</code> from the <code>dartz</code> package, ensuring explicit error handling.</p>
+
+  <pre><code><span class="cm">// Standard Cubit state pattern used across all features</span>
+<span class="kw">abstract class</span> <span class="cl">SignInState</span> {}
+<span class="kw">class</span> <span class="cl">SignInInitial</span> <span class="kw">extends</span> <span class="cl">SignInState</span> {}  <span class="cm">// Default</span>
+<span class="kw">class</span> <span class="cl">SignInLoading</span> <span class="kw">extends</span> <span class="cl">SignInState</span> {}  <span class="cm">// Show spinner</span>
+<span class="kw">class</span> <span class="cl">SignInSuccess</span> <span class="kw">extends</span> <span class="cl">SignInState</span> { <span class="kw">final</span> <span class="cl">UserEntity</span> userEntity; }
+<span class="kw">class</span> <span class="cl">SignInFailure</span> <span class="kw">extends</span> <span class="cl">SignInState</span> { <span class="kw">final</span> <span class="cl">String</span> errorMessage; }</code></pre>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Cubit</th><th>Feature</th><th>States</th></tr></thead>
+      <tbody>
+        <tr><td><code>SignInCubit</code></td><td>Authentication</td><td>Initial, Loading, Success, Failure</td></tr>
+        <tr><td><code>SignUpCubit</code></td><td>Authentication</td><td>Initial, Loading, Success, Failure</td></tr>
+        <tr><td><code>ChangePasswordCubit</code></td><td>Authentication</td><td>Initial, Loading, Success, Failure</td></tr>
+        <tr><td><code>GeneratePlanCubitCubit</code></td><td>Home / AI Plan</td><td>Initial, Loading, Success, Failure</td></tr>
+        <tr><td><code>PlanDetailsCubit</code></td><td>Plan Details / Save</td><td>Initial, Loading, Success, Failure</td></tr>
+        <tr><td><code>ExpenseCubit</code></td><td>Budget Tracker</td><td>Initial, Loading, Success, Failure</td></tr>
+        <tr><td><code>PlansListCubit</code></td><td>My Plans List</td><td>Initial, Loading, Success, Failure</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>3.3 Dependency Injection with GetIt</h3>
+  <p>All singleton services and repositories are registered at app startup via the <code>setup()</code> function in <code>core/services/service_locator.dart</code>.</p>
+
+  <pre><code><span class="kw">final</span> getIt = <span class="cl">GetIt</span>.instance;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  getIt.<span class="fn">registerSingleton</span>&lt;<span class="cl">FirebaseAuthService</span>&gt;(<span class="cl">FirebaseAuthService</span>());
+  getIt.<span class="fn">registerSingleton</span>&lt;<span class="cl">Api</span>&gt;(<span class="cl">Api</span>(dio: <span class="cl">Dio</span>(<span class="cl">BaseOptions</span>(
+    connectTimeout: <span class="kw">const</span> <span class="cl">Duration</span>(seconds: <span class="nm">60</span>),
+    receiveTimeout: <span class="kw">const</span> <span class="cl">Duration</span>(seconds: <span class="nm">60</span>),
+  ))));
+  getIt.<span class="fn">registerSingleton</span>&lt;<span class="cl">AuthRepo</span>&gt;(
+    <span class="cl">AuthRepoImpleApi</span>(api: getIt&lt;<span class="cl">Api</span>&gt;(), firebaseAuthService: getIt&lt;<span class="cl">FirebaseAuthService</span>&gt;()),
+  );
+  getIt.<span class="fn">registerSingleton</span>&lt;<span class="cl">ExpenseRepo</span>&gt;(<span class="cl">ExpenseRepoImple</span>(apiService: getIt&lt;<span class="cl">Api</span>&gt;()));
+  getIt.<span class="fn">registerSingleton</span>&lt;<span class="cl">HomeRepo</span>&gt;(<span class="cl">HomeRepoImple</span>(apiService: getIt&lt;<span class="cl">Api</span>&gt;()));
+  getIt.<span class="fn">registerSingleton</span>&lt;<span class="cl">PlanRepo</span>&gt;(<span class="cl">PlanRepoImple</span>(apiService: getIt&lt;<span class="cl">Api</span>&gt;()));
+  getIt.<span class="fn">registerSingleton</span>&lt;<span class="cl">PlansRepo</span>&gt;(<span class="cl">PlansRepoImple</span>(apiService: getIt&lt;<span class="cl">Api</span>&gt;()));
+}</code></pre>
+
+  <hr class="page-break" />
+
+  <!-- 4. PROJECT STRUCTURE -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#2D2A2A,#847577)">4</div>
+    <h2>Project File Structure</h2>
+  </div>
+
+  <pre><code>travel_trek/
+├── lib/
+│   ├── main.dart                    <span class="cm"># Entry point, Firebase init, DI setup</span>
+│   ├── constants.dart               <span class="cm"># App-wide constant keys</span>
+│   ├── firebase_options.dart        <span class="cm"># Auto-generated Firebase config</span>
+│   ├── core/                        <span class="cm"># Shared cross-feature code</span>
+│   │   ├── services/                <span class="cm"># Firebase, DI, preferences, currency</span>
+│   │   ├── utils/                   <span class="cm"># Colors, styles, images, routes</span>
+│   │   ├── widgets/                 <span class="cm"># Shared reusable widgets</span>
+│   │   ├── errors/                  <span class="cm"># Exception & Failure types</span>
+│   │   ├── helper_function/         <span class="cm"># API client, routing helpers</span>
+│   │   └── entities/                <span class="cm"># Core domain entities</span>
+│   └── Features/                    <span class="cm"># Feature modules (clean arch each)</span>
+│       ├── splash/                  <span class="cm"># Splash screen</span>
+│       ├── onboarding/              <span class="cm"># First-run onboarding</span>
+│       ├── auth/                    <span class="cm"># Sign in / Sign up / Change password</span>
+│       ├── home/                    <span class="cm"># Main home + AI plan generation</span>
+│       ├── Plandetails/             <span class="cm"># Generated itinerary view + save</span>
+│       ├── plans/                   <span class="cm"># Saved plans list view</span>
+│       ├── day_details/             <span class="cm"># Single day activity details</span>
+│       ├── Budget/                  <span class="cm"># Budget tracking + expense logging</span>
+│       ├── note/                    <span class="cm"># Travel tips / notes screen</span>
+│       └── profile/                 <span class="cm"># User profile + logout</span>
+├── assets/images/                   <span class="cm"># App illustrations and icons</span>
+└── pubspec.yaml                     <span class="cm"># Package manifest</span></code></pre>
+
+  <!-- 5. NAVIGATION -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#2D2A2A,#847577)">5</div>
+    <h2>Navigation System</h2>
+  </div>
+
+  <p>TravelTrek uses Flutter's built-in <strong>named route navigation</strong> with a custom <code>onGenerateRoute</code> function. Route names are static constants on each view class.</p>
+
+  <div class="diagram-box">
+    App Start → <strong>SplashView</strong> (checks: onboarding seen? user logged in?)<br>
+    &nbsp;&nbsp;├─ <strong>OnBoardingView</strong> (first-time users) → <strong>SignInView</strong> → [<strong>SignUpView</strong>]<br>
+    &nbsp;&nbsp;└─ <strong>MainView</strong> (authenticated — bottom navigation host)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ Tab 0: <strong>HomeView</strong> → AI prompt → <strong>ItineraryView</strong> → save<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ Tab 1: <strong>PlansView</strong> → <strong>PlanViewDetails</strong><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ Tab 2: <strong>BudgetView</strong> → <strong>AddExpenseView</strong><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ Tab 3: <strong>TipsView</strong> (travel notes)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ Tab 4: <strong>ProfileView</strong> (edit profile, logout)
+  </div>
+
+  <!-- 6. DESIGN SYSTEM -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#2D2A2A,#847577)">6</div>
+    <h2>Design System</h2>
+  </div>
+
+  <h3>6.1 Color Palette</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Name</th><th>Hex</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Primary</strong></td><td><code>#847577</code></td><td>Brand color — buttons, active states</td></tr>
+        <tr><td><strong>Background</strong></td><td><code>#F5F0E8</code></td><td>Main app background (warm cream)</td></tr>
+        <tr><td><strong>Surface</strong></td><td><code>#FFFFFF</code></td><td>Cards, sheets, modals</td></tr>
+        <tr><td><strong>Text Primary</strong></td><td><code>#2D2A2A</code></td><td>Headings, primary text</td></tr>
+        <tr><td><strong>Text Secondary</strong></td><td><code>#4A4646</code></td><td>Body text, descriptions</td></tr>
+        <tr><td><strong>Accent (Gold)</strong></td><td><code>#D4A843</code></td><td>Highlights, badges</td></tr>
+        <tr><td><strong>Success</strong></td><td><code>#2C5F2E</code></td><td>Budget OK, success states</td></tr>
+        <tr><td><strong>Error</strong></td><td><code>#B00020</code></td><td>Error states, logout button</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>6.2 Typography</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Style</th><th>Size</th><th>Weight</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td><code>semiBold40</code></td><td>40sp</td><td>700</td><td>Splash / hero text</td></tr>
+        <tr><td><code>bold26</code></td><td>26sp</td><td>700</td><td>Page titles</td></tr>
+        <tr><td><code>regluar18</code></td><td>18sp</td><td>500</td><td>Subtitles, card headings</td></tr>
+        <tr><td><code>semiBold16</code></td><td>16sp</td><td>600</td><td>Button labels</td></tr>
+        <tr><td><code>regluar16</code></td><td>16sp</td><td>500</td><td>Body text</td></tr>
+        <tr><td><code>meduim14</code></td><td>14sp</td><td>600</td><td>Labels, tags</td></tr>
+        <tr><td><code>regluar12</code></td><td>12sp</td><td>500</td><td>Captions, hints</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- end content-wrap part 1 -->
+
+
+<!-- ════════════════════════════════════════════════════════════════════
+     PART 2 DIVIDER
+════════════════════════════════════════════════════════════════════ -->
+<div id="part2" class="part-divider">
+  <div class="pd-num">Part 2 of 4</div>
+  <h2>Features &amp; Screens</h2>
+  <p>Deep-dive into every screen and user flow: from first launch through authentication, AI planning, itinerary viewing, budget management, and profile.</p>
+  <div class="pd-bar" style="background:linear-gradient(90deg,#1a3a2a,#2C5F2E)"></div>
+</div>
+
+<div class="content-wrap">
+
+  <!-- 7. SPLASH -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a3a2a,#2C5F2E)">7</div>
+    <h2>Splash Screen</h2>
+  </div>
+  <p>The <code>SplashView</code> is the app's entry point (configured as <code>initialRoute</code>). It displays the brand logo and performs two checks before routing the user:</p>
+  <div class="screen-flow">
+    App Launches → SplashView<br>
+    &nbsp;&nbsp;├─ Check <strong>kIsOnBoardingSeen</strong> in SharedPreferences<br>
+    &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└─ false → Navigate to <strong>OnBoardingView</strong><br>
+    &nbsp;&nbsp;└─ Check <strong>kUserEntity</strong> in SharedPreferences<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ null → Navigate to <strong>SignInView</strong><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ exists → Navigate to <strong>MainView</strong>
+  </div>
+
+  <!-- 8. ONBOARDING -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a3a2a,#2C5F2E)">8</div>
+    <h2>Onboarding</h2>
+  </div>
+  <p>A multi-page introductory experience shown only to first-time users. Built with a <code>PageView</code> widget and the <code>dots_indicator</code> package for page dots. On completion, <code>kIsOnBoardingSeen = true</code> is stored in SharedPreferences to prevent showing it again.</p>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Component</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Multi-page slides</strong></td><td>3–4 illustrative pages describing app capabilities with images</td></tr>
+        <tr><td><strong>DotsIndicator</strong></td><td>Animated page indicator dots (dots_indicator package)</td></tr>
+        <tr><td><strong>Skip / Get Started</strong></td><td>Buttons to skip or proceed through slides</td></tr>
+        <tr><td><strong>Persistence</strong></td><td>Marks onboarding seen in SharedPreferences on completion</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 9. AUTH -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a3a2a,#2C5F2E)">9</div>
+    <h2>Authentication Feature</h2>
+  </div>
+  <p>The authentication feature handles all user identity operations using a <strong>hybrid approach</strong>: email/password goes through the custom REST API, while Google Sign-In flows through Firebase, with the resulting session stored in SharedPreferences.</p>
+
+  <h3>9.1 Sign In Screen</h3>
+  <p>Uses <code>BlocConsumer&lt;SignInCubit, SignInState&gt;</code> — shows a loading spinner on <code>SignInLoading</code>, navigates to <code>MainView</code> on success, and displays a SnackBar on failure. Saves the user token and entity to SharedPreferences for auto-login.</p>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Widget</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>sign_in_view_body.dart</code></td><td>Layout — AppLogo, form fields, social buttons, links</td></tr>
+        <tr><td><code>custom_text_form_field.dart</code></td><td>Styled email input with validation</td></tr>
+        <tr><td><code>password_field.dart</code></td><td>Password input with show/hide toggle</td></tr>
+        <tr><td><code>custom_social_button.dart</code></td><td>Google Sign-In button with logo</td></tr>
+        <tr><td><code>custom_or_dividor.dart</code></td><td>Horizontal "OR" separator</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>9.2 Sign Up Screen</h3>
+  <p>Collects full name, email, and password. Validates form then calls <code>SignUpCubit.signUp()</code> which posts to <code>POST /api/auth/register</code>. Includes Terms &amp; Conditions checkbox and navigation link to Sign In.</p>
+
+  <h3>9.3 Google Sign-In</h3>
+  <p>Implemented using <code>google_sign_in</code> + <code>firebase_auth</code>. The flow: initialize GoogleSignIn → trigger OAuth consent → get ID token → create Firebase credential → sign in to Firebase → convert to UserModel → persist to SharedPreferences.</p>
+
+  <h3>9.4 Change Password</h3>
+  <p>The <code>ChangePasswordCubit</code> calls <code>FirebaseAuthService.changePassword()</code>, which <strong>re-authenticates</strong> the user with their current credentials before updating to the new password. This prevents unauthorized password changes on shared devices.</p>
+
+  <hr class="page-break" />
+
+  <!-- 10. HOME -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a3a2a,#2C5F2E)">10</div>
+    <h2>Home Screen &amp; AI Plan Generation</h2>
+  </div>
+  <p>The home screen is the <strong>core feature</strong> of TravelTrek — the first tab of the bottom navigation bar. Users describe their trip in one sentence and immediately generate a full AI-powered itinerary.</p>
+
+  <div class="screen-flow">
+    HomeView → BlocProvider(GeneratePlanCubitCubit)<br>
+    &nbsp;&nbsp;└─ HomeViewBody (StatefulWidget)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ Text: "Describe Your Dream Trip"<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ <strong>TripPlannerInputField</strong> (multi-line prompt textarea + quick-fill chips)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ "RECENT" section → <strong>RecentPlanListViewBuilderBlocBuilder</strong><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ <strong>CustomButton</strong>: "Generate My Plan"
+  </div>
+
+  <p>When the user taps "Generate My Plan", the cubit sends:</p>
+  <div class="info-card blue">
+    <code>GET /api/trip-plan/generate?prompt={text}&amp;currency={userCurrency}</code><br>
+    <strong>Auth:</strong> Bearer token in Authorization header
+  </div>
+
+  <p>On <code>GeneratePlanCubitSuccess</code>, a <code>BlocListener</code> navigates to <code>ItineraryView</code>, passing the generated <code>PlanModel</code>.</p>
+
+  <!-- 11. ITINERARY -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a3a2a,#2C5F2E)">11</div>
+    <h2>Plan Itinerary View</h2>
+  </div>
+  <p>The richest screen in TravelTrek. Receives a <code>PlanModel</code> and renders the complete trip using a <strong>CustomScrollView with Slivers</strong> for smooth scroll performance.</p>
+
+  <div class="screen-flow">
+    CustomScrollView<br>
+    ├─ <strong>SliverPlanHeader</strong> — city, country, duration, budget, currency, groupSize, weather<br>
+    ├─ SectionHeader: "Daily Itinerary"<br>
+    ├─ <strong>SliverListBuilderDayCard</strong> — one DayCard per day<br>
+    │&nbsp;&nbsp;&nbsp;└─ Each DayCard: day number, Meals (breakfast/lunch/dinner), Activities list<br>
+    │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ Each Activity: name, type, description, cost, Google Maps link<br>
+    ├─ <strong>LocalCurrencyCard</strong> — user's detected currency info<br>
+    ├─ Travel Tips (generalAdvice + packingTips bullet list)<br>
+    └─ CustomButton: <strong>"Save Plan"</strong>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Activity Field</th><th>Example Value</th></tr></thead>
+      <tbody>
+        <tr><td><code>name</code></td><td>"Eiffel Tower Visit"</td></tr>
+        <tr><td><code>type</code></td><td>"sightseeing" (color-coded badge)</td></tr>
+        <tr><td><code>description</code></td><td>Full activity description</td></tr>
+        <tr><td><code>approximateCost</code></td><td>"$20–$30 per person"</td></tr>
+        <tr><td><code>googleMapsLink</code></td><td>Deep link to Google Maps</td></tr>
+        <tr><td><code>website</code></td><td>Official website URL</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 12. MY PLANS -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a3a2a,#2C5F2E)">12</div>
+    <h2>My Plans Screen</h2>
+  </div>
+  <p>Shows all saved plans for the authenticated user. Includes a <strong>search bar</strong> to filter by destination. Each plan card shows city, country, duration, budget, and group type. Tapping navigates to <code>PlanViewDetails</code> which reuses the <code>ItineraryView</code> widget.</p>
+
+  <!-- 13. BUDGET -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a3a2a,#2C5F2E)">13</div>
+    <h2>Budget Tracker Feature</h2>
+  </div>
+
+  <h3>13.1 Budget Dashboard</h3>
+  <p>Presents a real-time financial overview with the <code>BudgetHeader</code> card showing spent vs. estimated total, an animated <code>BudgetProgressBar</code>, and expense categories breakdown.</p>
+
+  <pre><code><span class="cm">// Budget calculation logic</span>
+<span class="kw">double</span> totalBudget = planModel.value!.budget!.<span class="fn">toDouble</span>();
+<span class="kw">double</span> totalSpent  = expenses.<span class="fn">fold</span>(<span class="nm">0.0</span>, (sum, e) =&gt; sum + e.price);
+<span class="kw">double</span> remaining   = totalBudget - totalSpent;
+<span class="kw">double</span> utilizedPct = (totalSpent / totalBudget).<span class="fn">clamp</span>(<span class="nm">0.0</span>, <span class="nm">1.0</span>);</code></pre>
+
+  <h3>13.2 Add Expense Screen</h3>
+  <p>Form-based screen to log individual expenses. Fields: Description, Amount, Category (food/transport/accommodation/activities/shopping/health/other), and Date. Posts to <code>POST /api/trip-plan/expense/{planId}</code>. Uses shared <code>ExpenseCubit</code> via <code>BlocProvider.value</code> so the dashboard auto-refreshes.</p>
+
+  <!-- 14. PROFILE -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a3a2a,#2C5F2E)">14</div>
+    <h2>Profile Screen</h2>
+  </div>
+  <p>Displays user identity loaded from SharedPreferences. Features: avatar circle with initials, display name and email, "Edit Profile" modal bottom sheet (updates SharedPreferences), "About TravelTrek" info tile, and a <strong>Log Out</strong> button that clears the stored user and navigates to SignInView.</p>
+
+  <!-- 15. TIPS -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a3a2a,#2C5F2E)">15</div>
+    <h2>Tips / Notes Screen &amp; Bottom Navigation</h2>
+  </div>
+  <p>The Tips screen is a dedicated space for personal travel notes, accessible as Tab 3 of the bottom navigation. The <code>MainView</code> hosts all tabs with a custom bottom navigation bar using <code>ActiveItem</code>/<code>InActiveItem</code> widgets.</p>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Tab</th><th>Screen</th><th>Icon</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td>HomeView — AI prompt &amp; generation</td><td>Home / discover</td></tr>
+        <tr><td>1</td><td>PlansView — saved plans list</td><td>Bookmark</td></tr>
+        <tr><td>2</td><td>BudgetView — expense tracking</td><td>Wallet</td></tr>
+        <tr><td>3</td><td>TipsView — travel notes</td><td>Notes</td></tr>
+        <tr><td>4</td><td>ProfileView — user account</td><td>Person</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- end content-wrap part 2 -->
+
+
+<!-- ════════════════════════════════════════════════════════════════════
+     PART 3 DIVIDER
+════════════════════════════════════════════════════════════════════ -->
+<div id="part3" class="part-divider">
+  <div class="pd-num">Part 3 of 4</div>
+  <h2>Data Layer &amp; API Reference</h2>
+  <p>Domain entities, repository pattern implementations, error handling with Either monad, the Dio HTTP client, and complete REST API endpoint reference with request/response examples.</p>
+  <div class="pd-bar" style="background:linear-gradient(90deg,#0d1b2a,#1565c0)"></div>
+</div>
+
+<div class="content-wrap">
+
+  <!-- 16. DATA LAYER -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#0d1b2a,#1565c0)">16</div>
+    <h2>Data Layer Overview</h2>
+  </div>
+  <p>The data layer is responsible for all <strong>network communication</strong> and <strong>JSON serialization</strong>. It implements abstract repository interfaces from the domain layer, keeping all layers fully decoupled.</p>
+
+  <div class="info-card blue">
+    <strong>Key Pattern:</strong> Every repository method returns <code>Future&lt;Either&lt;Failures, T&gt;&gt;</code>. The <code>Either</code> monad (from <code>dartz</code>) forces callers to handle both success (Right) and failure (Left) paths explicitly — eliminating silent failures.
+  </div>
+
+  <!-- 17. ENTITIES -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#0d1b2a,#1565c0)">17</div>
+    <h2>Domain Entities</h2>
+  </div>
+
+  <h3>17.1 UserEntity &amp; UserModel</h3>
+  <pre><code><span class="kw">class</span> <span class="cl">UserEntity</span> {
+  <span class="kw">final</span> <span class="cl">String</span> name;
+  <span class="kw">final</span> <span class="cl">String</span> email;
+  <span class="kw">final</span> <span class="cl">String</span> uId;
+  <span class="kw">final</span> <span class="cl">String</span> token;   <span class="cm">// JWT access token from backend</span>
+}
+
+<span class="cm">// Data layer: UserModel extends UserEntity</span>
+<span class="kw">class</span> <span class="cl">UserModel</span> <span class="kw">extends</span> <span class="cl">UserEntity</span> {
+  <span class="kw">factory</span> <span class="cl">UserModel</span>.<span class="fn">fromJson</span>(json) =&gt; <span class="cl">UserModel</span>(
+    name:  json[<span class="st">'value'</span>][<span class="st">'user'</span>][<span class="st">'fullName'</span>],
+    email: json[<span class="st">'value'</span>][<span class="st">'user'</span>][<span class="st">'email'</span>],
+    uId:   json[<span class="st">'value'</span>][<span class="st">'user'</span>][<span class="st">'id'</span>],
+    token: json[<span class="st">'value'</span>][<span class="st">'accessToken'</span>],
+  );
+  <span class="kw">factory</span> <span class="cl">UserModel</span>.<span class="fn">fromFireBaseUser</span>({<span class="kw">required</span> <span class="cl">User</span> user}) =&gt; <span class="cl">UserModel</span>(
+    name: user.displayName ?? <span class="st">'Alex'</span>,
+    email: user.email ?? <span class="st">''</span>,
+    uId: user.uid,
+    token: user.phoneNumber ?? <span class="st">''</span>,
+  );
+}</code></pre>
+
+  <h3>17.2 Plan Data Model Hierarchy</h3>
+  <div class="model-block">
+    <pre style="background:none;color:var(--text-secondary);padding:0;margin:0;font-size:12.5px"><code>PlanModel
+  ├─ Value                        (main plan data)
+  │   ├─ id, prompt, city, country
+  │   ├─ duration, budget (int), currency, groupSize
+  │   ├─ Weather → description, temperature, condition
+  │   ├─ List&lt;Day&gt;
+  │   │   ├─ dayNumber
+  │   │   ├─ List&lt;Activity&gt;
+  │   │   │   ├─ name, description, type
+  │   │   │   ├─ googleMapsLink, website
+  │   │   │   └─ city, approximateCost
+  │   │   └─ Meals → breakfast, lunch, dinner
+  │   ├─ packingTips: List&lt;String&gt;
+  │   └─ generalAdvice: String
+  └─ Error → code, message (on API failure)</code></pre>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Method</th><th>Returns</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>PlanModel.fromJson(json)</code></td><td><code>PlanModel</code></td><td>Parse single plan from generate API response</td></tr>
+        <tr><td><code>PlanModel.fromHistoryJson(json)</code></td><td><code>List&lt;PlanModel&gt;</code></td><td>Parse array of saved plans from history API</td></tr>
+        <tr><td><code>toSavePlan()</code></td><td><code>Map</code></td><td>Serialize plan payload for save API call</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>17.3 ExpenseEntity &amp; ExpenseModel</h3>
+  <pre><code><span class="kw">class</span> <span class="cl">ExpenseEntity</span> {
+  <span class="kw">final</span> <span class="cl">String</span> description;  <span class="cm">// e.g. "Dinner at restaurant"</span>
+  <span class="kw">final</span> <span class="kw">double</span> price;         <span class="cm">// Amount spent</span>
+  <span class="kw">final</span> <span class="cl">String</span> category;     <span class="cm">// e.g. "food", "transport"</span>
+  <span class="kw">final</span> <span class="kw">double</span>? spent;        <span class="cm">// Total spent in category (from API)</span>
+  <span class="kw">final</span> <span class="kw">double</span>? remaining;    <span class="cm">// Remaining budget in category</span>
+}</code></pre>
+
+  <hr class="page-break" />
+
+  <!-- 18. REPOSITORIES -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#0d1b2a,#1565c0)">18</div>
+    <h2>Repository Pattern — 5 Repositories</h2>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Repository</th><th>Method</th><th>Returns</th><th>API Endpoint</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="4"><strong>AuthRepo</strong></td><td><code>createUserWithEmailAndPassword</code></td><td><code>Either&lt;Failures, UserEntity&gt;</code></td><td><span class="method-tag post">POST</span> <code>/api/auth/register</code></td></tr>
+        <tr><td><code>signInWithEmailAndPassword</code></td><td><code>Either&lt;Failures, UserEntity&gt;</code></td><td><span class="method-tag post">POST</span> <code>/api/auth/login</code></td></tr>
+        <tr><td><code>signInWithGoogle</code></td><td><code>Either&lt;Failures, UserEntity&gt;</code></td><td>Firebase SDK</td></tr>
+        <tr><td><code>updatePassword</code></td><td><code>Either&lt;Failures, bool&gt;</code></td><td><span class="method-tag post">POST</span> <code>/api/auth/forgot-password?token=</code></td></tr>
+        <tr><td rowspan="2"><strong>HomeRepo</strong></td><td><code>generatePlan</code></td><td><code>Either&lt;Failures, PlanModel&gt;</code></td><td><span class="method-tag get">GET</span> <code>/api/trip-plan/generate?</code></td></tr>
+        <tr><td><code>getRecentPrompts</code></td><td><code>Either&lt;Failures, List&lt;PlanModel&gt;&gt;</code></td><td><span class="method-tag get">GET</span> <code>/api/trip-plan/prompts?</code></td></tr>
+        <tr><td><strong>PlanRepo</strong></td><td><code>savePlan</code></td><td><code>Either&lt;Failures, bool&gt;</code></td><td><span class="method-tag post">POST</span> <code>/api/trip-plan/save-created?token=</code></td></tr>
+        <tr><td><strong>PlansRepo</strong></td><td><code>getAllPlans</code></td><td><code>Either&lt;Failures, List&lt;PlanModel&gt;&gt;</code></td><td><span class="method-tag get">GET</span> <code>/api/trip-plan?token=</code></td></tr>
+        <tr><td rowspan="2"><strong>ExpenseRepo</strong></td><td><code>addExpense</code></td><td><code>Either&lt;Failures, bool&gt;</code></td><td><span class="method-tag post">POST</span> <code>/api/trip-plan/expense/{planId}</code></td></tr>
+        <tr><td><code>getExpenseHistory</code></td><td><code>Either&lt;Failures, List&lt;ExpenseEntity&gt;&gt;</code></td><td><span class="method-tag get">GET</span> <code>/api/trip-plan/expense/{planId}</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 19. ERROR HANDLING -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#0d1b2a,#1565c0)">19</div>
+    <h2>Error Handling Architecture</h2>
+  </div>
+
+  <pre><code><span class="cm">// Two-tier error system</span>
+<span class="kw">class</span> <span class="cl">CustomException</span> <span class="kw">implements</span> <span class="cl">Exception</span> {
+  <span class="kw">final</span> <span class="cl">String</span> message;
+}
+
+<span class="kw">abstract class</span> <span class="cl">Failures</span> {
+  <span class="kw">final</span> <span class="cl">String</span> errorMessage;
+}
+
+<span class="kw">class</span> <span class="cl">ServerFailure</span> <span class="kw">extends</span> <span class="cl">Failures</span> { ... }</code></pre>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Error Source</th><th>Firebase Code</th><th>User Message</th></tr></thead>
+      <tbody>
+        <tr><td>Registration</td><td><code>weak-password</code></td><td>"The password provided is too weak."</td></tr>
+        <tr><td>Registration</td><td><code>email-already-in-use</code></td><td>"The account already exists for that email."</td></tr>
+        <tr><td>Login</td><td><code>user-not-found</code></td><td>"password or email not valid"</td></tr>
+        <tr><td>Login</td><td><code>wrong-password</code></td><td>"password or email not valid"</td></tr>
+        <tr><td>Login</td><td><code>invalid-credential</code></td><td>"password or email not valid"</td></tr>
+        <tr><td>Change pwd</td><td><code>requires-recent-login</code></td><td>"Please sign in again before changing your password."</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 20. API CLIENT -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#0d1b2a,#1565c0)">20</div>
+    <h2>API HTTP Client (Dio Wrapper)</h2>
+  </div>
+  <p>The <code>Api</code> class wraps <strong>Dio</strong> and provides <code>get()</code>, <code>post()</code>, and <code>put()</code> methods. Each method automatically adds the <code>Authorization: Bearer {token}</code> header and converts <code>DioException</code> to <code>CustomException</code> with user-friendly messages.</p>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Dio Setting</th><th>Value</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>connectTimeout</code></td><td>60 seconds</td><td>Max time to establish TCP connection</td></tr>
+        <tr><td><code>receiveTimeout</code></td><td>60 seconds</td><td>Max time to receive full response</td></tr>
+        <tr><td><code>sendTimeout</code></td><td>60 seconds</td><td>Max time to send request body</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="page-break" />
+
+  <!-- 21. REST API REFERENCE -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#0d1b2a,#1565c0)">21</div>
+    <h2>REST API Endpoint Reference</h2>
+  </div>
+  <p>Base URL: <strong><code>http://traveltrek.runasp.net</code></strong> &nbsp;|&nbsp; Authenticated endpoints require <code>Authorization: Bearer {token}</code></p>
+
+  <h3>21.1 Authentication Endpoints</h3>
+
+  <div class="model-block">
+    <p><span class="method-tag post">POST</span> <code>/api/auth/register</code> — Register new user</p>
+    <pre><code><span class="cm">// Request body</span>
+{ <span class="st">"email"</span>: <span class="st">"user@example.com"</span>, <span class="st">"password"</span>: <span class="st">"secret"</span>, <span class="st">"fullName"</span>: <span class="st">"Saeed Ahmed"</span> }
+<span class="cm">// Success response</span>
+{ <span class="st">"isSuccess"</span>: <span class="kw">true</span>, <span class="st">"value"</span>: { <span class="st">"message"</span>: <span class="st">"User registered successfully"</span> } }</code></pre>
+  </div>
+
+  <div class="model-block">
+    <p><span class="method-tag post">POST</span> <code>/api/auth/login</code> — Authenticate user</p>
+    <pre><code><span class="cm">// Success response</span>
+{
+  <span class="st">"isSuccess"</span>: <span class="kw">true</span>,
+  <span class="st">"value"</span>: {
+    <span class="st">"accessToken"</span>: <span class="st">"eyJhbGciOiJIUzI1NiIs..."</span>,
+    <span class="st">"user"</span>: { <span class="st">"id"</span>: <span class="st">"uuid"</span>, <span class="st">"fullName"</span>: <span class="st">"Saeed Ahmed"</span>, <span class="st">"email"</span>: <span class="st">"..."</span> }
+  }
+}</code></pre>
+  </div>
+
+  <h3>21.2 Trip Plan Endpoints</h3>
+
+  <div class="model-block">
+    <p><span class="method-tag get">GET</span> <code>/api/trip-plan/generate?prompt={text}&amp;currency={code}</code> — AI plan generation</p>
+    <pre><code><span class="cm">// Success response (abbreviated)</span>
+{
+  <span class="st">"isSuccess"</span>: <span class="kw">true</span>,
+  <span class="st">"value"</span>: {
+    <span class="st">"id"</span>: <span class="st">"plan-uuid"</span>, <span class="st">"city"</span>: <span class="st">"Paris"</span>, <span class="st">"country"</span>: <span class="st">"France"</span>,
+    <span class="st">"duration"</span>: <span class="st">"5 days"</span>, <span class="st">"budget"</span>: <span class="nm">2000</span>, <span class="st">"currency"</span>: <span class="st">"USD"</span>,
+    <span class="st">"weather"</span>: { ... },
+    <span class="st">"days"</span>: [ { <span class="st">"dayNumber"</span>: <span class="nm">1</span>, <span class="st">"activities"</span>: [...], <span class="st">"meals"</span>: {...} } ],
+    <span class="st">"packingTips"</span>: [<span class="st">"Comfortable shoes"</span>],
+    <span class="st">"generalAdvice"</span>: <span class="st">"Book Louvre in advance..."</span>
+  }
+}</code></pre>
+  </div>
+
+  <div class="model-block">
+    <p><span class="method-tag post">POST</span> <code>/api/trip-plan/save-created?token={token}</code> — Save a generated plan</p>
+    <p><span class="method-tag get">GET</span> <code>/api/trip-plan?token={token}</code> — Get all saved plans</p>
+    <p><span class="method-tag get">GET</span> <code>/api/trip-plan/prompts?token={token}</code> — Get recent prompts history</p>
+  </div>
+
+  <h3>21.3 Expense Endpoints</h3>
+  <div class="model-block">
+    <p><span class="method-tag post">POST</span> <code>/api/trip-plan/expense/{planId}</code> — Log a new expense</p>
+    <pre><code>{ <span class="st">"description"</span>: <span class="st">"Dinner at Café"</span>, <span class="st">"price"</span>: <span class="nm">85.50</span>, <span class="st">"category"</span>: <span class="st">"food"</span> }</code></pre>
+    <p><span class="method-tag get">GET</span> <code>/api/trip-plan/expense/{planId}</code> — Get expense history</p>
+  </div>
+
+  <!-- 22. DATA FLOW -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#0d1b2a,#1565c0)">22</div>
+    <h2>Data Flow Diagrams</h2>
+  </div>
+
+  <h3>Plan Generation Flow (Happy Path)</h3>
+  <pre><code>User taps "Generate My Plan"
+  → GeneratePlanCubitCubit.generatePlan(token, prompt)
+  → emit(Loading) → UI shows spinner
+  → HomeRepo.generatePlan(prompt, token, currency)
+  → Api.get('/api/trip-plan/generate?...', token)
+  → Backend AI processes prompt → JSON response
+  → PlanModel.fromJson(response)
+  → right(planModel) → emit(Success(planModel))
+  → BlocListener → Navigator.push → ItineraryView(planModel)</code></pre>
+
+  <h3>Sign In Flow</h3>
+  <pre><code>User submits form
+  → SignInCubit.signIn(email, password)
+  → emit(Loading) → ModalProgressHUD shows
+  → AuthRepo.signInWithEmailAndPassword(email, password)
+  → Api.post('/api/auth/login', {email, password})
+  → UserModel.fromJson(response) → right(userEntity)
+  → emit(Success(userEntity))
+  → Save token + entity to SharedPreferences
+  → Navigator.pushNamedAndRemoveUntil → MainView</code></pre>
+
+</div><!-- end content-wrap part 3 -->
+
+
+<!-- ════════════════════════════════════════════════════════════════════
+     PART 4 DIVIDER
+════════════════════════════════════════════════════════════════════ -->
+<div id="part4" class="part-divider">
+  <div class="pd-num">Part 4 of 4</div>
+  <h2>Services, Security &amp; Deployment</h2>
+  <p>Firebase Auth service internals, local storage, GPS currency detection, BLoC observer, app initialization, Firebase config, Android/iOS build guides, security analysis, and future roadmap.</p>
+  <div class="pd-bar" style="background:linear-gradient(90deg,#1a0533,#6a1b9a)"></div>
+</div>
+
+<div class="content-wrap">
+
+  <!-- 23. FIREBASE SERVICE -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a0533,#6a1b9a)">23</div>
+    <h2>Firebase Authentication Service</h2>
+  </div>
+  <p>The <code>FirebaseAuthService</code> class isolates all Firebase SDK calls from the rest of the app. It provides a clean interface returning Dart native types and throws <code>CustomException</code> for all error cases.</p>
+
+  <div class="info-card purple">
+    <strong>Design Decision:</strong> Isolating Firebase in this service means <code>AuthRepo</code> has zero Firebase imports. The entire repository can be tested with mock services without a real Firebase project.
+  </div>
+
+  <h3>Email/Password Authentication</h3>
+  <p>Both <code>createUserWithEmailAndPassword()</code> and <code>signInWithEmailAndPassword()</code> wrap Firebase SDK calls, catch <code>FirebaseAuthException</code>, map specific error codes to user-friendly messages, and throw <code>CustomException</code> for all other cases.</p>
+
+  <h3>Google Sign-In Flow</h3>
+  <pre><code><span class="kw">Future</span>&lt;<span class="cl">User</span>&gt; <span class="fn">signInWithGoogle</span>() <span class="kw">async</span> {
+  <span class="kw">final</span> googleSignIn = <span class="cl">GoogleSignIn</span>.instance;
+  <span class="kw">await</span> googleSignIn.<span class="fn">initialize</span>();                    <span class="cm">// 1. Initialize</span>
+  <span class="kw">final</span> googleUser = <span class="kw">await</span> googleSignIn.<span class="fn">authenticate</span>(); <span class="cm">// 2. OAuth consent</span>
+  <span class="kw">final</span> credential = <span class="cl">GoogleAuthProvider</span>.<span class="fn">credential</span>(     <span class="cm">// 3. Firebase credential</span>
+    idToken: googleUser.authentication.idToken,
+  );
+  <span class="kw">return</span> (<span class="kw">await</span> <span class="cl">FirebaseAuth</span>.instance.<span class="fn">signInWithCredential</span>(credential)).user!;
+}</code></pre>
+
+  <h3>Change Password with Re-authentication</h3>
+  <p>Requires re-authentication before password update to prevent unauthorized changes on shared devices:</p>
+  <pre><code><span class="kw">final</span> credential = <span class="cl">EmailAuthProvider</span>.<span class="fn">credential</span>(email: email, password: oldPassword);
+<span class="kw">await</span> user.<span class="fn">reauthenticateWithCredential</span>(credential);   <span class="cm">// Verify old password</span>
+<span class="kw">await</span> user.<span class="fn">updatePassword</span>(newPassword);               <span class="cm">// Update to new password</span></code></pre>
+
+  <hr class="page-break" />
+
+  <!-- 24. LOCAL STORAGE -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a0533,#6a1b9a)">24</div>
+    <h2>Local Storage — Prefs Service</h2>
+  </div>
+  <p>The <code>Prefs</code> class wraps SharedPreferences with a type-safe static API, initialized once in <code>main()</code>.</p>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Constant</th><th>Key</th><th>Type</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>kIsOnBoardingSeen</code></td><td>"isOnBoardingSeen"</td><td>bool</td><td>Controls splash routing to onboarding</td></tr>
+        <tr><td><code>kUserEntity</code></td><td>"user_data_key"</td><td>String (JSON)</td><td>Serialized UserEntity (name, email, uId, token)</td></tr>
+        <tr><td><code>kUserToken</code></td><td>"userToken"</td><td>String</td><td>JWT Bearer token for API authorization</td></tr>
+        <tr><td><code>kSavedCurrency</code></td><td>"savedCurrency"</td><td>String</td><td>Detected local currency code (e.g., "EGP")</td></tr>
+        <tr><td><code>kSelectedRemeberMe</code></td><td>"SelectedRemeberMe"</td><td>bool</td><td>"Remember Me" preference on sign-in</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 25. CURRENCY SERVICE -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a0533,#6a1b9a)">25</div>
+    <h2>Currency &amp; Location Detection Service</h2>
+  </div>
+  <p>The <code>CurrencyLocationService</code> automatically detects the user's local currency by combining GPS with reverse geocoding, with graceful fallbacks:</p>
+
+  <div class="screen-flow">
+    Step 1: Check if location services are enabled<br>
+    Step 2: Request location permission (if denied → fallback to locale)<br>
+    Step 3: Get GPS coordinates (10-second timeout)<br>
+    Step 4: Reverse geocode coordinates → ISO country code (10-second timeout)<br>
+    Step 5: Map country code → currency symbol<br>
+    Fallback 1: Device locale (PlatformDispatcher.locale.countryCode)<br>
+    Fallback 2: Default = SAR (Saudi Riyal)
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Country Code(s)</th><th>Country</th><th>Currency</th></tr></thead>
+      <tbody>
+        <tr><td>US</td><td>United States</td><td>USD</td></tr>
+        <tr><td>EG</td><td>Egypt</td><td>EGP</td></tr>
+        <tr><td>SA</td><td>Saudi Arabia</td><td>SAR</td></tr>
+        <tr><td>AE</td><td>UAE</td><td>AED</td></tr>
+        <tr><td>GB / UK</td><td>United Kingdom</td><td>GBP</td></tr>
+        <tr><td>DE / FR / ES / IT</td><td>Europe</td><td>EUR</td></tr>
+        <tr><td>IN</td><td>India</td><td>INR</td></tr>
+        <tr><td>TR</td><td>Turkey</td><td>TRY</td></tr>
+        <tr><td>KW</td><td>Kuwait</td><td>KWD</td></tr>
+        <tr><td>QA</td><td>Qatar</td><td>QAR</td></tr>
+        <tr><td>JP</td><td>Japan</td><td>JPY</td></tr>
+        <tr><td>Default</td><td>—</td><td>SAR</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 26. BLOC OBSERVER -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a0533,#6a1b9a)">26</div>
+    <h2>BLoC Observer (Debug Logging)</h2>
+  </div>
+  <p>The <code>SimpleBlocObserver</code> extends <code>BlocObserver</code> to log all state transitions and errors centrally during development. Registered globally in <code>main()</code> via <code>Bloc.observer = SimpleBlocObserver()</code>.</p>
+
+  <hr class="page-break" />
+
+  <!-- 27. APP INIT -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a0533,#6a1b9a)">27</div>
+    <h2>App Initialization Sequence</h2>
+  </div>
+  <pre><code><span class="kw">void</span> <span class="fn">main</span>() <span class="kw">async</span> {
+  <span class="cl">WidgetsFlutterBinding</span>.<span class="fn">ensureInitialized</span>();    <span class="cm">// 1. Flutter engine ready</span>
+  <span class="cl">Bloc</span>.observer = <span class="cl">SimpleBlocObserver</span>();           <span class="cm">// 2. BLoC debug observer</span>
+  <span class="kw">await</span> <span class="cl">Firebase</span>.<span class="fn">initializeApp</span>(                  <span class="cm">// 3. Firebase init</span>
+    options: <span class="cl">DefaultFirebaseOptions</span>.currentPlatform,
+  );
+  <span class="fn">setup</span>();                                        <span class="cm">// 4. Register DI singletons</span>
+  <span class="kw">await</span> <span class="cl">Prefs</span>.<span class="fn">init</span>();                            <span class="cm">// 5. SharedPreferences init</span>
+  <span class="fn">runApp</span>(<span class="kw">const</span> <span class="cl">TravelTrek</span>());                    <span class="cm">// 6. Launch app</span>
+}</code></pre>
+
+  <!-- 28. FIREBASE CONFIG -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a0533,#6a1b9a)">28</div>
+    <h2>Firebase Configuration</h2>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Platform</th><th>Config File</th><th>Key Settings</th></tr></thead>
+      <tbody>
+        <tr><td>Android</td><td><code>android/app/google-services.json</code></td><td>applicationId, API key, SHA-1 for Google Sign-In</td></tr>
+        <tr><td>iOS</td><td><code>ios/Runner/GoogleService-Info.plist</code></td><td>Bundle ID, API key, reversed client ID</td></tr>
+        <tr><td>All</td><td><code>lib/firebase_options.dart</code></td><td>Auto-generated by FlutterFire CLI</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-card red">
+    <strong>⚠️ Security:</strong> <code>firebase_options.dart</code> and config files should be added to <code>.gitignore</code> to prevent exposing API keys in public repositories.
+  </div>
+
+  <!-- 29. DEPLOYMENT -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a0533,#6a1b9a)">29</div>
+    <h2>Build &amp; Deployment Guide</h2>
+  </div>
+
+  <h3>Android Build</h3>
+  <p><strong>Prerequisites:</strong> Android Studio, Android SDK API 21+, <code>google-services.json</code>, SHA-1 fingerprint in Firebase Console, Internet + Location permissions in AndroidManifest.xml.</p>
+  <pre><code><span class="cm"># Debug APK</span>
+flutter build apk --debug
+
+<span class="cm"># Release APK (split per ABI — recommended)</span>
+flutter build apk --split-per-abi --release
+
+<span class="cm"># App Bundle for Play Store</span>
+flutter build appbundle --release</code></pre>
+
+  <h3>iOS Build</h3>
+  <p><strong>Prerequisites:</strong> macOS + Xcode 14+, Apple Developer account, <code>GoogleService-Info.plist</code>, location usage descriptions in <code>Info.plist</code>.</p>
+  <pre><code><span class="cm"># iOS release build</span>
+flutter build ios --release
+
+<span class="cm"># IPA for App Store distribution</span>
+flutter build ipa --release</code></pre>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Setting</th><th>Value</th></tr></thead>
+      <tbody>
+        <tr><td>App Version</td><td>1.0.0 (build 1)</td></tr>
+        <tr><td>Min Android SDK</td><td>API 21 (Android 5.0 Lollipop)</td></tr>
+        <tr><td>Min iOS Target</td><td>iOS 12.0+</td></tr>
+        <tr><td>Dart SDK</td><td>^3.11.4</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="page-break" />
+
+  <!-- 30. SECURITY -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a0533,#6a1b9a)">30</div>
+    <h2>Security Considerations</h2>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Concern</th><th>Current State</th><th>Recommendation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>JWT Token Storage</strong></td><td>SharedPreferences</td><td><span class="badge badge-amber">⚠️</span> Use <code>flutter_secure_storage</code> (Keystore/Keychain)</td></tr>
+        <tr><td><strong>API Transport</strong></td><td>HTTP (not HTTPS)</td><td><span class="badge badge-red">🔴</span> <strong>Upgrade to HTTPS before production</strong></td></tr>
+        <tr><td><strong>API Authorization</strong></td><td>Bearer token in header</td><td><span class="badge badge-green">✅</span> Correctly implemented</td></tr>
+        <tr><td><strong>Password Change</strong></td><td>Re-authentication required</td><td><span class="badge badge-green">✅</span> Follows Firebase best practices</td></tr>
+        <tr><td><strong>Input Validation</strong></td><td>Form validation on all inputs</td><td><span class="badge badge-green">✅</span> Basic validation implemented</td></tr>
+        <tr><td><strong>Firebase Config</strong></td><td>In source code</td><td><span class="badge badge-amber">⚠️</span> Add to <code>.gitignore</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 31. FUTURE -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a0533,#6a1b9a)">31</div>
+    <h2>Future Enhancements</h2>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Enhancement</th><th>Priority</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><strong>HTTPS Backend</strong></td><td><span class="badge badge-red">Critical</span></td><td>Migrate API from HTTP to HTTPS for encrypted traffic</td></tr>
+        <tr><td><strong>Secure Token Storage</strong></td><td><span class="badge" style="background:#fff0e0;color:#e65100">High</span></td><td>Use <code>flutter_secure_storage</code> for JWT and user data</td></tr>
+        <tr><td><strong>Unit &amp; Widget Tests</strong></td><td><span class="badge" style="background:#fff0e0;color:#e65100">High</span></td><td>Comprehensive test coverage for all cubits and repositories</td></tr>
+        <tr><td><strong>Offline Support</strong></td><td><span class="badge badge-blue">Medium</span></td><td>Cache plans locally with SQLite/Hive for offline viewing</td></tr>
+        <tr><td><strong>Push Notifications</strong></td><td><span class="badge badge-blue">Medium</span></td><td>Firebase Cloud Messaging for trip reminders</td></tr>
+        <tr><td><strong>Photo Attachments</strong></td><td><span class="badge badge-blue">Medium</span></td><td>Attach photos to expense entries and plan notes</td></tr>
+        <tr><td><strong>Plan Sharing / PDF Export</strong></td><td><span class="badge badge-blue">Medium</span></td><td>Share itineraries as PDF or shareable links</td></tr>
+        <tr><td><strong>Real-time Exchange Rates</strong></td><td><span class="badge badge-blue">Medium</span></td><td>Integrate a live exchange rate API for currency card</td></tr>
+        <tr><td><strong>Multi-user Collaboration</strong></td><td><span class="badge badge-green">Low</span></td><td>Share plans with travel companions</td></tr>
+        <tr><td><strong>Flight/Hotel Booking Links</strong></td><td><span class="badge badge-green">Low</span></td><td>Deep link to booking platforms</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 32. CONCLUSION -->
+  <div class="section-header">
+    <div class="section-num" style="background:linear-gradient(135deg,#1a0533,#6a1b9a)">32</div>
+    <h2>Conclusion</h2>
+  </div>
+
+  <div class="conclusion-box">
+    <h2>TravelTrek — Project Summary</h2>
+    <p>A production-quality AI-powered travel planning application built with Flutter, following Clean Architecture principles, BLoC state management, and hybrid Firebase + REST API authentication.</p>
+    <div class="conclusion-grid">
+      <div class="conclusion-item"><div class="ci-num">10</div><div class="ci-lbl">Feature Modules</div></div>
+      <div class="conclusion-item"><div class="ci-num">7</div><div class="ci-lbl">BLoC Cubits</div></div>
+      <div class="conclusion-item"><div class="ci-num">5</div><div class="ci-lbl">Repositories</div></div>
+      <div class="conclusion-item"><div class="ci-num">11</div><div class="ci-lbl">API Endpoints</div></div>
+      <div class="conclusion-item"><div class="ci-num">16</div><div class="ci-lbl">Dependencies</div></div>
+      <div class="conclusion-item"><div class="ci-num">17</div><div class="ci-lbl">Currencies</div></div>
+    </div>
+  </div>
+
+  <h3>Architecture Achievements</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Principle</th><th>Implementation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Separation of Concerns</strong></td><td>Clean Architecture — 3 independent layers per feature (Presentation, Domain, Data)</td></tr>
+        <tr><td><strong>Dependency Inversion</strong></td><td>All features depend on abstract repository interfaces, not concrete implementations</td></tr>
+        <tr><td><strong>Single Responsibility</strong></td><td>Each class has one well-defined purpose — Cubit for state, Repo for data, View for UI</td></tr>
+        <tr><td><strong>Reactive UI</strong></td><td>BLoC/Cubit pattern ensures UI automatically reflects state changes</td></tr>
+        <tr><td><strong>Explicit Error Handling</strong></td><td>Either monad forces all error paths to be handled — no silent failures</td></tr>
+        <tr><td><strong>Graceful Degradation</strong></td><td>Currency service has 3 fallback levels; all API errors show user-friendly messages</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-card green">
+    <strong>✅ Graduation Project Outcome:</strong> TravelTrek demonstrates a complete, production-grade mobile application lifecycle — from architectural design and implementation, through feature development, to REST API integration and deployment preparation. The codebase follows industry best practices for Flutter development.
+  </div>
+
+</div><!-- end content-wrap part 4 -->
+
+<!-- ════════════════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════════════════ -->
+<div class="doc-footer">
+  <strong>TravelTrek — Complete Technical Documentation</strong><br>
+  AI-Powered Travel Planning Application &nbsp;·&nbsp; Graduation Project &nbsp;·&nbsp; Flutter &amp; Dart &nbsp;·&nbsp; Version 1.0.0 &nbsp;·&nbsp; June 2026
+</div>
+
+</body>
+</html>

@@ -12,11 +12,26 @@ class GetAllPlansCubit extends Cubit<GetAllPlansState> {
 
   Future<void> getAllPlans({required String token}) async {
     emit(GetAllPlansLoading());
-    var reuslt = await plansRepo.getAllPlans(token: token);
-
-    reuslt.fold(
+    var result = await plansRepo.getAllPlans(token: token);
+    result.fold(
       (failure) => emit(GetAllPlansFailure(errorMessage: failure.errorMessage)),
       (planModel) => emit(GetAllPlansSuccess(plans: planModel)),
+    );
+  }
+
+  Future<void> deletePlan({
+    required String token,
+    required String planId,
+  }) async {
+    emit(GetAllPlansDeleteLoading());
+    final result = await plansRepo.deletePlan(token: token, planId: planId);
+    result.fold(
+      (failure) => emit(GetAllPlansDeleteFailure(errorMessage: failure.errorMessage)),
+      (_) async {
+        emit(GetAllPlansDeleteSuccess());
+        // بعد الحذف، جيب القائمة المحدّثة
+        await getAllPlans(token: token);
+      },
     );
   }
 }

@@ -9,6 +9,7 @@ class PlansRepoImple implements PlansRepo {
   final Api apiService;
 
   PlansRepoImple({required this.apiService});
+
   @override
   Future<Either<Failures, List<PlanModel>>> getAllPlans({
     required String token,
@@ -19,8 +20,23 @@ class PlansRepoImple implements PlansRepo {
         token: token,
       );
       List<PlanModel> plans = PlanModel.fromHistoryJson(response);
-     
       return right(plans);
+    } on Exception catch (e) {
+      return left(ServerFailure(errorMessage: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failures, bool>> deletePlan({
+    required String token,
+    required String planId,
+  }) async {
+    try {
+      await apiService.delete(
+        url: '${BackendService.deletePlanUrl}$planId?',
+        token: token,
+      );
+      return right(true);
     } on Exception catch (e) {
       return left(ServerFailure(errorMessage: e.toString()));
     }

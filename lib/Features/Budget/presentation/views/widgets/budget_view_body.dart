@@ -30,7 +30,12 @@ class BudgetViewBody extends StatelessWidget {
             BlocBuilder<ExpenseCubit, ExpenseState>(
               builder: (context, state) {
                 if (state is GetExpenseHistoryLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xff8B7E7A),
+                      strokeWidth: 2.5,
+                    ),
+                  );
                 }
 
                 if (state is GetExpenseHistorySuccess) {

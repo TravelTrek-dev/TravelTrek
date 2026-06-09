@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TravelTrek Documentation – Part 4: Services, Testing & Deployment</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #847577; --primary-dark: #5c4e50; --accent: #D4A843;
+      --bg: #F5F0E8; --surface: #ffffff; --text: #2D2A2A;
+      --text-secondary: #4A4646; --text-muted: #847577;
+      --border: #E0D8D0; --success: #2C5F2E;
+      --code-bg: #1e1e2e; --code-text: #cdd6f4;
+    }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px; }
+    .cover { min-height: 55vh; background: linear-gradient(135deg, #1a0533 0%, #6a1b9a 50%, #9c27b0 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 40px; text-align: center; position: relative; overflow: hidden; }
+    .cover::before { content: ''; position: absolute; width: 500px; height: 500px; background: rgba(212,168,67,0.07); border-radius: 50%; top: -80px; right: -80px; }
+    .cover-badge { background: rgba(212,168,67,0.2); border: 1px solid var(--accent); color: var(--accent); padding: 6px 20px; border-radius: 40px; font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px; }
+    .cover h1 { font-size: clamp(32px, 5vw, 56px); font-weight: 800; color: #fff; letter-spacing: -1px; line-height: 1.1; margin-bottom: 12px; }
+    .cover h1 span { color: var(--accent); }
+    .cover p.subtitle { font-size: 17px; color: rgba(255,255,255,0.75); max-width: 520px; margin: 0 auto 36px; }
+    .part-label { background: var(--accent); color: #1a1207; font-size: 14px; font-weight: 700; padding: 10px 32px; border-radius: 40px; letter-spacing: 1px; }
+    .nav-bar { background: var(--surface); border-bottom: 2px solid var(--border); padding: 0 40px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .nav-brand { font-weight: 800; font-size: 18px; color: var(--primary-dark); padding: 16px 24px 16px 0; border-right: 1px solid var(--border); margin-right: 24px; white-space: nowrap; }
+    .nav-brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 0; overflow-x: auto; flex: 1; }
+    .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 13px; font-weight: 500; padding: 18px 16px; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; }
+    .nav-links a:hover { color: var(--primary-dark); border-bottom-color: var(--primary); }
+    .nav-links a.active { color: var(--primary-dark); border-bottom-color: var(--accent); font-weight: 700; }
+    .doc-layout { display: grid; grid-template-columns: 240px 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; padding: 40px; }
+    .toc-sidebar { position: sticky; top: 80px; align-self: start; background: var(--surface); border-radius: 16px; padding: 24px; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+    .toc-sidebar h4 { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; }
+    .toc-sidebar ul { list-style: none; }
+    .toc-sidebar ul li { margin-bottom: 6px; }
+    .toc-sidebar ul li a { text-decoration: none; color: var(--text-secondary); font-size: 13px; padding: 4px 8px; border-radius: 6px; display: block; transition: all 0.2s; }
+    .toc-sidebar ul li a:hover { background: var(--bg); color: var(--primary-dark); }
+    .toc-sidebar ul li.sub a { padding-left: 20px; font-size: 12px; color: var(--text-muted); }
+    .section-header { display: flex; align-items: center; gap: 16px; margin: 56px 0 28px; }
+    .section-num { background: linear-gradient(135deg, #6a1b9a, #9c27b0); color: #fff; font-size: 13px; font-weight: 700; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .section-header h2 { font-size: 26px; font-weight: 700; color: var(--text); border-bottom: 2px solid var(--accent); padding-bottom: 4px; }
+    h3 { font-size: 18px; font-weight: 700; color: var(--primary-dark); margin: 32px 0 14px; display: flex; align-items: center; gap: 10px; }
+    h3::before { content: ''; display: block; width: 4px; height: 20px; background: var(--accent); border-radius: 2px; }
+    h4 { font-size: 15px; font-weight: 600; color: var(--text); margin: 20px 0 10px; }
+    p { margin-bottom: 14px; color: var(--text-secondary); }
+    strong { color: var(--text); }
+    ul.styled-list { margin: 12px 0 20px 28px; color: var(--text-secondary); }
+    ul.styled-list li { margin-bottom: 8px; }
+    .info-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 12px; padding: 20px 24px; margin: 20px 0; }
+    .info-card.purple { border-left-color: #6a1b9a; background: #f3e5f5; }
+    .info-card.green { border-left-color: var(--success); background: #e8f5e9; }
+    .info-card.blue { border-left-color: #1565c0; background: #e3f2fd; }
+    .info-card.red { border-left-color: #B00020; background: #fce4ec; }
+    pre { background: var(--code-bg); color: var(--code-text); border-radius: 12px; padding: 24px; overflow-x: auto; font-size: 13px; line-height: 1.6; margin: 16px 0 24px; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; }
+    code { background: rgba(132,117,119,0.12); color: var(--primary-dark); border-radius: 4px; padding: 2px 7px; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 13px; }
+    pre code { background: none; color: inherit; padding: 0; }
+    .kw { color: #cba6f7; } .cl { color: #89b4fa; } .st { color: #a6e3a1; } .cm { color: #6c7086; font-style: italic; } .nm { color: #fab387; } .fn { color: #89dceb; }
+    .table-wrapper { overflow-x: auto; margin: 20px 0; border-radius: 12px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); }
+    thead { background: linear-gradient(135deg, #1a0533, #6a1b9a); }
+    thead th { color: #fff; padding: 14px 18px; text-align: left; font-size: 13px; font-weight: 600; }
+    tbody td { padding: 13px 18px; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-secondary); vertical-align: top; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--bg); }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-green { background: #e8f5e9; color: #2C5F2E; }
+    .badge-blue { background: #e3f2fd; color: #1565c0; }
+    .badge-amber { background: #fff8e1; color: #e65100; }
+    .service-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .service-card h4 { font-size: 17px; font-weight: 700; color: var(--text); margin: 0 0 10px; display: flex; align-items: center; gap: 10px; }
+    .conclusion-box { background: linear-gradient(135deg, #2D2A2A, #4A4646); color: #fff; border-radius: 20px; padding: 40px; margin: 40px 0; text-align: center; }
+    .conclusion-box h2 { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 16px; }
+    .conclusion-box p { color: rgba(255,255,255,0.75); font-size: 16px; max-width: 600px; margin: 0 auto 24px; }
+    .conclusion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 24px; }
+    .conclusion-item { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 20px; }
+    .conclusion-item .ci-num { font-size: 32px; font-weight: 800; color: var(--accent); }
+    .conclusion-item .ci-label { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+    .page-break { border: none; border-top: 2px dashed var(--border); margin: 60px 0; }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+    .chip { padding: 5px 14px; border-radius: 40px; font-size: 12px; font-weight: 500; border: 1px solid; }
+    .chip-primary { background: rgba(132,117,119,0.1); border-color: var(--primary); color: var(--primary-dark); }
+    .chip-purple { background: rgba(106,27,154,0.1); border-color: #6a1b9a; color: #4a0072; }
+    .footer { background: #2D2A2A; color: rgba(255,255,255,0.5); text-align: center; padding: 32px 40px; font-size: 13px; margin-top: 80px; }
+    .footer strong { color: rgba(255,255,255,0.8); }
+    .footer .parts-nav { display: flex; justify-content: center; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+    .footer .parts-nav a { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 13px; padding: 6px 16px; border: 1px solid rgba(212,168,67,0.4); border-radius: 20px; }
+    @media (max-width: 768px) { .doc-layout { grid-template-columns: 1fr; } .toc-sidebar { display: none; } }
+  </style>
+</head>
+<body>
+
+<!-- ═══ COVER ═══════════════════════════════════════════════════════════ -->
+<section class="cover">
+  <div class="cover-badge">Graduation Project Documentation</div>
+  <h1>Travel<span>Trek</span></h1>
+  <p class="subtitle">Core Services, State Management, Local Storage, Currency Detection &amp; Deployment Guide</p>
+  <div class="part-label">Part 4 of 4 &nbsp;·&nbsp; Services, Testing &amp; Deployment</div>
+</section>
+
+<!-- ═══ NAV BAR ═════════════════════════════════════════════════════════ -->
+<nav class="nav-bar">
+  <div class="nav-brand">Travel<span>Trek</span> Docs</div>
+  <div class="nav-links">
+    <a href="part1_overview_and_architecture.html">Part 1: Overview</a>
+    <a href="part2_features_and_screens.html">Part 2: Features</a>
+    <a href="part3_data_layer_and_api.html">Part 3: Data Layer</a>
+    <a href="part4_services_and_deployment.html" class="active">Part 4: Services</a>
+  </div>
+</nav>
+
+<!-- ═══ MAIN LAYOUT ══════════════════════════════════════════════════════ -->
+<div class="doc-layout">
+  <aside class="toc-sidebar">
+    <h4>Contents — Part 4</h4>
+    <ul>
+      <li><a href="#firebase-service">1. Firebase Auth Service</a></li>
+      <li class="sub"><a href="#email-auth">1.1 Email Authentication</a></li>
+      <li class="sub"><a href="#google-auth">1.2 Google Sign-In</a></li>
+      <li class="sub"><a href="#change-pwd">1.3 Change Password</a></li>
+      <li><a href="#local-storage">2. Local Storage (Prefs)</a></li>
+      <li class="sub"><a href="#prefs-api">2.1 Prefs API Reference</a></li>
+      <li class="sub"><a href="#stored-keys">2.2 Stored Keys</a></li>
+      <li><a href="#currency-service">3. Currency Detection</a></li>
+      <li class="sub"><a href="#location-flow">3.1 Location Flow</a></li>
+      <li class="sub"><a href="#currency-map">3.2 Country → Currency Map</a></li>
+      <li><a href="#bloc-observer">4. BLoC Observer</a></li>
+      <li><a href="#di-setup">5. Dependency Injection</a></li>
+      <li><a href="#app-init">6. App Initialization</a></li>
+      <li><a href="#firebase-config">7. Firebase Configuration</a></li>
+      <li><a href="#deployment">8. Build &amp; Deployment</a></li>
+      <li class="sub"><a href="#android-build">8.1 Android</a></li>
+      <li class="sub"><a href="#ios-build">8.2 iOS</a></li>
+      <li><a href="#security">9. Security Considerations</a></li>
+      <li><a href="#future">10. Future Enhancements</a></li>
+      <li><a href="#conclusion">11. Conclusion</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <!-- ─── 1. FIREBASE AUTH SERVICE ──────────────────────────────── -->
+    <div class="section-header" id="firebase-service">
+      <div class="section-num">1</div>
+      <h2>Firebase Authentication Service</h2>
+    </div>
+
+    <p>The <code>FirebaseAuthService</code> class (<code>lib/core/services/firebase_auth_service.dart</code>)
+      is a dedicated service layer that wraps the <strong>Firebase Authentication SDK</strong>. It abstracts all
+      Firebase-specific logic away from the repository and domain layers, providing a clean interface that
+      returns Dart's native types (<code>User</code> or throws <code>CustomException</code>).</p>
+
+    <div class="info-card purple">
+      <strong>Design Decision:</strong> By isolating Firebase calls in this service, the <code>AuthRepo</code>
+      interface has no Firebase imports. This means the entire auth repository can be tested with mock services
+      without needing a real Firebase project.
+    </div>
+
+    <h3 id="email-auth">1.1 Email/Password Authentication</h3>
+
+    <div class="service-card">
+      <h4>📧 createUserWithEmailAndPassword(name, email, password)</h4>
+      <p>Creates a new Firebase user account. If successful, it internally calls the backend register API
+        (via <code>AuthRepoImpleApi</code>) to create the server-side user record. The Firebase account
+        creation is currently used for credential validation — the primary user creation goes through the
+        backend REST API.</p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Firebase Error Code</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><code>weak-password</code></td><td>Throws <code>CustomException("The password provided is too weak.")</code></td></tr>
+            <tr><td><code>email-already-in-use</code></td><td>Throws <code>CustomException("The account already exists for that email.")</code></td></tr>
+            <tr><td>Any other error</td><td>Throws <code>CustomException("Error. pls try again later!")</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <h4>🔑 signInWithEmailAndPassword(email, password)</h4>
+      <p>Authenticates an existing user with Firebase. Note that in the final implementation,
+        sign-in primarily goes through the backend REST API (<code>/api/auth/login</code>) which returns
+        the JWT token. Firebase sign-in is used as a secondary credential verification layer.</p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Firebase Error Code</th><th>User-Facing Message</th></tr></thead>
+          <tbody>
+            <tr><td><code>user-not-found</code></td><td>"password or email not valid"</td></tr>
+            <tr><td><code>wrong-password</code></td><td>"password or email not valid"</td></tr>
+            <tr><td><code>invalid-credential</code></td><td>"password or email not valid"</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3 id="google-auth">1.2 Google Sign-In Flow</h3>
+
+    <div class="service-card">
+      <h4>🔵 signInWithGoogle()</h4>
+      <p>Implements the full Google OAuth flow using the <code>GoogleSignIn</code> package combined with
+        Firebase Authentication. The flow is entirely handled within this service:</p>
+
+      <pre><code><span class="kw">Future</span>&lt;<span class="cl">User</span>&gt; <span class="fn">signInWithGoogle</span>() <span class="kw">async</span> {
+  <span class="cm">// 1. Initialize Google Sign-In</span>
+  <span class="kw">final</span> googleSignIn = <span class="cl">GoogleSignIn</span>.instance;
+  <span class="kw">await</span> googleSignIn.<span class="fn">initialize</span>();
+
+  <span class="cm">// 2. Trigger OAuth consent screen</span>
+  <span class="kw">final</span> googleUser = <span class="kw">await</span> googleSignIn.<span class="fn">authenticate</span>();
+
+  <span class="cm">// 3. Get ID token from Google</span>
+  <span class="kw">final</span> googleAuth = googleUser.authentication;
+
+  <span class="cm">// 4. Create Firebase credential</span>
+  <span class="kw">final</span> credential = <span class="cl">GoogleAuthProvider</span>.<span class="fn">credential</span>(
+    idToken: googleAuth.idToken,
+  );
+
+  <span class="cm">// 5. Sign in to Firebase with Google credential</span>
+  <span class="kw">return</span> (<span class="kw">await</span> <span class="cl">FirebaseAuth</span>.instance.<span class="fn">signInWithCredential</span>(credential)).user!;
+}</code></pre>
+
+      <p>On success, the returned Firebase <code>User</code> object is converted to a <code>UserModel</code>
+        using the <code>UserModel.fromFireBaseUser()</code> factory, then persisted to SharedPreferences.</p>
+    </div>
+
+    <h3 id="change-pwd">1.3 Change Password with Re-authentication</h3>
+
+    <div class="service-card">
+      <h4>🔒 changePassword(email, oldPassword, newPassword)</h4>
+      <p>Changing a password is a <strong>sensitive operation</strong> that Firebase requires recent authentication for.
+        The service implements re-authentication before the password update to ensure security:</p>
+
+      <pre><code><span class="kw">Future</span>&lt;<span class="kw">void</span>&gt; <span class="fn">changePassword</span>({email, oldPassword, newPassword}) <span class="kw">async</span> {
+  <span class="kw">final</span> user = <span class="cl">FirebaseAuth</span>.instance.currentUser;
+  <span class="kw">if</span> (user == <span class="kw">null</span>) <span class="kw">throw</span> <span class="cl">CustomException</span>(message: <span class="st">'Please sign in again.'</span>);
+
+  <span class="cm">// Re-authenticate with current credentials first</span>
+  <span class="kw">final</span> credential = <span class="cl">EmailAuthProvider</span>.<span class="fn">credential</span>(
+    email: email, password: oldPassword,
+  );
+  <span class="kw">await</span> user.<span class="fn">reauthenticateWithCredential</span>(credential);
+
+  <span class="cm">// Now safely update the password</span>
+  <span class="kw">await</span> user.<span class="fn">updatePassword</span>(newPassword);
+}</code></pre>
+
+      <div class="info-card green">
+        <strong>Security Note:</strong> Re-authentication ensures that even if a device is left unlocked,
+        an attacker cannot change the password without knowing the current password. This follows
+        Firebase's security best practices for sensitive account operations.
+      </div>
+    </div>
+
+    <hr class="page-break" />
+
+    <!-- ─── 2. LOCAL STORAGE ───────────────────────────────────────── -->
+    <div class="section-header" id="local-storage">
+      <div class="section-num">2</div>
+      <h2>Local Storage — Prefs Service</h2>
+    </div>
+
+    <p>The <code>Prefs</code> class (<code>lib/core/services/prefs.dart</code>) is a static wrapper around
+      Flutter's <strong>SharedPreferences</strong> package, providing a simple, type-safe API for persisting
+      app data locally on the device.</p>
+
+    <p>It is initialized asynchronously at app startup in <code>main()</code> and stored as a late static
+      instance (<code>static late SharedPreferences _instance</code>), making all subsequent calls synchronous.</p>
+
+    <h3 id="prefs-api">2.1 Prefs API Reference</h3>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Method</th><th>Signature</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>init()</code></td><td><code>static Future&lt;void&gt;</code></td><td>Initialize SharedPreferences (must be called in main() before runApp)</td></tr>
+          <tr><td><code>setBool(key, value)</code></td><td><code>static void</code></td><td>Store a boolean value</td></tr>
+          <tr><td><code>getBool(key)</code></td><td><code>static bool</code></td><td>Retrieve boolean (returns false if not set)</td></tr>
+          <tr><td><code>setString(key, value)</code></td><td><code>static Future&lt;void&gt;</code></td><td>Store a string value (async for write completion)</td></tr>
+          <tr><td><code>getString(key)</code></td><td><code>static String</code></td><td>Retrieve string (returns empty string if not set)</td></tr>
+          <tr><td><code>setUserEntity(userEntity)</code></td><td><code>static Future&lt;void&gt;</code></td><td>Serialize and store a <code>UserEntity</code> as JSON</td></tr>
+          <tr><td><code>getUserEntity()</code></td><td><code>static UserEntity?</code></td><td>Retrieve and deserialize stored user; returns null if not found</td></tr>
+          <tr><td><code>removeUserEntity()</code></td><td><code>static Future&lt;void&gt;</code></td><td>Delete stored user entity (used on logout)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="stored-keys">2.2 Stored Keys Reference</h3>
+    <p>All key names are defined as constants in <code>lib/constants.dart</code>:</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Constant</th><th>Key String</th><th>Type</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>kIsOnBoardingSeen</code></td><td><code>"isOnBoardingSeen"</code></td><td>bool</td><td>Whether the user has completed onboarding; controls splash routing</td></tr>
+          <tr><td><code>kUserEntity</code></td><td><code>"user_data_key"</code></td><td>String (JSON)</td><td>Serialized <code>UserEntity</code> — name, email, uId, token</td></tr>
+          <tr><td><code>kUserToken</code></td><td><code>"userToken"</code></td><td>String</td><td>JWT Bearer token for API authorization (redundant with entity token)</td></tr>
+          <tr><td><code>kSavedCurrency</code></td><td><code>"savedCurrency"</code></td><td>String</td><td>User's detected local currency code (e.g., "EGP", "USD")</td></tr>
+          <tr><td><code>kSelectedRemeberMe</code></td><td><code>"SelectedRemeberMe"</code></td><td>bool</td><td>Whether "Remember Me" was checked on sign-in</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>UserEntity Persistence Flow</h4>
+    <pre><code><span class="cm">// Serialization (setUserEntity)</span>
+<span class="kw">final</span> jsonString = <span class="fn">jsonEncode</span>(userEntity.<span class="fn">toJson</span>());
+<span class="kw">await</span> _instance.<span class="fn">setString</span>(kUserEntity, jsonString);
+
+<span class="cm">// Deserialization (getUserEntity)</span>
+<span class="kw">final</span>? jsonString = _instance.<span class="fn">getString</span>(kUserEntity);
+<span class="kw">if</span> (jsonString == <span class="kw">null</span> || jsonString.isEmpty) <span class="kw">return null</span>;
+<span class="kw">final</span> jsonMap = <span class="fn">jsonDecode</span>(jsonString) <span class="kw">as</span> <span class="cl">Map</span>&lt;<span class="cl">String</span>, <span class="kw">dynamic</span>&gt;;
+<span class="kw">return</span> <span class="cl">UserEntity</span>.<span class="fn">fromJson</span>(jsonMap);</code></pre>
+
+    <hr class="page-break" />
+
+    <!-- ─── 3. CURRENCY DETECTION ─────────────────────────────────── -->
+    <div class="section-header" id="currency-service">
+      <div class="section-num">3</div>
+      <h2>Currency &amp; Location Detection Service</h2>
+    </div>
+
+    <p>The <code>CurrencyLocationService</code> (<code>lib/core/services/currency_location_service.dart</code>)
+      automatically detects the user's <strong>local currency</strong> by combining GPS coordinates with
+      reverse geocoding. This currency is then passed to the AI plan generation API so the generated budget
+      is always in the user's local currency.</p>
+
+    <h3 id="location-flow">3.1 Currency Detection Flow</h3>
+
+    <pre><code><span class="kw">Future</span>&lt;<span class="cl">String</span>&gt; <span class="fn">getUserCurrency</span>() <span class="kw">async</span> {
+  <span class="cm">// Step 1: Check if location services are enabled</span>
+  <span class="kw">bool</span> serviceEnabled = <span class="kw">await</span> <span class="cl">Geolocator</span>.<span class="fn">isLocationServiceEnabled</span>();
+  
+  <span class="cm">// Step 2: Request location permission if not granted</span>
+  <span class="kw">var</span> permission = <span class="kw">await</span> <span class="cl">Geolocator</span>.<span class="fn">checkPermission</span>();
+  <span class="kw">if</span> (permission == <span class="cl">LocationPermission</span>.denied) {
+    permission = <span class="kw">await</span> <span class="cl">Geolocator</span>.<span class="fn">requestPermission</span>();
+  }
+
+  <span class="cm">// Step 3: Fallback to locale if permission denied</span>
+  <span class="kw">if</span> (permission == <span class="cl">LocationPermission</span>.denied ||
+      permission == <span class="cl">LocationPermission</span>.deniedForever) {
+    <span class="kw">return</span> <span class="fn">_getCurrencyFromLocale</span>();
+  }
+
+  <span class="cm">// Step 4: Get GPS coordinates (10-second timeout)</span>
+  <span class="kw">final</span> position = <span class="kw">await</span> <span class="cl">Geolocator</span>.<span class="fn">getCurrentPosition</span>(
+    locationSettings: <span class="kw">const</span> <span class="cl">LocationSettings</span>(accuracy: <span class="cl">LocationAccuracy</span>.low),
+  ).<span class="fn">timeout</span>(<span class="kw">const</span> <span class="cl">Duration</span>(seconds: <span class="nm">10</span>));
+
+  <span class="cm">// Step 5: Reverse geocode coordinates → country code</span>
+  <span class="kw">final</span> placemarks = <span class="kw">await</span> <span class="fn">placemarkFromCoordinates</span>(
+    position.latitude, position.longitude,
+  ).<span class="fn">timeout</span>(<span class="kw">const</span> <span class="cl">Duration</span>(seconds: <span class="nm">10</span>));
+
+  <span class="cm">// Step 6: Map country code → currency symbol</span>
+  <span class="kw">final</span> countryCode = placemarks.first.isoCountryCode;
+  <span class="kw">return</span> <span class="fn">_getCurrencyFromCountryCode</span>(countryCode);
+}</code></pre>
+
+    <h4>Fallback Strategy</h4>
+    <p>The service implements a <strong>graceful degradation</strong> strategy with three fallback levels:</p>
+    <ol style="margin:12px 0 20px 28px;color:var(--text-secondary)">
+      <li style="margin-bottom:8px"><strong>GPS + Geocoding</strong> (primary) — Most accurate, uses actual device location</li>
+      <li style="margin-bottom:8px"><strong>Device Locale</strong> (fallback) — Uses <code>ui.PlatformDispatcher.instance.locale.countryCode</code></li>
+      <li style="margin-bottom:8px"><strong>Default: SAR</strong> — Saudi Riyal, the app's default currency when all detection fails</li>
+    </ol>
+
+    <h3 id="currency-map">3.2 Supported Country → Currency Mapping</h3>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Country Code</th><th>Country</th><th>Currency Code</th><th>Symbol</th></tr></thead>
+        <tbody>
+          <tr><td>US</td><td>United States</td><td>USD</td><td>$</td></tr>
+          <tr><td>AE</td><td>United Arab Emirates</td><td>AED</td><td>د.إ</td></tr>
+          <tr><td>GB / UK</td><td>United Kingdom</td><td>GBP</td><td>£</td></tr>
+          <tr><td>EG</td><td>Egypt</td><td>EGP</td><td>ج.م</td></tr>
+          <tr><td>SA</td><td>Saudi Arabia</td><td>SAR</td><td>ر.س</td></tr>
+          <tr><td>IN</td><td>India</td><td>INR</td><td>₹</td></tr>
+          <tr><td>CA</td><td>Canada</td><td>CAD</td><td>CA$</td></tr>
+          <tr><td>AU</td><td>Australia</td><td>AUD</td><td>A$</td></tr>
+          <tr><td>DE / FR / ES / IT</td><td>Germany / France / Spain / Italy</td><td>EUR</td><td>€</td></tr>
+          <tr><td>JP</td><td>Japan</td><td>JPY</td><td>¥</td></tr>
+          <tr><td>CN</td><td>China</td><td>CNY</td><td>¥</td></tr>
+          <tr><td>TR</td><td>Turkey</td><td>TRY</td><td>₺</td></tr>
+          <tr><td>KW</td><td>Kuwait</td><td>KWD</td><td>د.ك</td></tr>
+          <tr><td>QA</td><td>Qatar</td><td>QAR</td><td>ر.ق</td></tr>
+          <tr><td>BH</td><td>Bahrain</td><td>BHD</td><td>BD</td></tr>
+          <tr><td>OM</td><td>Oman</td><td>OMR</td><td>ر.ع</td></tr>
+          <tr><td>JO</td><td>Jordan</td><td>JOD</td><td>JD</td></tr>
+          <tr><td>Default (any other)</td><td>—</td><td>SAR</td><td>ر.س</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="page-break" />
+
+    <!-- ─── 4. BLOC OBSERVER ──────────────────────────────────────── -->
+    <div class="section-header" id="bloc-observer">
+      <div class="section-num">4</div>
+      <h2>BLoC Observer (Debug Logging)</h2>
+    </div>
+
+    <p>The <code>SimpleBlocObserver</code> (<code>lib/core/services/simple_bloc_observer.dart</code>) extends
+      Flutter BLoC's <code>BlocObserver</code> to provide centralized logging of all state transitions,
+      errors, and events during development.</p>
+
+    <pre><code><span class="cm">// lib/core/services/simple_bloc_observer.dart</span>
+<span class="kw">class</span> <span class="cl">SimpleBlocObserver</span> <span class="kw">extends</span> <span class="cl">BlocObserver</span> {
+  <span class="kw">@override</span>
+  <span class="kw">void</span> <span class="fn">onCreate</span>(<span class="cl">BlocBase</span> bloc) {
+    <span class="kw">super</span>.<span class="fn">onCreate</span>(bloc);
+    <span class="fn">log</span>(<span class="st">'onCreate -- ${bloc.runtimeType}'</span>);
+  }
+
+  <span class="kw">@override</span>
+  <span class="kw">void</span> <span class="fn">onChange</span>(<span class="cl">BlocBase</span> bloc, <span class="cl">Change</span> change) {
+    <span class="kw">super</span>.<span class="fn">onChange</span>(bloc, change);
+    <span class="fn">log</span>(<span class="st">'onChange -- ${bloc.runtimeType}, $change'</span>);
+  }
+
+  <span class="kw">@override</span>
+  <span class="kw">void</span> <span class="fn">onError</span>(<span class="cl">BlocBase</span> bloc, <span class="cl">Object</span> error, <span class="cl">StackTrace</span> stackTrace) {
+    <span class="fn">log</span>(<span class="st">'onError -- ${bloc.runtimeType}, $error'</span>);
+    <span class="kw">super</span>.<span class="fn">onError</span>(bloc, error, stackTrace);
+  }
+}</code></pre>
+
+    <p>It is registered globally in <code>main()</code> before the app starts:</p>
+    <pre><code><span class="cl">Bloc</span>.observer = <span class="cl">SimpleBlocObserver</span>();</code></pre>
+
+    <div class="info-card">
+      <strong>Development Benefit:</strong> The observer helps trace exactly which cubits are transitioning
+      between states and when errors occur, making debugging state management issues significantly faster
+      during development.
+    </div>
+
+    <hr class="page-break" />
+
+    <!-- ─── 5. DEPENDENCY INJECTION ───────────────────────────────── -->
+    <div class="section-header" id="di-setup">
+      <div class="section-num">5</div>
+      <h2>Dependency Injection Setup</h2>
+    </div>
+
+    <p>TravelTrek uses <strong>GetIt</strong> as a Service Locator for dependency injection. All services
+      and repositories are registered as <strong>singletons</strong> — meaning one instance is shared
+      across the entire app lifecycle.</p>
+
+    <h4>Registration Order</h4>
+    <p>Dependencies are registered in order of their dependency chain (dependencies first):</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Registration Order</th><th>Type Registered</th><th>Implementation</th><th>Dependencies</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><code>FirebaseAuthService</code></td><td><code>FirebaseAuthService()</code></td><td>None</td></tr>
+          <tr><td>2</td><td><code>Api</code></td><td><code>Api(dio: Dio(BaseOptions(...)))</code></td><td>None</td></tr>
+          <tr><td>3</td><td><code>AuthRepo</code></td><td><code>AuthRepoImpleApi</code></td><td>Api, FirebaseAuthService</td></tr>
+          <tr><td>4</td><td><code>ExpenseRepo</code></td><td><code>ExpenseRepoImple</code></td><td>Api</td></tr>
+          <tr><td>5</td><td><code>HomeRepo</code></td><td><code>HomeRepoImple</code></td><td>Api</td></tr>
+          <tr><td>6</td><td><code>PlanRepo</code></td><td><code>PlanRepoImple</code></td><td>Api</td></tr>
+          <tr><td>7</td><td><code>PlansRepo</code></td><td><code>PlansRepoImple</code></td><td>Api</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Usage in Cubits</h4>
+    <p>Cubits retrieve dependencies from GetIt at point of use. For example, in the <code>HomeViewBody</code>
+      where a cubit needs a repository:</p>
+    <pre><code><span class="cm">// In a BlocProvider, retrieve registered dependency:</span>
+<span class="cl">BlocProvider</span>(
+  create: (_) =&gt; <span class="cl">PlanDetailsCubit</span>(planRepo: <span class="fn">getIt</span>&lt;<span class="cl">PlanRepo</span>&gt;()),
+  child: <span class="cl">ItineraryView</span>(...),
+)</code></pre>
+
+    <hr class="page-break" />
+
+    <!-- ─── 6. APP INITIALIZATION ─────────────────────────────────── -->
+    <div class="section-header" id="app-init">
+      <div class="section-num">6</div>
+      <h2>App Initialization Sequence</h2>
+    </div>
+
+    <p>The <code>main()</code> function in <code>lib/main.dart</code> performs a critical sequence of
+      async initialization steps before the Flutter UI is rendered:</p>
+
+    <pre><code><span class="kw">void</span> <span class="fn">main</span>() <span class="kw">async</span> {
+  <span class="cm">// Step 1: Ensure Flutter engine is initialized</span>
+  <span class="cl">WidgetsFlutterBinding</span>.<span class="fn">ensureInitialized</span>();
+
+  <span class="cm">// Step 2: Register global BLoC observer for debugging</span>
+  <span class="cl">Bloc</span>.observer = <span class="cl">SimpleBlocObserver</span>();
+
+  <span class="cm">// Step 3: Initialize Firebase with platform-specific config</span>
+  <span class="kw">await</span> <span class="cl">Firebase</span>.<span class="fn">initializeApp</span>(
+    options: <span class="cl">DefaultFirebaseOptions</span>.currentPlatform,
+  );
+
+  <span class="cm">// Step 4: Register all singleton services and repositories</span>
+  <span class="fn">setup</span>();
+
+  <span class="cm">// Step 5: Initialize SharedPreferences</span>
+  <span class="kw">await</span> <span class="cl">Prefs</span>.<span class="fn">init</span>();
+
+  <span class="cm">// Step 6: Read and log saved currency for debugging</span>
+  <span class="kw">final</span> localCurrency = <span class="cl">Prefs</span>.<span class="fn">getString</span>(kSavedCurrency);
+  <span class="fn">log</span>(<span class="st">'Saved Local Currency: $localCurrency'</span>);
+
+  <span class="cm">// Step 7: Launch the app</span>
+  <span class="fn">runApp</span>(<span class="kw">const</span> <span class="cl">TravelTrek</span>());
+}</code></pre>
+
+    <h4>TravelTrek Root Widget</h4>
+    <p>The root <code>TravelTrek</code> widget is a <code>StatelessWidget</code> that configures the
+      <code>MaterialApp</code>:</p>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Property</th><th>Value</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>theme</code></td><td><code>ColorScheme.fromSeed(#847577)</code></td><td>Brand color seed for Material 3 theme</td></tr>
+          <tr><td><code>onGenerateRoute</code></td><td><code>onGenerateRoute</code> function</td><td>Custom named route generation</td></tr>
+          <tr><td><code>debugShowCheckedModeBanner</code></td><td><code>false</code></td><td>Removes debug banner in all builds</td></tr>
+          <tr><td><code>initialRoute</code></td><td><code>SplashView.routeName</code></td><td>First screen on launch</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="page-break" />
+
+    <!-- ─── 7. FIREBASE CONFIGURATION ────────────────────────────── -->
+    <div class="section-header" id="firebase-config">
+      <div class="section-num">7</div>
+      <h2>Firebase Configuration</h2>
+    </div>
+
+    <p>TravelTrek uses Firebase for authentication services. The configuration is managed by the
+      auto-generated <code>firebase_options.dart</code> file, created using the
+      <strong>FlutterFire CLI</strong> (<code>flutterfire configure</code>).</p>
+
+    <div class="info-card red">
+      <strong>⚠️ Security Warning:</strong> The <code>firebase_options.dart</code> file contains
+      API keys and app IDs. While Firebase API keys for client apps are not secret by themselves
+      (they are restricted by Firebase Security Rules and SHA certificate fingerprints), this file
+      should still be <strong>excluded from public repositories</strong> via <code>.gitignore</code>.
+    </div>
+
+    <h4>Firebase Services Used</h4>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Firebase Product</th><th>Package</th><th>Usage</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Firebase Core</strong></td><td><code>firebase_core ^4.7.0</code></td><td>Required initialization for all Firebase services</td></tr>
+          <tr><td><strong>Firebase Auth</strong></td><td><code>firebase_auth ^6.4.0</code></td><td>Email/password auth, Google Sign-In, password management</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Platform Configuration Requirements</h4>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Platform</th><th>Configuration File</th><th>Key Settings</th></tr></thead>
+        <tbody>
+          <tr><td>Android</td><td><code>android/app/google-services.json</code></td><td>applicationId, API key, SHA-1 fingerprint for Google Sign-In</td></tr>
+          <tr><td>iOS</td><td><code>ios/Runner/GoogleService-Info.plist</code></td><td>Bundle ID, API key, reversed client ID for Google Sign-In</td></tr>
+          <tr><td>Web</td><td><code>web/index.html</code> + firebase config</td><td>Project ID, auth domain</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="page-break" />
+
+    <!-- ─── 8. BUILD & DEPLOYMENT ─────────────────────────────────── -->
+    <div class="section-header" id="deployment">
+      <div class="section-num">8</div>
+      <h2>Build &amp; Deployment Guide</h2>
+    </div>
+
+    <h3 id="android-build">8.1 Android Build</h3>
+
+    <h4>Prerequisites</h4>
+    <ul class="styled-list">
+      <li>Android Studio with Android SDK API level 21+ (Android 5.0 Lollipop or higher)</li>
+      <li><code>google-services.json</code> placed at <code>android/app/google-services.json</code></li>
+      <li>SHA-1 certificate fingerprint added to Firebase Console for Google Sign-In</li>
+      <li>Internet permission declared in <code>AndroidManifest.xml</code></li>
+      <li>Location permissions for <code>CurrencyLocationService</code>:
+        <code>ACCESS_FINE_LOCATION</code> and <code>ACCESS_COARSE_LOCATION</code></li>
+    </ul>
+
+    <h4>Build Commands</h4>
+    <pre><code><span class="cm"># Development build (debug APK)</span>
+flutter build apk --debug
+
+<span class="cm"># Release APK (unsigned)</span>
+flutter build apk --release
+
+<span class="cm"># Release APK (split per ABI — smaller file sizes)</span>
+flutter build apk --split-per-abi --release
+
+<span class="cm"># App Bundle (recommended for Play Store)</span>
+flutter build appbundle --release</code></pre>
+
+    <h4>Android Manifest Permissions</h4>
+    <pre><code><span class="cm">&lt;!-- Required for API calls --&gt;</span>
+&lt;<span class="kw">uses-permission</span> android:name=<span class="st">"android.permission.INTERNET"</span> /&gt;
+
+<span class="cm">&lt;!-- Required for CurrencyLocationService --&gt;</span>
+&lt;<span class="kw">uses-permission</span> android:name=<span class="st">"android.permission.ACCESS_FINE_LOCATION"</span> /&gt;
+&lt;<span class="kw">uses-permission</span> android:name=<span class="st">"android.permission.ACCESS_COARSE_LOCATION"</span> /&gt;</code></pre>
+
+    <h3 id="ios-build">8.2 iOS Build</h3>
+
+    <h4>Prerequisites</h4>
+    <ul class="styled-list">
+      <li>macOS with Xcode 14+ and valid Apple Developer account</li>
+      <li><code>GoogleService-Info.plist</code> placed in <code>ios/Runner/</code></li>
+      <li>Bundle ID registered in Firebase Console</li>
+      <li>Location usage descriptions in <code>Info.plist</code></li>
+    </ul>
+
+    <h4>Build Commands</h4>
+    <pre><code><span class="cm"># iOS debug build</span>
+flutter build ios --debug
+
+<span class="cm"># iOS release build (requires Apple Developer account)</span>
+flutter build ios --release
+
+<span class="cm"># IPA for App Store distribution</span>
+flutter build ipa --release</code></pre>
+
+    <h4>Info.plist Location Descriptions</h4>
+    <pre><code>&lt;<span class="kw">key</span>&gt;NSLocationWhenInUseUsageDescription&lt;/<span class="kw">key</span>&gt;
+&lt;<span class="kw">string</span>&gt;TravelTrek uses your location to detect your local currency
+for travel planning.&lt;/<span class="kw">string</span>&gt;
+
+&lt;<span class="kw">key</span>&gt;NSLocationAlwaysUsageDescription&lt;/<span class="kw">key</span>&gt;
+&lt;<span class="kw">string</span>&gt;TravelTrek uses your location to provide local currency
+information.&lt;/<span class="kw">string</span>&gt;</code></pre>
+
+    <h4>Version Information</h4>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Setting</th><th>Value</th><th>Where Configured</th></tr></thead>
+        <tbody>
+          <tr><td>Version Name</td><td>1.0.0</td><td><code>pubspec.yaml</code> → <code>version: 1.0.0+1</code></td></tr>
+          <tr><td>Build Number</td><td>1</td><td><code>pubspec.yaml</code> → version suffix <code>+1</code></td></tr>
+          <tr><td>Min SDK</td><td>API 21 (Android 5.0)</td><td><code>android/app/build.gradle</code></td></tr>
+          <tr><td>iOS Target</td><td>iOS 12.0+</td><td><code>ios/Podfile</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="page-break" />
+
+    <!-- ─── 9. SECURITY ───────────────────────────────────────────── -->
+    <div class="section-header" id="security">
+      <div class="section-num">9</div>
+      <h2>Security Considerations</h2>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Security Concern</th><th>Implementation</th><th>Recommendation</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>JWT Token Storage</strong></td>
+            <td>Stored in SharedPreferences (<code>kUserToken</code>)</td>
+            <td>⚠️ Consider <code>flutter_secure_storage</code> for production (uses Android Keystore / iOS Keychain)</td>
+          </tr>
+          <tr>
+            <td><strong>User Data Storage</strong></td>
+            <td>UserEntity JSON stored in SharedPreferences</td>
+            <td>⚠️ Move to secure storage for sensitive fields</td>
+          </tr>
+          <tr>
+            <td><strong>API Authorization</strong></td>
+            <td>Bearer token in Authorization header on all authenticated calls</td>
+            <td>✅ Correctly implemented</td>
+          </tr>
+          <tr>
+            <td><strong>Password Change</strong></td>
+            <td>Re-authentication required before password update</td>
+            <td>✅ Follows Firebase security best practices</td>
+          </tr>
+          <tr>
+            <td><strong>Firebase API Keys</strong></td>
+            <td>In <code>firebase_options.dart</code></td>
+            <td>⚠️ Add to <code>.gitignore</code>; restrict keys in Firebase Console</td>
+          </tr>
+          <tr>
+            <td><strong>Network Security</strong></td>
+            <td>HTTP (not HTTPS) for backend API calls</td>
+            <td>🔴 <strong>Upgrade to HTTPS before production</strong> to prevent MITM attacks</td>
+          </tr>
+          <tr>
+            <td><strong>Input Validation</strong></td>
+            <td>Form validation on sign-up/sign-in fields</td>
+            <td>✅ Basic validation implemented</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="page-break" />
+
+    <!-- ─── 10. FUTURE ENHANCEMENTS ──────────────────────────────── -->
+    <div class="section-header" id="future">
+      <div class="section-num">10</div>
+      <h2>Future Enhancements</h2>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Enhancement</th><th>Priority</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>HTTPS Backend</strong></td>
+            <td><span class="badge" style="background:#fce4ec;color:#B00020">Critical</span></td>
+            <td>Migrate backend from HTTP to HTTPS to encrypt all API traffic</td>
+          </tr>
+          <tr>
+            <td><strong>Secure Token Storage</strong></td>
+            <td><span class="badge" style="background:#fce4ec;color:#B00020">High</span></td>
+            <td>Use <code>flutter_secure_storage</code> for JWT token and user data</td>
+          </tr>
+          <tr>
+            <td><strong>Offline Support</strong></td>
+            <td><span class="badge badge-blue">Medium</span></td>
+            <td>Cache generated plans locally with SQLite/Hive for offline viewing</td>
+          </tr>
+          <tr>
+            <td><strong>Push Notifications</strong></td>
+            <td><span class="badge badge-blue">Medium</span></td>
+            <td>Firebase Cloud Messaging for trip reminders and updates</td>
+          </tr>
+          <tr>
+            <td><strong>Photo Attachments</strong></td>
+            <td><span class="badge badge-blue">Medium</span></td>
+            <td>Allow users to attach photos to expense entries and plan notes</td>
+          </tr>
+          <tr>
+            <td><strong>Multi-user Collaboration</strong></td>
+            <td><span class="badge badge-amber">Low</span></td>
+            <td>Share plans with travel companions; real-time collaborative editing</td>
+          </tr>
+          <tr>
+            <td><strong>Flight/Hotel Integration</strong></td>
+            <td><span class="badge badge-amber">Low</span></td>
+            <td>Deep link to booking platforms for flights and accommodations</td>
+          </tr>
+          <tr>
+            <td><strong>Unit &amp; Widget Tests</strong></td>
+            <td><span class="badge" style="background:#fce4ec;color:#B00020">High</span></td>
+            <td>Comprehensive test coverage for all cubits and repository implementations</td>
+          </tr>
+          <tr>
+            <td><strong>Plan Sharing</strong></td>
+            <td><span class="badge badge-blue">Medium</span></td>
+            <td>Export/share itineraries as PDF or share links</td>
+          </tr>
+          <tr>
+            <td><strong>Currency Exchange Rates</strong></td>
+            <td><span class="badge badge-blue">Medium</span></td>
+            <td>Integrate a real-time exchange rate API for the LocalCurrencyCard widget</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="page-break" />
+
+    <!-- ─── 11. CONCLUSION ────────────────────────────────────────── -->
+    <div class="section-header" id="conclusion">
+      <div class="section-num">11</div>
+      <h2>Conclusion</h2>
+    </div>
+
+    <div class="conclusion-box">
+      <h2>TravelTrek — Project Summary</h2>
+      <p>A production-quality AI-powered travel planning application built with Flutter, following
+        Clean Architecture principles, BLoC state management, and hybrid Firebase + REST API authentication.</p>
+
+      <div class="conclusion-grid">
+        <div class="conclusion-item">
+          <div class="ci-num">10</div>
+          <div class="ci-label">Feature Modules</div>
+        </div>
+        <div class="conclusion-item">
+          <div class="ci-num">7</div>
+          <div class="ci-label">BLoC Cubits</div>
+        </div>
+        <div class="conclusion-item">
+          <div class="ci-num">5</div>
+          <div class="ci-label">Repository Abstractions</div>
+        </div>
+        <div class="conclusion-item">
+          <div class="ci-num">11</div>
+          <div class="ci-label">REST API Endpoints</div>
+        </div>
+        <div class="conclusion-item">
+          <div class="ci-num">16</div>
+          <div class="ci-num" style="font-size:14px;color:rgba(255,255,255,0.6)">Dependencies</div>
+        </div>
+        <div class="conclusion-item">
+          <div class="ci-num">17</div>
+          <div class="ci-label">Supported Currencies</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Architecture Achievements</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Principle</th><th>Implementation</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Separation of Concerns</strong></td><td>Clean Architecture with 3 independent layers per feature (Presentation, Domain, Data)</td></tr>
+          <tr><td><strong>Dependency Inversion</strong></td><td>All features depend on abstract repository interfaces, not concrete implementations</td></tr>
+          <tr><td><strong>Single Responsibility</strong></td><td>Each class has one well-defined purpose (Cubit handles state, Repo handles data, View handles UI)</td></tr>
+          <tr><td><strong>Reactive UI</strong></td><td>BLoC/Cubit pattern ensures UI automatically updates to reflect state changes</td></tr>
+          <tr><td><strong>Explicit Error Handling</strong></td><td>Either monad forces all error paths to be handled; no silent failures</td></tr>
+          <tr><td><strong>Graceful Degradation</strong></td><td>Currency service has 3 fallback levels; API errors show user-friendly messages</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-card green">
+      <strong>✅ Graduation Project Outcome:</strong> TravelTrek demonstrates a complete, production-grade mobile
+      application lifecycle — from architectural design and implementation, through feature development,
+      to REST API integration and deployment preparation. The codebase follows industry best practices
+      for Flutter development and serves as a strong portfolio piece for graduation.
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══ FOOTER ══════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <strong>TravelTrek — Complete Technical Documentation</strong><br>
+  Graduation Project | Flutter &amp; Dart | Version 1.0.0 | June 2026
+  <div class="parts-nav">
+    <a href="part1_overview_and_architecture.html">Part 1: Overview &amp; Architecture</a>
+    <a href="part2_features_and_screens.html">Part 2: Features &amp; Screens</a>
+    <a href="part3_data_layer_and_api.html">Part 3: Data Layer &amp; API</a>
+    <a href="part4_services_and_deployment.html">Part 4: Services &amp; Deployment</a>
+  </div>
+  <p style="margin-top:20px;font-size:12px;color:rgba(255,255,255,0.3)">
+    All 4 parts combined constitute the complete documentation (≈ 40–55 pages equivalent)
+  </p>
+</footer>
+
+</body>
+</html>

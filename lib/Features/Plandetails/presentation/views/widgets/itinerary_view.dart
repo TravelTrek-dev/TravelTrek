@@ -11,10 +11,24 @@ import 'package:travel_trek/core/services/prefs.dart';
 import 'package:travel_trek/constants.dart';
 import 'package:travel_trek/core/widgets/custom_button.dart';
 
-class ItineraryView extends StatelessWidget {
-  const ItineraryView({super.key, required this.planModel});
+class ItineraryView extends StatefulWidget {
+  const ItineraryView({
+    super.key,
+    required this.planModel,
+    this.showSaveButton = false,
+  });
 
   final PlanModel? planModel;
+
+  /// true فقط لما يكون PlanDetailsCubit موجود في الشجرة
+  final bool showSaveButton;
+
+  @override
+  State<ItineraryView> createState() => _ItineraryViewState();
+}
+
+class _ItineraryViewState extends State<ItineraryView> {
+  bool _planSaved = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +37,7 @@ class ItineraryView extends StatelessWidget {
         SliverToBoxAdapter(
           child: Column(
             children: [
-              SliverPlanHeader(planModel: planModel),
+              SliverPlanHeader(planModel: widget.planModel),
               const SizedBox(height: 32),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -36,7 +50,7 @@ class ItineraryView extends StatelessWidget {
             ],
           ),
         ),
-        SliverListBuilderDayCard(days: planModel?.value?.days),
+        SliverListBuilderDayCard(days: widget.planModel?.value?.days),
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -44,20 +58,22 @@ class ItineraryView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 24),
-                LocalCurrencyCard(userCurrency: planModel!.value!.currency!),
+                LocalCurrencyCard(
+                    userCurrency: widget.planModel!.value!.currency!),
                 const SizedBox(height: 24),
                 const Text(
                   'Travel Tips',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                  style:
+                      TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 16),
-                if (planModel?.value?.generalAdvice != null)
+                if (widget.planModel?.value?.generalAdvice != null)
                   Text(
-                    planModel!.value!.generalAdvice!,
+                    widget.planModel!.value!.generalAdvice!,
                     style: const TextStyle(fontSize: 16, height: 1.5),
                   ),
-                if (planModel?.value?.packingTips != null)
-                  ...planModel!.value!.packingTips!.map(
+                if (widget.planModel?.value?.packingTips != null)
+                  ...widget.planModel!.value!.packingTips!.map(
                     (tip) => Padding(
                       padding: const EdgeInsets.only(top: 12),
                       child: Text(
@@ -71,24 +87,36 @@ class ItineraryView extends StatelessWidget {
             ),
           ),
         ),
-        SliverListBuilderTrivelTrip(),
         SliverToBoxAdapter(child: const SizedBox(height: 24)),
 
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: CustomButton(
-              text: 'Save Plan',
-              onPressed: () {
-                if (planModel == null) return;
-                BlocProvider.of<PlanDetailsCubit>(context).savePlan(
-                  planModel: planModel!,
-                  userToken: Prefs.getString(kUserToken),
-                );
-              },
+        if (widget.showSaveButton && !_planSaved)
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: BlocConsumer<PlanDetailsCubit, PlanDetailsState>(
+                listener: (context, state) {
+                  if (state is PlanDetailsSuccess) {
+                    setState(() => _planSaved = true);
+                  }
+                },
+                builder: (context, state) {
+                  final isSaving = state is PlanDetailsLoading;
+                  return CustomButton(
+                    text: isSaving ? 'Saving…' : 'Save Plan',
+                    onPressed: isSaving
+                        ? () {}
+                        : () {
+                            if (widget.planModel == null) return;
+                            BlocProvider.of<PlanDetailsCubit>(context).savePlan(
+                              planModel: widget.planModel!,
+                              userToken: Prefs.getString(kUserToken),
+                            );
+                          },
+                  );
+                },
+              ),
             ),
           ),
-        ),
 
         SliverToBoxAdapter(child: const SizedBox(height: 24)),
       ],

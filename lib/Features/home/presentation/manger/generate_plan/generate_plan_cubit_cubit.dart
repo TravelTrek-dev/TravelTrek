@@ -16,9 +16,16 @@ class GeneratePlanCubitCubit extends Cubit<GeneratePlanCubitState> {
       promot: promot,
     );
     result.fold(
-      (failure) =>
-          emit(GeneratePlanCubitFailure(errorMessage: failure.errorMessage)),
-      (planModel) => emit(GeneratePlanCubitSuccess(planModel: planModel)),
+      (failure) {
+        if (!isClosed) {
+          emit(GeneratePlanCubitFailure(errorMessage: failure.errorMessage));
+        }
+      },
+      (plan) {
+        if (!isClosed) {
+          emit(GeneratePlanCubitSuccess(planModel: plan));
+        }
+      },
     );
   }
 }

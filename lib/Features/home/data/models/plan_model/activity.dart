@@ -5,6 +5,7 @@ class Activity extends Equatable {
   final String? description;
   final String? googleMapsLink;
   final dynamic website;
+  final String? imageUrl;
   final String? city;
   final String? approximateCost;
   final String? type;
@@ -16,10 +17,11 @@ class Activity extends Equatable {
     this.website,
     this.city,
     this.approximateCost,
-    this.type,
+    this.type, this.imageUrl,
   });
 
   factory Activity.fromJson(Map<String, dynamic> json) => Activity(
+    imageUrl: json['imageUrl'] as String?,
     name: json['name'] as String?,
     description: json['description'] as String?,
     googleMapsLink: json['googleMapsLink'] as String?,
@@ -30,6 +32,7 @@ class Activity extends Equatable {
   );
 
   Map<String, dynamic> toJson() => {
+    'imageUrl' : imageUrl,
     'name': name,
     'description': description,
     'googleMapsLink': googleMapsLink,
@@ -42,6 +45,7 @@ class Activity extends Equatable {
   @override
   List<Object?> get props {
     return [
+      imageUrl,
       name,
       description,
       googleMapsLink,

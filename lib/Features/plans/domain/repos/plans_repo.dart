@@ -3,5 +3,9 @@ import 'package:travel_trek/Features/home/data/models/plan_model/plan_model.dart
 import 'package:travel_trek/core/errors/failures.dart';
 
 abstract class PlansRepo {
-  Future<Either<Failures,List<PlanModel> >> getAllPlans({required String token});
+  Future<Either<Failures, List<PlanModel>>> getAllPlans({required String token});
+  Future<Either<Failures, bool>> deletePlan({
+    required String token,
+    required String planId,
+  });
 }
