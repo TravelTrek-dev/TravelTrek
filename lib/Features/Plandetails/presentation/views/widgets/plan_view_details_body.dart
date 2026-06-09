@@ -3,7 +3,6 @@ import 'package:travel_trek/Features/Budget/presentation/views/budget_view.dart'
 import 'package:travel_trek/Features/day_details/presentation/views/day_details_view.dart';
 import 'package:travel_trek/Features/Plandetails/presentation/views/widgets/itinerary_view.dart';
 import 'package:travel_trek/Features/home/data/models/plan_model/plan_model.dart';
-import 'package:travel_trek/Features/note/presentation/views/tips_view.dart';
 
 class PlanViewDetailsBody extends StatelessWidget {
   const PlanViewDetailsBody({
@@ -21,9 +20,8 @@ class PlanViewDetailsBody extends StatelessWidget {
       index: currentindex,
       children: [
         ItineraryView(planModel: planModel),
-        BudgetView(planModel: planModel!,),
-        TipsView(),
-        DayDetailsView(),
+        BudgetView(planModel: planModel!),
+        DayDetailsView(planModel: planModel),
       ],
     );
   }

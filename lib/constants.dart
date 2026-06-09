@@ -5,3 +5,4 @@ String kUserAccessToken = 'userAccessToken';
 String kRefreshToken = 'userRefreshToken';
 String kSavedCurrency = 'savedCurrency';
 List<String> kRecentSearches = [];
+const String kProfileImagePath = 'profileImagePath';
