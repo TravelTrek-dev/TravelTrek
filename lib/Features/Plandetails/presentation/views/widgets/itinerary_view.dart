@@ -46,10 +46,7 @@ class _ItineraryViewState extends State<ItineraryView> {
               const SizedBox(height: 32),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: SectionHeader(
-                  title: 'Daily Itinerary',
-                  action: null,
-                ),
+                child: SectionHeader(title: 'Daily Itinerary', action: null),
               ),
               const SizedBox(height: 16),
             ],
@@ -68,17 +65,18 @@ class _ItineraryViewState extends State<ItineraryView> {
               children: [
                 const SizedBox(height: 28),
 
-                // Currency card
                 if (currency != null && currency.isNotEmpty)
-                  LocalCurrencyCard(userCurrency: currency),
+                  LocalCurrencyCard(
+                    userCurrency: widget.planModel?.value?.userCurrency ?? widget.planModel?.value?.currency ?? "USD",
+                    currency: widget.planModel?.value?.currency ?? "USD",
+                    conversionRate: widget.planModel?.value?.conversionRate ?? 1.0,
+                  ),
 
-                // Travel Tips Section
                 if (hasTips) ...[
                   const SizedBox(height: 28),
                   const SectionHeader(title: 'Travel Tips'),
                   const SizedBox(height: 16),
 
-                  // General Advice
                   if (generalAdvice != null && generalAdvice.isNotEmpty)
                     _TipCard(
                       icon: Icons.lightbulb_outline_rounded,

@@ -5,13 +5,15 @@ import 'package:travel_trek/constants.dart';
 import 'package:travel_trek/core/services/prefs.dart';
 
 class LocalCurrencyCard extends StatelessWidget {
-  const LocalCurrencyCard({super.key, required this.userCurrency});
+  const LocalCurrencyCard({super.key, required this.userCurrency, required this.currency, required this.conversionRate});
   final String userCurrency;
+  final String currency;
+  final double conversionRate;
   @override
   Widget build(BuildContext context) {
     final savedCurrency = Prefs.getString(kSavedCurrency);
     String localCurrency = savedCurrency.isEmpty ? 'SAR' : savedCurrency;
-    log('Local Currency: $localCurrency'); // Debug print to check the value
+    log('Local Currency: $localCurrency');
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -47,7 +49,7 @@ class LocalCurrencyCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                '1 $localCurrency = 48.50 $userCurrency',
+                '1 $userCurrency = ${conversionRate.toStringAsFixed(4)} $currency',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

@@ -9,6 +9,8 @@ class Value extends Equatable {
   final String? city;
   final String? country;
   final String? duration;
+  final String? userCurrency;
+  final double? conversionRate;
   final int? budget;
   final String? imageUrl;
   final String? currency;
@@ -29,10 +31,12 @@ class Value extends Equatable {
     this.weather,
     this.days,
     this.packingTips,
-    this.generalAdvice, this.id, this.imageUrl,
+    this.generalAdvice, this.id, this.imageUrl, this.userCurrency, this.conversionRate,
   });
 
   factory Value.fromJson(Map<String, dynamic> json) => Value(
+    conversionRate: (json['conversionRate'] as num?)?.toDouble(),
+    userCurrency: json['userCurrency'] as String?,
     imageUrl: json['imageUrl'] as String?,
     id:   json['id'] as String?,
     prompt: json['prompt'] as String?,
@@ -53,6 +57,8 @@ class Value extends Equatable {
   );
 
   Map<String, dynamic> toJson() => {
+    'userCurrency' : userCurrency,
+    'conversionRate' : conversionRate,
     "imageUrl" : imageUrl,
     'id' :id,
     'prompt': prompt,
@@ -71,6 +77,8 @@ class Value extends Equatable {
   @override
   List<Object?> get props {
     return [
+      conversionRate,
+      userCurrency,
       imageUrl,
       id,
       prompt,
