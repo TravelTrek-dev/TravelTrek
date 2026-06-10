@@ -13,11 +13,17 @@ class BuildActionBtn extends StatelessWidget {
         color: Color(0xFFF5F0E8),
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
       ),
-      child: ActionBtn(
-        icon: Icons.delete_outline_rounded,
-        label: 'Delete',
-        color: const Color(0xFFB00020),
-        onTap: onDelete,
+      child: Row(
+        children: [
+          Expanded(
+            child: ActionBtn(
+              icon: Icons.delete_outline_rounded,
+              label: 'Delete',
+              color: const Color(0xFFB00020),
+              onTap: onDelete,
+            ),
+          ),
+        ],
       ),
     );
   }

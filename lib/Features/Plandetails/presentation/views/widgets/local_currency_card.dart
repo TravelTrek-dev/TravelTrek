@@ -49,7 +49,7 @@ class LocalCurrencyCard extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                '1 $userCurrency = ${conversionRate.toStringAsFixed(4)} $currency',
+                '1 $currency = ${conversionRate.toStringAsFixed(4)} $userCurrency',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

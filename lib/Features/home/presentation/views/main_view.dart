@@ -51,6 +51,11 @@ class _MainViewState extends State<MainView> {
       _userTripInfoCubit.getUserTripInfo(token: userToken);
     } else if (index == 1 && userToken.isNotEmpty) {
       _getAllPlansCubit.getAllPlans(token: userToken);
+    } else if (index == 2) {
+      // When navigating to profile tab, refresh on return
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {});
+      });
     }
   }
 

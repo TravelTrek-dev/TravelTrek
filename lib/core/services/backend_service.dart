@@ -5,6 +5,9 @@ class BackendService {
   static const String forgotPasswordUrl =
       'http://traveltrek.runasp.net/api/auth/forgot-password';
 
+  static const String resendConfirmationUrl =
+      'http://traveltrek.runasp.net/api/auth/resend-confirmation';
+
   static const String refreshTokenUrl =
       'http://traveltrek.runasp.net/api/auth/refresh-token';
   static const String revokeTokenUrl =

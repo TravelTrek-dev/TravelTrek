@@ -85,4 +85,18 @@ class AuthRepoImple implements AuthRepo {
       return left(ServerFailure(errorMessage: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failures, String>> forgotPassword({
+    required String email,
+  }) async {
+    return left(ServerFailure(errorMessage: 'Not supported in Firebase mode'));
+  }
+
+  @override
+  Future<Either<Failures, String>> resendVerification({
+    required String email,
+  }) async {
+    return left(ServerFailure(errorMessage: 'Not supported in Firebase mode'));
+  }
 }

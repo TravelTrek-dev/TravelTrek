@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_trek/Features/auth/presentation/manger/sign_in_cubit/sign_in_cubit.dart';
+import 'package:travel_trek/Features/auth/presentation/views/trouble_signing_in_view.dart';
 import 'package:travel_trek/Features/auth/presentation/views/widgets/build_social_button.dart';
 import 'package:travel_trek/Features/auth/presentation/views/widgets/custom_or_dividor.dart';
 import 'package:travel_trek/Features/auth/presentation/views/widgets/custom_text_form_field.dart';
@@ -83,9 +84,14 @@ class _SignInViewBodyState extends State<SignInViewBody> {
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      TroubleSigningInView.routeName,
+                    );
+                  },
                   child: const Text(
-                    'Forgot Password?',
+                    'Trouble Signing In?',
                     style: TextStyle(color: Colors.grey, fontSize: 12),
                   ),
                 ),
