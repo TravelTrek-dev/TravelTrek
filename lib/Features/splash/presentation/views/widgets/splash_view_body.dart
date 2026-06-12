@@ -4,7 +4,6 @@ import 'package:travel_trek/Features/auth/presentation/views/sign_in_view.dart';
 import 'package:travel_trek/Features/home/presentation/views/main_view.dart';
 import 'package:travel_trek/Features/onboarding/presentation/views/on_boarding_view.dart';
 import 'package:travel_trek/constants.dart';
-import 'package:travel_trek/core/services/currency_location_service.dart';
 import 'package:travel_trek/core/services/prefs.dart';
 import 'package:travel_trek/core/utils/app_images.dart';
 import 'package:travel_trek/core/utils/app_styles.dart';
@@ -100,16 +99,5 @@ class _SplashViewBodyState extends State<SplashViewBody> {
     );
   }
 
-  Future<void> _fetchAndSaveCurrency() async {
-    try {
-      final service = CurrencyLocationService();
-      String currency = await service.getUserCurrency();
-
-      debugPrint('======> Currency From Location Service: $currency');
-
-      await Prefs.setString(kSavedCurrency, currency);
-    } catch (e) {
-      debugPrint('Error in fetchAndSaveCurrency: $e');
-    }
-  }
+ 
 }
