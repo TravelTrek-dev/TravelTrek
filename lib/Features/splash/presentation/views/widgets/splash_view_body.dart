@@ -29,16 +29,7 @@ class _SplashViewBodyState extends State<SplashViewBody> {
 
   Future<void> _initializeApp() async {
     debugPrint('[Splash] initialize app start');
-    await Future.wait([
-      _fetchAndSaveCurrency().timeout(
-        const Duration(seconds: 10),
-        onTimeout: () async {
-          debugPrint('[Splash] currency fetch timed out; using SAR');
-          await Prefs.setString(kSavedCurrency, 'SAR');
-        },
-      ),
-      Future.delayed(const Duration(seconds: 3)),
-    ]);
+   await Future.delayed(const Duration(seconds: 3));
 
     if (!mounted) return;
     debugPrint('[Splash] navigate next');

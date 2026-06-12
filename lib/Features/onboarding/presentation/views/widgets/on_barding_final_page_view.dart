@@ -78,10 +78,7 @@ class OnBoardingFinalPageView extends StatelessWidget {
                   text: 'GET STARTED',
                   onPressed: () {
                     Prefs.setBool(kIsOnBoardingSeen, true);
-                    Navigator.pushReplacementNamed(
-                      context,
-                      SignInView.routeName,
-                    );
+                   
                   },
                 ),
                 const SizedBox(height: 40),

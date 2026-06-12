@@ -11,10 +11,17 @@ class UserTripInfoCubit extends Cubit<UserTripInfoState> {
   void getUserTripInfo({required String token}) async {
     emit(UserTripInfoLoading());
     var result = await homeRepo.getPrompts(userToken: token);
-    result.fold(
-      (failure) =>
-          emit(UserTripInfoFailure(errorMessage: failure.errorMessage)),
-      (userTripInfo) => emit(UserTripInfoSuccess(userTripInfo: userTripInfo)),
+   result.fold(
+      (failure) {
+        if (!isClosed) {
+          emit(UserTripInfoFailure(errorMessage: failure.errorMessage));
+        }
+      },
+      (plan) {
+        if (!isClosed) {
+          emit(UserTripInfoSuccess(userTripInfo: plan));
+        }
+      },
     );
   }
 }

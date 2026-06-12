@@ -70,6 +70,8 @@ class PlanModel extends Equatable {
   };
 
   Map<String, dynamic> toSavePlan() => {
+    'conversionRate' : value!.conversionRate,
+    'userCurrency' : value!.userCurrency,
     'imageUrl' : value!.imageUrl,
     'prompt': value!.prompt,
     'city': value!.city,
